@@ -10,6 +10,7 @@ from sqlalchemy.orm import sessionmaker
 
 from loginFunctions.encryption import generate_key_pair, encrypt_message, decrypt_message  # Importing encryption functions
 from endpoints.loginEndpoints import create_account, login
+from models import AccountCreate, Login
 # Use SQLite database URL
 SQLALCHEMY_DATABASE_URL = "sqlite:///./congo.db"
 
@@ -46,16 +47,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Pydantic model for request body
-class AccountCreate(BaseModel):
-    email: str
-    password: str
-
-# Pydantic model for login request body
-class Login(BaseModel):
-    email: str
-    password: str
-
 # Endpoint to create a new account with encrypted email, password, and public key
 @app.post("/create_account")
 async def create_account_handler(account: AccountCreate):
@@ -65,4 +56,4 @@ async def create_account_handler(account: AccountCreate):
 @app.post("/login")
 async def login_handler(login_data: Login):
     db = SessionLocal()
-    return login(db, login_data.email, login_data.password)
+    return login(db, login_data)  # Pass the login_data object directly
