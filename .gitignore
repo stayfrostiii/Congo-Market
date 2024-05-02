@@ -1,0 +1,45 @@
+# Ignore system files and directories
+.DS_Store
+Thumbs.db
+
+# Ignore Python virtual environment
+.venv/
+venv/
+env/
+__pycache__/
+
+# Ignore Node.js dependencies
+node_modules/
+
+# Ignore compiled files
+*.pyc
+*.class
+*.war
+*.jar
+
+# Ignore package-lock.json for npm
+package-lock.json
+
+# Ignore IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore logs and temporary files
+*.log
+logs/
+tmp/
+temp/
+
+# Ignore database files
+*.sqlite
+*.db
+
+# Ignore compiled binaries
+bin/
+build/
+
+# Ignore generated files
+*.min.js
+*.min.css
