@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../../api";
 
-function SignUpPage() {
+const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -11,13 +11,10 @@ function SignUpPage() {
   const handleSubmit = async () => {
     try {
       console.log("Submitting sign-up request:", { email, password });
-      const response = await axios.post(
-        "http://localhost:8000/create_account",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await api.post("/create_account", {
+        email,
+        password,
+      });
       console.log("Response:", response.data);
       setMessage(response.data.message);
       setEmail("");
@@ -70,6 +67,6 @@ function SignUpPage() {
       </button>
     </div>
   );
-}
+};
 
 export default SignUpPage;

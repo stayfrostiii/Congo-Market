@@ -7,32 +7,11 @@ from sqlalchemy import create_engine, Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
+
+from loginFunctions.encryption import generate_key_pair, encrypt_message, decrypt_message  # Importing encryption functions
 from endpoints.loginEndpoints import create_account, login
 from models import AccountCreate, Login
-# Use SQLite database URL
-SQLALCHEMY_DATABASE_URL = "sqlite:///./congo.db"
-
-# Create SQLAlchemy engine
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
- 
-# Create SQLAlchemy session
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Base class for declarative models
-Base = declarative_base()
-
-# Define database model
-class Account(Base):
-    __tablename__ = "account_test"
-
-    id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True)
-    password = Column(String)
-    public_key = Column(String)  # New column to store public key
-    private_key = Column(String)  # New column to store public key
-
-# Create tables in the database
-Base.metadata.create_all(bind=engine)
+from database import SessionLocal
 
 app = FastAPI()
 
