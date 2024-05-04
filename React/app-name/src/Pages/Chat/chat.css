@@ -1,0 +1,13 @@
+.chat-page-container {
+  display: flex;
+  height: 100vh; /* Adjust as needed */
+}
+
+.left-side {
+  flex: 1;
+  border-right: 1px solid #ccc; /* Border */
+}
+
+.right-side {
+  flex: 3;
+}
