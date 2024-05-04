@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import MainPage from "./pages/main-page/MainPage";
-import AuthenticationSelectionPage from "./pages/authentication/AuthenticationSelectionPage";
-import SignUpPage from "./pages/authentication/SignUpPage";
-import LoginPage from "./pages/authentication/LoginPage";
+import MainPage from "./Pages/main-page/MainPage";
+import AuthenticationSelectionPage from "./Pages/authentication/AuthenticationSelectionPage";
+import SignUpPage from "./Pages/authentication/SignUpPage";
+import LoginPage from "./Pages/authentication/LoginPage";
 
 function App() {
   useEffect(() => {
