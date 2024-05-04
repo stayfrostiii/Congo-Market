@@ -19,7 +19,9 @@ const AuthenticationSelectionPage = () => {
   const handleFriendForm = () => {
     navigate("/add_friend")
   }
-
+  const handleChatForm = () => {
+    navigate("/chat")
+  }
   return (
     <div>
       <h2>Welcome to Our Marketplace!</h2>
@@ -32,6 +34,7 @@ const AuthenticationSelectionPage = () => {
       <button onClick={handleGoToMainClick}>Go to Main Page</button>
 
       <button onClick={handleFriendForm}>Friends</button>
+      <button onClick={handleChatForm}>Chat</button>
     </div>
   );
 };
