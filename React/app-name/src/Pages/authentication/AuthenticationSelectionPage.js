@@ -16,6 +16,10 @@ const AuthenticationSelectionPage = () => {
     navigate("/");
   };
 
+  const handleFriendForm = () => {
+    navigate("/add_friend")
+  }
+
   return (
     <div>
       <h2>Welcome to Our Marketplace!</h2>
@@ -26,6 +30,8 @@ const AuthenticationSelectionPage = () => {
       <button onClick={handleLoginClick}>Log In</button>
       {/* Button to navigate back to the main page */}
       <button onClick={handleGoToMainClick}>Go to Main Page</button>
+
+      <button onClick={handleFriendForm}>Friends</button>
     </div>
   );
 };
