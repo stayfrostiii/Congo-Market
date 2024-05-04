@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
-from models import AccountCreate, Login
-from database import Account
+from models import AccountCreate, Login, Account
+
 def create_account(db: Session, account: AccountCreate):
     try:
         # Check if email already exists

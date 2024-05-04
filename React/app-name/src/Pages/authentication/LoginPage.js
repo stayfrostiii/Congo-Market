@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../../api";
 
-function LoginPage() {
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -11,7 +11,7 @@ function LoginPage() {
   const handleSubmit = async () => {
     try {
       console.log("Submitting login request:", { email, password });
-      const response = await axios.post("http://localhost:8000/login", {
+      const response = await api.post("/login", {
         email: encrypt(email),
         password: encrypt(password),
       });
@@ -72,6 +72,6 @@ function LoginPage() {
       </button>
     </div>
   );
-}
+};
 
 export default LoginPage;

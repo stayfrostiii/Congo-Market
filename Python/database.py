@@ -11,14 +11,11 @@ SQLALCHEMY_DATABASE_URL = "sqlite:///./congo.db"
 # Create SQLAlchemy engine
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
+# Create SQLAlchemy session
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 # Base class for declarative models
 Base = declarative_base()
 
-class Account(Base):
-    __tablename__ = "account_test"
-
-    id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True)
-    password = Column(String)
-    public_key = Column(String)  # New column to store public key
-    private_key = Column(String)  # New column to store public key
+# Create tables in the database
+Base.metadata.create_all(bind=engine)
