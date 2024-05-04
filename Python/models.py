@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from database import Base
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, Float
 
 class AccountCreate(BaseModel):
     email: str
@@ -25,7 +25,16 @@ class Account(Base):
     public_key = Column(String)  # New column to store public key
     private_key = Column(String)  # New column to store public key
 
+class Item(Base):
+    __tablename__ = "item"
 
+    itemkey = Column(String, primary_key = True, index = True)
+    name = Column(String)
+    desc = Column(String)
+    itemID = Column(Integer)
+    price = Column(Float)
+    time = Column(Float)
+    date = Column(Integer)
 
 class Friend:
     def __init__(self, first_name, last_name, id_number):
