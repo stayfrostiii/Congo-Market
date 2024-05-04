@@ -25,6 +25,10 @@ class Account(Base):
     public_key = Column(String)  # New column to store public key
     private_key = Column(String)  # New column to store public key
 
+
+class queryItem(BaseModel):
+    name: str
+
 class Item(Base):
     __tablename__ = "item"
 
