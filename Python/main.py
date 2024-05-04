@@ -8,10 +8,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from loginFunctions.encryption import generate_key_pair, encrypt_message, decrypt_message  # Importing encryption functions
 from endpoints.loginEndpoints import create_account, login
 from models import AccountCreate, Login
-from database import SessionLocal
+from database import SessionLocal, Base, engine
+
+# Create tables in the database
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
