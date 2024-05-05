@@ -1,5 +1,4 @@
 # main.py (FastAPI backend)
-
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,6 +6,7 @@ from sqlalchemy import create_engine, Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
+from api.messages import router as messages_router
 
 from endpoints.loginEndpoints import create_account, login
 from models import AccountCreate, Login, FriendModel, Friend, Node, LinkedList
@@ -16,7 +16,8 @@ from database import SessionLocal, Base, engine
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-
+#for messaging
+app.include_router(messages_router, prefix="/messages")
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
