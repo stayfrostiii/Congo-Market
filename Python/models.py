@@ -29,6 +29,9 @@ class Account(Base):
 class queryItem(BaseModel):
     name: str
 
+class getItemID(BaseModel):
+    itemID: int
+
 class Item(Base):
     __tablename__ = "item"
 
@@ -39,6 +42,9 @@ class Item(Base):
     price = Column(Float)
     time = Column(Float)
     date = Column(Integer)
+    owner = Column(Integer)
+    distCenter = Column(Integer)
+
 
 class Friend:
     def __init__(self, first_name, last_name, id_number):

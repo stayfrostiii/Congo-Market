@@ -1,18 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
+import "./MainPage.css";
+import lebron from "../../binary/lebron.jpg";
+
+let itemPicked = 0;
 
 const MainPage = () => 
 {
+  useEffect(() => {handleSubmit()}, []);
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
-  const [counter, setCounter] = useState("");
+  const [counter, setCounter] = useState(0);
   const navigate = useNavigate(); // Hook for navigation
-  var itemCount = 0;
 
   const handleAuthenticationClick = () => 
   {
     navigate("/selection");
+  };
+
+  const handleItemClick = (id_get) =>
+  {
+    console.log(id_get);
+    itemPicked = id_get;
+    navigate("/item_page");
   };
 
   const handleSubmit = async () => 
@@ -20,11 +31,12 @@ const MainPage = () =>
     try 
     {
       console.log("Submitting item request:", { name });
-      const response = await api.post("/query_item", { name: name, });
+      const response = await api.post("/query_item", { name: name });
       console.log("Response:", response.data);
       setMessage(response.data.message);
       setCounter(response.data.counter);
       setName("");
+      document.getElementById("search").value = "";
     } 
     catch (error) 
     {
@@ -53,15 +65,52 @@ const MainPage = () =>
 
   const addDiv = () => 
   {
-    itemCount = {counter};
-    itemCount = 1;
-    while (itemCount--)
+    let items = message;
+    //console.log("Add div:" + message);
+
+    var indexComma = 0;
+    var indexLine = 0;
+    var indexSemi = 0;
+    var itemCount = counter;
+    let name = "";
+    let price = "";
+    var itemID = 0;
+
+    let html = [];
+
+    for (let i = 0; i < itemCount; i++)
     {
-      return (  
+      indexComma = items.indexOf(",");
+      name = items.substring(0, indexComma);
+
+      indexSemi = items.indexOf(";");
+      price = items.substring(indexComma + 1, indexSemi);
+
+      indexLine = items.indexOf("|");
+      const itemID = parseInt(items.substring(indexSemi + 1, indexLine));
+
+      items = items.substring(indexLine + 1);
+
+      //console.log("id: " + itemID);
+
+      html.push(
         <div>
-          <p> {message[itemCount]} </p>
-        </div>);
+        <button class='item' onClick={() => handleItemClick(itemID)}>
+            <div class='indicators'>
+                <p class='trade-ind'></p>
+                <p class='friend-ind'></p>
+            </div>
+            <img class='image' src={lebron} alt=""/> 
+            <p class='item-name'>{name}, {itemID}</p>
+            <p class='price'>${price}</p>
+        </button>
+      </div>
+      );
+
+      //console.log(i + " - " + name + " " + price + " " + itemID);
     }
+
+    return html;
   }
 
   return (
@@ -71,11 +120,16 @@ const MainPage = () =>
       {/* Button to navigate to the authentication selection page */}
       <button onClick={handleAuthenticationClick}>Go to Authentication</button>
       <br/>
-      <input type="text" onChange={(e) => setName(e.target.value)} placeholder="Enter name"/>
-      <button onClick={handleSubmit}>Login</button>
-      {addDiv()}
+      <input type="text" id="search" onChange={(e) => setName(e.target.value)} placeholder="Enter name"/>
+      <button onClick={handleSubmit}>Submit</button>
+      <br/>
+      {/*<img src={lebron}/>*/}
+      <div class="item-holder">
+        {addDiv()}
+      </div>
     </div>
   );
 };
 
+export { itemPicked };
 export default MainPage;
