@@ -1,13 +1,12 @@
 # main.py (FastAPI backend)
-
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
-
+from ConnectionManager import ConnectionManager
 from endpoints.loginEndpoints import create_account, login 
 from endpoints.itemEndpoints import query_item, item_profile
 from models import AccountCreate, Login, FriendModel, Friend, Node, LinkedList, queryItem, getItemID, Item
@@ -17,7 +16,6 @@ from database import SessionLocal, Base, engine
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
@@ -26,6 +24,22 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
+
+
+manager = ConnectionManager()
+
+@app.websocket("/ws/{client_id}")
+async def websocket_endpoint(websocket: WebSocket, client_id: int):
+    await manager.connect(websocket)  # Connect client
+    try:
+        while True:
+            data = await websocket.receive_text()  # Receive message from client
+            # Process the received message, e.g., save it to the database
+            # Then broadcast the message to all connected clients
+            await manager.broadcast(f"Client {client_id}: {data}")
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)  # Disconnect client
+        await manager.broadcast(f"Client {client_id} has left the chat")
 
 # Endpoint to create a new account with encrypted email, password, and public key
 @app.post("/create_account")

@@ -5,6 +5,7 @@ import AuthenticationSelectionPage from "./Pages/authentication/AuthenticationSe
 import SignUpPage from "./Pages/authentication/SignUpPage";
 import LoginPage from "./Pages/authentication/LoginPage";
 import AddFriendForm from "./Pages/AddFriend/AddFriendForm";
+import ChatPage from "./Pages/Chat/chat";
 import ItemPage from "./Pages/item-page/ItemPage";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/add_friend" element={<AddFriendForm />} />
+        <Route path="/chat" element={<ChatPage />} />
         <Route path="/item_page" element={<ItemPage />} />
       </Routes>
     </Router>
