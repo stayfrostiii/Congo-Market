@@ -15,10 +15,17 @@ const LoginPage = () => {
         email: encrypt(email),
         password: encrypt(password),
       });
+
       console.log("Response:", response.data);
-      setMessage(response.data.message);
-      setEmail("");
-      setPassword("");
+
+      // Assuming the response contains a token field
+      const token = response.data.token;
+
+      // Set the token as an HTTP-only cookie
+      document.cookie = `token=${token}; Path=/; SameSite=Strict`;
+
+      // Redirect the user to another page, e.g., dashboard
+      navigate("/selection");
     } catch (error) {
       console.error("Error:", error);
       if (error.response) {
@@ -41,6 +48,11 @@ const LoginPage = () => {
   const encrypt = (data) => {
     // Perform encryption logic here
     return data;
+  };
+
+  const handleLogout = () => {
+    // Clear the session token by setting an expired cookie
+    document.cookie = `token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
   };
 
   const handleGoBack = () => {
@@ -66,17 +78,13 @@ const LoginPage = () => {
       />
       <button onClick={handleSubmit}>Login</button>
       <p>{message}</p>
+      {/* Button to logout */}
+      <button onClick={handleLogout}>Logout</button>
       {/* Button to navigate back to the authentication selection page */}
       <button onClick={handleGoBack}>
         Go Back to Authentication Selection
       </button>
-
-      
-
     </div>
-
-
-    
   );
 };
 

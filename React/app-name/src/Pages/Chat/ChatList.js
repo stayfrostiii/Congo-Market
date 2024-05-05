@@ -1,9 +1,10 @@
 import React from 'react';
 
 const ChatList = () => {
+
   return (
-    <div>
-      testing
+    <div className="chat-list-container">
+      {/* Display list of chats or users */}
     </div>
   );
 };

@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
-from fastapi import HTTPException
+from fastapi import Cookie, Depends, HTTPException, Response, status
 from models import AccountCreate, Login, Account
 from loginEncryption.generate_user_keys import generate_user_keys, email_to_user_id, read_private_key
 from loginEncryption.encrypt_data import generate_salt, hash_password
 from loginEncryption.token_authentication import create_access_token, encrypt_message, decrypt_message, read_server_keys
+
 
 import traceback
 
@@ -63,7 +64,7 @@ def create_account(db: Session, account: AccountCreate):
 
 
 
-def login(db: Session, login_data: Login):
+def login(db: Session, login_data: Login, response: Response):
     try:
         # Query the database for the user with the provided email
         user = db.query(Account).filter(Account.email == login_data.email).first()
@@ -82,19 +83,18 @@ def login(db: Session, login_data: Login):
         
         # Encrypt the token using the user's public key
         encrypted_token = encrypt_message(user.public_key.encode(), access_token)
-
+        
         # Decrypt the encrypted token using the user's private key
         private_key = read_private_key(user.user_id)
         print("Type of private key:", type(private_key))
         decrypted_token = decrypt_message(private_key, encrypted_token)
         print("Type of decrypted token:", type(decrypted_token))
-        
         # Compare the original token with the decrypted token
         if access_token != decrypted_token:
             raise HTTPException(status_code=401, detail="Invalid token")
-
-        # If the credentials match, return a success message
-        return {"message": "Login successful"}
+        
+        # If the credentials match, return a success message along with the token
+        return {"message": "Login successful", "token": str(user.user_id)}
 
     except HTTPException as http_error:
         # Re-raise HTTPException to return specific error responses
