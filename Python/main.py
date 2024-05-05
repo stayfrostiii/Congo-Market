@@ -11,7 +11,8 @@ from endpoints.loginEndpoints import create_account, login
 from endpoints.itemEndpoints import query_item, item_profile
 from models import AccountCreate, Login, FriendModel, Friend, Node, LinkedList, queryItem, getItemID, Item
 from database import SessionLocal, Base, engine
-
+from messaging.messages import store_message, get_messages
+import json
 # Create tables in the database
 Base.metadata.create_all(bind=engine)
 
@@ -35,11 +36,15 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int):
         while True:
             data = await websocket.receive_text()  # Receive message from client
             # Process the received message, e.g., save it to the database
-            # Then broadcast the message to all connected clients
-            await manager.broadcast(f"Client {client_id}: {data}")
+            message_data = json.loads(data)
+            message_content = message_data.get("message", "")  # Get the value of "message" or an empty string if not found
+            await manager.broadcast(f"{client_id}: {message_content}")
+            sender_id = client_id
+            recipient_id = client_id
+            store_message(sender_id, recipient_id, data)
     except WebSocketDisconnect:
         manager.disconnect(websocket)  # Disconnect client
-        await manager.broadcast(f"Client {client_id} has left the chat")
+        await manager.broadcast(f"{client_id} has left the chat")
 
 # Endpoint to create a new account with encrypted email, password, and public key
 @app.post("/create_account")
