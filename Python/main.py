@@ -1,6 +1,6 @@
 # main.py (FastAPI backend)
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Response
-from fastapi import Depends
+from fastapi import Depends, Request
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 from ConnectionManager import ConnectionManager
 from endpoints.loginEndpoints import create_account, login 
 from endpoints.itemEndpoints import query_item, item_profile
-from models import AccountCreate, Login, FriendModel, Friend, Node, LinkedList, queryItem, getItemID, Item
+from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemID, Item
 from database import SessionLocal, Base, engine
 import json
 from endpoints.friendEndpoints import add_friend_to_account
