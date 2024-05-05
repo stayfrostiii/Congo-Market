@@ -1,5 +1,7 @@
 # main.py (FastAPI backend)
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Response
+from fastapi import Depends
+from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, Column, String, Integer
@@ -11,6 +13,7 @@ from endpoints.loginEndpoints import create_account, login
 from endpoints.itemEndpoints import query_item, item_profile
 from models import AccountCreate, Login, FriendModel, Friend, Node, LinkedList, queryItem, getItemID, Item
 from database import SessionLocal, Base, engine
+from endpoints.friendEndpoints import add_friend_to_account
 
 # Create tables in the database
 Base.metadata.create_all(bind=engine)
@@ -47,31 +50,17 @@ async def create_account_handler(account: AccountCreate):
     db = SessionLocal()
     return create_account(db, account)
 
-@app.post("/login")
-async def login_handler(login_data: Login):
-    db = SessionLocal()
-    return login(db, login_data)  # Pass the login_data object directly
-
-friend_list = LinkedList()
-
-# Define API endpoints
+# Endpoint to add a friend to an account's friends list
 @app.post("/friends")
-async def add_friend(friend: FriendModel):
-    friend_list.add_friend(Friend(friend.first_name, friend.last_name, friend.id_number))
-    return {"message": "Friend added successfully"}
+async def add_friend_handler(friend: FriendModel):
+    db = SessionLocal()
+    return add_friend_to_account(db, friend)
 
-@app.get("/friends")
-async def get_friends():
-    friends = []
-    current = friend_list.head
-    while current:
-        friends.append({
-            "first_name": current.friend.first_name,
-            "last_name": current.friend.last_name,
-            "id_number": current.friend.id_number
-        })
-        current = current.next
-    return friends
+@app.post("/login")
+async def login_handler(login_data: Login, response: Response):
+    db = SessionLocal()
+    return login(db, login_data, response)  # Pass the login_data object directly
+
 
 @app.post("/query_item")
 async def item_handler(item: queryItem):
