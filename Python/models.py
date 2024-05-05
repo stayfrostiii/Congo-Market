@@ -1,7 +1,7 @@
 #models.py
 from pydantic import BaseModel
 from database import Base
-from sqlalchemy import Column, String, Integer, Float, DateTime, ForeignKey
+from sqlalchemy import Column, String, Integer, Float, DateTime, ForeignKey, TEXT
 from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
@@ -37,10 +37,11 @@ class Account(Base):
     __tablename__ = "account_test"
 
     id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer)  # Store user ID as a string
     email = Column(String, unique=True, index=True)
-    password = Column(String)
-    public_key = Column(String)  # New column to store public key
-    private_key = Column(String)  # New column to store public key
+    hashed_password = Column(String)
+    salt = Column(String)  # Store public key as a string
+    public_key = Column(TEXT)  # New column to store public key
 
     sent_messages = relationship("Message", back_populates="sender", foreign_keys=[Message.sender_id])
     received_messages = relationship("Message", back_populates="recipient", foreign_keys=[Message.recipient_id])
