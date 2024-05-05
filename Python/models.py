@@ -18,7 +18,7 @@ class Login(BaseModel):
 class FriendModel(BaseModel):   #For Friend's List
     first_name: str
     last_name: str
-    id_number: int
+    id_number: str
     
 #temp table for messaging
 class Message(Base):
@@ -42,6 +42,7 @@ class Account(Base):
     hashed_password = Column(String)
     salt = Column(String)  # Store public key as a string
     public_key = Column(TEXT)  # New column to store public key
+    friends_list = Column(TEXT)
 
     sent_messages = relationship("Message", back_populates="sender", foreign_keys=[Message.sender_id])
     received_messages = relationship("Message", back_populates="recipient", foreign_keys=[Message.recipient_id])
