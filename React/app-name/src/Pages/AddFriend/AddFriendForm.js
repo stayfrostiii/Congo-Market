@@ -1,34 +1,35 @@
 import React, { useState } from "react";
-import api from "../../api";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import FriendsList from "../../FriendsList";
 import "./AddFriendForm.css";
 
-const handleSubmit = async (e) => {
-  e.preventDefault(); // Prevent default form submission behavior
-  try {
-    console.log("Submitting friend request:", {
-      firstName,
-      lastName,
-      idNumber,
-    });
-    const response = await api.post("/friends", {
-      firstName,
-      lastName,
-      idNumber,
-    });
+const AddFriendForm = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate(); // Hook for navigation
 
-    console.log("Friend added successfully:", response.data);
-    // Clear the form after successfully adding the friend
-    setFirstName("");
-    setLastName("");
-    setIdNumber("");
-    setMessage("Friend added successfully");
-  } catch (error) {
-    console.error("Error adding friend:", error);
-    setMessage("An error occurred. Please try again later.");
-  }
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Send a POST request to the backend to add the friend
+      const response = await axios.post("http://localhost:8000/friends", {
+        firstName: firstName,
+        lastName: lastName,
+        idNumber: idNumber,
+      });
+      console.log("Friend added successfully:", response.data);
+      // Clear the form after successfully adding the friend
+      setFirstName("");
+      setLastName("");
+      setIdNumber("");
+      setMessage("Friend added successfully");
+    } catch (error) {
+      console.error("Error adding friend:", error);
+      setMessage("An error occurred. Please try again later.");
+    }
+  };
 
   const handleGoBack = () => {
     navigate("/selection");
@@ -80,11 +81,7 @@ const handleSubmit = async (e) => {
       <button onClick={handleGoBack}>
         Go Back to Authentication Selection
       </button>
-      <div className="friendList">
-        <div>
-          <FriendsList /> {/* Use the FriendsList component */}
-        </div>
-      </div>
+      <div className="friendList"></div>
     </div>
   );
 };
