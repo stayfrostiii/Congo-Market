@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
 const ChatComponent = ({ websocket }) => {
-
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     // Event listener for incoming messages
-  websocket.onmessage = (event) => {
-    const data = event.data; // Just use the raw data without JSON parsing
-    setMessages((prevMessages) => [...prevMessages, data]);
-  };
-
+    websocket.onmessage = (event) => {
+      const data = event.data; 
+      setMessages((prevMessages) => [...prevMessages, data]);
+    };
 
     return () => {
       // Cleanup function
@@ -21,8 +19,14 @@ const ChatComponent = ({ websocket }) => {
 
   const handleSendMessage = () => {
     if (message.trim() !== '') {
-      websocket.send(JSON.stringify({ content: message }));
+      websocket.send(JSON.stringify({ message }));
       setMessage('');
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSendMessage();
     }
   };
 
@@ -40,6 +44,7 @@ const ChatComponent = ({ websocket }) => {
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown} // Add keydown event handler
           placeholder="Type a message..."
         />
         <button onClick={handleSendMessage}>Send</button>
