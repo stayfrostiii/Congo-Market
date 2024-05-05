@@ -7,8 +7,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from ConnectionManager import ConnectionManager
-from endpoints.loginEndpoints import create_account, login
-from models import AccountCreate, Login, FriendModel, Friend, Node, LinkedList
+from endpoints.loginEndpoints import create_account, login 
+from endpoints.itemEndpoints import query_item, item_profile
+from models import AccountCreate, Login, FriendModel, Friend, Node, LinkedList, queryItem, getItemID, Item
 from database import SessionLocal, Base, engine
 
 # Create tables in the database
@@ -72,3 +73,12 @@ async def get_friends():
         current = current.next
     return friends
 
+@app.post("/query_item")
+async def item_handler(item: queryItem):
+    db = SessionLocal()
+    return query_item(db, item)
+
+@app.post("/item_profile")
+async def item_profile_handler(item: getItemID):
+    db = SessionLocal()
+    return item_profile(db, item)

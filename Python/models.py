@@ -41,6 +41,13 @@ class Message(Base):
 
     sender = relationship("Account", back_populates="sent_messages", foreign_keys=[sender_id])
     recipient = relationship("Account", back_populates="received_messages", foreign_keys=[recipient_id])
+
+class queryItem(BaseModel):
+    name: str
+
+class getItemID(BaseModel):
+    itemID: int
+
 class Item(Base):
     __tablename__ = "item"
 
@@ -51,6 +58,9 @@ class Item(Base):
     price = Column(Float)
     time = Column(Float)
     date = Column(Integer)
+    owner = Column(Integer)
+    distCenter = Column(Integer)
+
 
 class Friend:
     def __init__(self, first_name, last_name, id_number):
