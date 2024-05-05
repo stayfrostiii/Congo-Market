@@ -1,6 +1,10 @@
+#models.py
 from pydantic import BaseModel
 from database import Base
-from sqlalchemy import Column, String, Integer, Float
+from sqlalchemy import Column, String, Integer, Float, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
+from database import Base
+from datetime import datetime
 
 class AccountCreate(BaseModel):
     email: str
@@ -25,6 +29,25 @@ class Account(Base):
     public_key = Column(String)  # New column to store public key
     private_key = Column(String)  # New column to store public key
 
+#temp table for messaging
+class Message(Base):
+    __tablename__ = "messages"
+
+    id = Column(Integer, primary_key=True, index=True)
+    sender_id = Column(Integer, ForeignKey("account_test.id"))
+    recipient_id = Column(Integer, ForeignKey("account_test.id"))
+    content = Column(String)
+    timestamp = Column(DateTime, default=datetime.now)
+
+    sender = relationship("Account", back_populates="sent_messages", foreign_keys=[sender_id])
+    recipient = relationship("Account", back_populates="received_messages", foreign_keys=[recipient_id])
+
+class queryItem(BaseModel):
+    name: str
+
+class getItemID(BaseModel):
+    itemID: int
+
 class Item(Base):
     __tablename__ = "item"
 
@@ -35,6 +58,9 @@ class Item(Base):
     price = Column(Float)
     time = Column(Float)
     date = Column(Integer)
+    owner = Column(Integer)
+    distCenter = Column(Integer)
+
 
 class Friend:
     def __init__(self, first_name, last_name, id_number):

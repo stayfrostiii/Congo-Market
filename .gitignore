@@ -43,3 +43,6 @@ build/
 # Ignore generated files
 *.min.js
 *.min.css
+
+# Ignore binary files
+React/app-name/src/binary
