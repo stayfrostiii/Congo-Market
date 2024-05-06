@@ -85,4 +85,6 @@ const AddFriendForm = () => {
   );
 };
 
+
 export default AddFriendForm;
+

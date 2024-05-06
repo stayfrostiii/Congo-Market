@@ -11,11 +11,12 @@ class AccountCreate(BaseModel):
     password: str
     username: str
     # Pydantic model for login request body
+
 class Login(BaseModel):
     email: str
     password: str
 
-class FriendModel(BaseModel):   # #temp table for messaging
+class FriendModel(BaseModel): #temp table for messaging
     firstName: str
     lastName: str
     idNumber: str
@@ -72,7 +73,6 @@ class Item(Base):
     date = Column(String)
     owner = Column(Integer)
     distCenter = Column(String)
-
 
 class Node:
     def __init__(self, friend):

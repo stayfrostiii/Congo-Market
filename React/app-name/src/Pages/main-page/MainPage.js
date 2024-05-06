@@ -19,11 +19,15 @@ const MainPage = () => {
     navigate("/selection");
   };
 
-  const handleAddItemClick = () => {
+
+  const handleAddItemClick = () =>
+  {
     navigate("/add-item");
   };
 
-  const handleItemClick = (id_get) => {
+
+  const handleItemClick = (id_get) =>
+  {
     //console.log(id_get);
     itemPicked = id_get;
     navigate("/item_page");
@@ -121,6 +125,7 @@ const MainPage = () => {
         onChange={(e) => setName(e.target.value)}
         placeholder="Enter Item"
       />
+
       <button onClick={handleSubmit}>Submit</button>
       <br />
       {/*<img src={lebron}/>*/}
