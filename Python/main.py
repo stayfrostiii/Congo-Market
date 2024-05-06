@@ -20,7 +20,7 @@ from endpoints.fileEndpoints import query_Files, queryFiles
 import json
 from typing import Annotated
 
-# from endpoints.friendEndpoints import add_friend_to_account
+from endpoints.friendEndpoints import add_friend_to_account, delete_friend_from_account
 
 from messaging.messages import store_message, get_messages
 # Create tables in the database
@@ -74,6 +74,24 @@ async def create_account_handler(account: AccountCreate):
 async def add_friend_handler(friend: FriendModel, request: Request):
     db = SessionLocal()
     return add_friend_to_account(db, friend, request)
+
+@app.delete("/friends/{id_number}")
+async def delete_friend_handler(id_number: int, request: Request):
+    db = SessionLocal()
+    return delete_friend_from_account(db, id_number, request)
+
+"""
+@app.delete("/friends")
+async def delete_friend_handler(friend: FriendModel, request: Request):
+    db = SessionLocal()
+    return delete_friend_from_account(db, friend, request)
+    
+
+@app.delete("/friends")
+async def delete_friend_handler(id_number: int, request: Request):
+    db = SessionLocal()
+    return delete_friend_from_account(db, id_number, request)
+"""
 
 @app.post("/login")
 async def login_handler(login_data: Login, response: Response):

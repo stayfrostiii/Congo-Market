@@ -22,7 +22,8 @@ const MainPage = () => {
   const handleAddItemClick = () =>
   {
     navigate("/add-item");
-  }
+  };
+
 
   const handleItemClick = (id_get) =>
   {

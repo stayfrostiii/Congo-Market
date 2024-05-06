@@ -7,8 +7,15 @@ const AddFriendForm = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [idNumber, setIdNumber] = useState("");
+  const [deleteID, setDeleteID] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate(); // Hook for navigation
+
+
+  const handleGoBack = () => {
+    navigate("/selection");
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +37,41 @@ const AddFriendForm = () => {
       setMessage("An error occurred. Please try again later.");
     }
   };
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      // Send a DELETE request to the backend to delete the friend
+      const response = await axios.delete(`http://localhost:8000/friends/${deleteID}`);
+      console.log("Friend deleted successfully:", response.data);
+      // Clear the form after successfully deleting the friend
+      setDeleteID("");
+      setMessage("Friend deleted successfully");
+    } catch (error) {
+      console.error("Error deleting friend:", error);
+      setMessage("An error occurred. Please try again later.");
+    }
+  };
+
+/*
+  const handleDelete = async () => {
+    try {
+      // Send a DELETE request to the backend to delete the friend
+      const response = await axios.delete("http://localhost:8000/friends", {
+        idNumber: idNumber,
+      });
+      console.log("Friend removed successfully:", response.data);
+      // Clear the form after successfully removing the friend
+      setFirstName("");
+      setLastName("");
+      setIdNumber("");
+      setMessage("Friend removed successfully");
+    } catch (error) {
+      console.error("Error removing friend:", error);
+      setMessage("An error occurred. Please try again later.");
+    }
+  };*/
+
 
   return (
     <div>
@@ -72,6 +114,24 @@ const AddFriendForm = () => {
           Add Friend
         </button>
       </form>
+
+      <form onSubmit={handleDelete}>
+        <label>
+          ID Number:
+          <input
+            className="idnum"
+            type="text"
+            value={deleteID}
+            onChange={(e) => setDeleteID(e.target.value)}
+          />
+        </label>
+        <br />
+        <br />
+        <button className="submit-button" type="submit">
+          Delete Friend
+        </button>
+      </form>
+
       <p>{message}</p>
       {/* Button to navigate back to the authentication selection page */}
       <button onClick={handleGoBack}>
@@ -81,4 +141,5 @@ const AddFriendForm = () => {
   );
 };
 
-// export default AddFriendForm;
+export default AddFriendForm;
+

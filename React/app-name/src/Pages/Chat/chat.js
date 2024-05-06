@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ChatComponent from './ChatComponent';
-import './chat.css';
+import ChatList from "./ChatList";
+import "./chat.css";
 
 const ChatPage = () => {
-
   const [websocket, setWebsocket] = useState(null);
   const [userId, setUserId] = useState(null); // State to store the user ID
 
@@ -34,7 +34,7 @@ const ChatPage = () => {
   return (
     <div className="chat-page-container">
       <div className="left-side">
-        {/* Your chat list component goes here */}
+        <ChatList />
       </div>
       <div className="right-side">
         {websocket && <ChatComponent websocket={websocket} />}
