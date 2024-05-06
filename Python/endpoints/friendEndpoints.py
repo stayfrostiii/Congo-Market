@@ -1,10 +1,12 @@
 from sqlalchemy.orm import Session
-from fastapi import HTTPException
+from fastapi import HTTPException, Request
 from models import Account, FriendModel
 
-def add_friend_to_account(db: Session, friend: FriendModel):
+def add_friend_to_account(db: Session, friend: FriendModel, request: Request):
     # Simulate a user ID, you can replace this with an actual user ID from your database
-    user_id = 1219588
+
+    user_id = request.cookies.get("user_id")
+    #user_id = 1219588
     try:
         # Retrieve the account from the database using the provided user_id
         account = db.query(Account).filter(Account.user_id == user_id).first()
