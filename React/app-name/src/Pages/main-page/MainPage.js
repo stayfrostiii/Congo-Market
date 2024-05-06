@@ -6,19 +6,20 @@ import lebron from "../../binary/lebron.jpg";
 
 let itemPicked = 0;
 
-const MainPage = () => 
-{
-  useEffect(() => {handleSubmit()}, []);
+const MainPage = () => {
+  useEffect(() => {
+    handleSubmit();
+  }, []);
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [counter, setCounter] = useState(0);
   const navigate = useNavigate(); // Hook for navigation
 
-  const handleAuthenticationClick = () => 
-  {
+  const handleAuthenticationClick = () => {
     navigate("/selection");
   };
 
+<<<<<<< HEAD
   const handleAddItemClick = () =>
   {
     navigate("/add-item");
@@ -27,14 +28,16 @@ const MainPage = () =>
   const handleItemClick = (id_get) =>
   {
     //console.log(id_get);
+=======
+  const handleItemClick = (id_get) => {
+    console.log(id_get);
+>>>>>>> dbf50054d42e1f2bc5a28a272dcafc42a2200445
     itemPicked = id_get;
     navigate("/item_page");
   };
 
-  const handleSubmit = async () => 
-  {
-    try 
-    {
+  const handleSubmit = async () => {
+    try {
       console.log("Submitting item request:", { name });
       const response = await api.post("/query_item", { name: name });
       console.log("Response:", response.data);
@@ -42,24 +45,17 @@ const MainPage = () =>
       setCounter(response.data.counter);
       setName("");
       document.getElementById("search").value = "";
-    } 
-    catch (error) 
-    {
+    } catch (error) {
       console.error("Error:", error);
-      if (error.response) 
-      {
+      if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         console.error("Server responded with status:", error.response.status);
         console.error("Response data:", error.response.data);
-      } 
-      else if (error.request) 
-      {
+      } else if (error.request) {
         // The request was made but no response was received
         console.error("No response received:", error.request);
-      } 
-      else 
-      {
+      } else {
         // Something happened in setting up the request that triggered an error
         console.error("Error setting up request:", error.message);
       }
@@ -68,8 +64,7 @@ const MainPage = () =>
     }
   };
 
-  const addDiv = () => 
-  {
+  const addDiv = () => {
     let items = message;
     //console.log("Add div:" + message);
 
@@ -83,8 +78,7 @@ const MainPage = () =>
 
     let html = [];
 
-    for (let i = 0; i < itemCount; i++)
-    {
+    for (let i = 0; i < itemCount; i++) {
       indexComma = items.indexOf(",");
       name = items.substring(0, indexComma);
 
@@ -100,23 +94,25 @@ const MainPage = () =>
 
       html.push(
         <div>
-        <button class='item' onClick={() => handleItemClick(itemID)}>
-            <div class='indicators'>
-                <p class='trade-ind'></p>
-                <p class='friend-ind'></p>
+          <button class="item" onClick={() => handleItemClick(itemID)}>
+            <div class="indicators">
+              <p class="trade-ind"></p>
+              <p class="friend-ind"></p>
             </div>
-            <img class='image' src={lebron} alt=""/> 
-            <p class='item-name'>{name}, {itemID}</p>
-            <p class='price'>${price}</p>
-        </button>
-      </div>
+            <img class="image" src={lebron} alt="" />
+            <p class="item-name">
+              {name}, {itemID}
+            </p>
+            <p class="price">${price}</p>
+          </button>
+        </div>
       );
 
       //console.log(i + " - " + name + " " + price + " " + itemID);
     }
 
     return html;
-  }
+  };
 
   return (
     <div>
@@ -124,15 +120,23 @@ const MainPage = () =>
       <p>This is the main page content.</p>
       {/* Button to navigate to the authentication selection page */}
       <button onClick={handleAuthenticationClick}>Go to Authentication</button>
+<<<<<<< HEAD
       <button onClick={handleAddItemClick}>Add Item</button>
       <br/>
       <input type="text" id="search" onChange={(e) => setName(e.target.value)} placeholder="Enter Item"/>
+=======
+      <br />
+      <input
+        type="text"
+        id="search"
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Enter name"
+      />
+>>>>>>> dbf50054d42e1f2bc5a28a272dcafc42a2200445
       <button onClick={handleSubmit}>Submit</button>
-      <br/>
+      <br />
       {/*<img src={lebron}/>*/}
-      <div class="item-holder">
-        {addDiv()}
-      </div>
+      <div class="item-holder">{addDiv()}</div>
     </div>
   );
 };

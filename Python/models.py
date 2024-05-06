@@ -1,7 +1,7 @@
 #models.py
 from pydantic import BaseModel
 from database import Base
-from sqlalchemy import Column, String, Integer, Float, DateTime, ForeignKey
+from sqlalchemy import Column, String, Integer, Float, DateTime, ForeignKey, TEXT
 from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
@@ -9,16 +9,16 @@ from datetime import datetime
 class AccountCreate(BaseModel):
     email: str
     password: str
-
+    username: str
     # Pydantic model for login request body
 class Login(BaseModel):
     email: str
     password: str
 
-class FriendModel(BaseModel):   #For Friend's List
-    first_name: str
-    last_name: str
-    id_number: int
+class FriendModel(BaseModel):   # #temp table for messaging
+    firstName: str
+    lastName: str
+    idNumber: str
 
 class queryItem(BaseModel):
     name: str
@@ -32,7 +32,7 @@ class addItem(BaseModel):
     price: str
     tags: str
 
-# #temp table for messaging
+#temp table for messaging
 class Message(Base):
     __tablename__ = "messages"
 
@@ -45,6 +45,19 @@ class Message(Base):
     sender = relationship("Account", back_populates="sent_messages", foreign_keys=[sender_id])
     recipient = relationship("Account", back_populates="received_messages", foreign_keys=[recipient_id])
 
+class Account(Base):
+    __tablename__ = "account_test"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer)  # Store user ID as a string
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+    salt = Column(String)  # Store public key as a string
+    public_key = Column(TEXT)  # New column to store public key
+    friends_list = Column(TEXT)
+    username = Column(TEXT)
+    sent_messages = relationship("Message", back_populates="sender", foreign_keys=[Message.sender_id])
+    received_messages = relationship("Message", back_populates="recipient", foreign_keys=[Message.recipient_id])
 
 class Account(Base):
     __tablename__ = "account_test"
@@ -72,12 +85,6 @@ class Item(Base):
     owner = Column(Integer)
     distCenter = Column(String)
 
-
-class Friend:
-    def __init__(self, first_name, last_name, id_number):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.id_number = id_number
 
 class Node:
     def __init__(self, friend):

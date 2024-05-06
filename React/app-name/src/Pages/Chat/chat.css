@@ -1,13 +1,41 @@
 .chat-page-container {
   display: flex;
-  height: 100vh; /* Adjust as needed */
+  height: 100vh;
 }
 
 .left-side {
-  flex: 1;
-  border-right: 1px solid #ccc; /* Border */
+  width: 30%;
+  background-color: #f0f0f0;
 }
 
 .right-side {
-  flex: 3;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto; /* Apply scroll only if content overflows */
+  height: calc(100vh - 40px); /* Set a fixed height for the chat messages container */
+}
+
+.chat-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 0;
+  width: 70%;
+  background-color: #f8f8f8;
+  padding: 10px;
+}
+
+.chat-input input {
+  width: calc(100% - 100px);
+  margin-right: 10px;
+}
+
+.chat-input button {
+  width: 80px;
 }

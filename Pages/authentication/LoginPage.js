@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import api from "../../api";
 
-const LoginPage = () => {
+function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -11,21 +11,14 @@ const LoginPage = () => {
   const handleSubmit = async () => {
     try {
       console.log("Submitting login request:", { email, password });
-      const response = await api.post("/login", {
+      const response = await axios.post("http://localhost:8000/login", {
         email: encrypt(email),
         password: encrypt(password),
       });
-
       console.log("Response:", response.data);
-
-      // Assuming the response contains a token field
-      const token = response.data.token;
-
-      // Set the token as an HTTP-only cookie
-      document.cookie = `token=${token}; Path=/; SameSite=Strict`;
-
-      // Redirect the user to another page, e.g., dashboard
-      navigate("/selection");
+      setMessage(response.data.message);
+      setEmail("");
+      setPassword("");
     } catch (error) {
       console.error("Error:", error);
       if (error.response) {
@@ -48,11 +41,6 @@ const LoginPage = () => {
   const encrypt = (data) => {
     // Perform encryption logic here
     return data;
-  };
-
-  const handleLogout = () => {
-    // Clear the session token by setting an expired cookie
-    document.cookie = `token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
   };
 
   const handleGoBack = () => {
@@ -78,14 +66,12 @@ const LoginPage = () => {
       />
       <button onClick={handleSubmit}>Login</button>
       <p>{message}</p>
-      {/* Button to logout */}
-      <button onClick={handleLogout}>Logout</button>
       {/* Button to navigate back to the authentication selection page */}
       <button onClick={handleGoBack}>
         Go Back to Authentication Selection
       </button>
     </div>
   );
-};
+}
 
 export default LoginPage;
