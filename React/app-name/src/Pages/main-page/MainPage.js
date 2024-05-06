@@ -19,7 +19,6 @@ const MainPage = () => {
     navigate("/selection");
   };
 
-<<<<<<< HEAD
   const handleAddItemClick = () =>
   {
     navigate("/add-item");
@@ -28,10 +27,6 @@ const MainPage = () => {
   const handleItemClick = (id_get) =>
   {
     //console.log(id_get);
-=======
-  const handleItemClick = (id_get) => {
-    console.log(id_get);
->>>>>>> dbf50054d42e1f2bc5a28a272dcafc42a2200445
     itemPicked = id_get;
     navigate("/item_page");
   };
@@ -120,19 +115,9 @@ const MainPage = () => {
       <p>This is the main page content.</p>
       {/* Button to navigate to the authentication selection page */}
       <button onClick={handleAuthenticationClick}>Go to Authentication</button>
-<<<<<<< HEAD
       <button onClick={handleAddItemClick}>Add Item</button>
       <br/>
       <input type="text" id="search" onChange={(e) => setName(e.target.value)} placeholder="Enter Item"/>
-=======
-      <br />
-      <input
-        type="text"
-        id="search"
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Enter name"
-      />
->>>>>>> dbf50054d42e1f2bc5a28a272dcafc42a2200445
       <button onClick={handleSubmit}>Submit</button>
       <br />
       {/*<img src={lebron}/>*/}

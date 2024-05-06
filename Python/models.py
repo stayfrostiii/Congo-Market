@@ -11,11 +11,12 @@ class AccountCreate(BaseModel):
     password: str
     username: str
     # Pydantic model for login request body
+
 class Login(BaseModel):
     email: str
     password: str
 
-class FriendModel(BaseModel):   # #temp table for messaging
+class FriendModel(BaseModel): #temp table for messaging
     firstName: str
     lastName: str
     idNumber: str
@@ -59,18 +60,6 @@ class Account(Base):
     sent_messages = relationship("Message", back_populates="sender", foreign_keys=[Message.sender_id])
     received_messages = relationship("Message", back_populates="recipient", foreign_keys=[Message.recipient_id])
 
-class Account(Base):
-    __tablename__ = "account_test"
-
-    id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True)
-    password = Column(String)
-    public_key = Column(String)  # New column to store public key
-    private_key = Column(String)  # New column to store public key
-
-    sent_messages = relationship("Message", back_populates="sender", foreign_keys=[Message.sender_id])
-    received_messages = relationship("Message", back_populates="recipient", foreign_keys=[Message.recipient_id])
-
 class Item(Base):
     __tablename__ = "item"
 
@@ -84,7 +73,6 @@ class Item(Base):
     date = Column(String)
     owner = Column(Integer)
     distCenter = Column(String)
-
 
 class Node:
     def __init__(self, friend):
