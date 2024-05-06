@@ -31,10 +31,6 @@ const AddFriendForm = () => {
     }
   };
 
-  const handleGoBack = () => {
-    navigate("/selection");
-  };
-
   return (
     <div>
       <h2 className="friend-header">Add Friend</h2>
@@ -86,4 +82,4 @@ const AddFriendForm = () => {
   );
 };
 
-export default AddFriendForm;
+// export default AddFriendForm;

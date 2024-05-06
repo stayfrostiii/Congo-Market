@@ -1,8 +1,7 @@
 # message_utils.py
-
 from datetime import datetime
 from sqlalchemy.orm import Session
-from models import Message
+from models import Message, Account
 from database import SessionLocal
 
 def store_message(sender_id: int, recipient_id: int, content: str):
@@ -35,3 +34,10 @@ def get_messages(sender_id: int, recipient_id: int):
     finally:
         # Close the session
         db.close()
+        
+def get_username_by_client_id(db: Session, client_id: int) -> str:
+    user = db.query(Account).filter(Account.user_id == client_id).first()
+    if user:
+        return user.username
+    else:
+        return f"User{client_id}"

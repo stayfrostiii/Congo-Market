@@ -5,6 +5,7 @@ import api from "../../api";
 const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate(); // Hook for navigation
 
@@ -14,11 +15,13 @@ const SignUpPage = () => {
       const response = await api.post("/create_account", {
         email,
         password,
+        username,
       });
       console.log("Response:", response.data);
       setMessage(response.data.message);
       setEmail("");
       setPassword("");
+      setUsername("");
     } catch (error) {
       console.error("Error:", error);
       if (error.response) {
@@ -58,6 +61,13 @@ const SignUpPage = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Enter your password"
+      />
+      <label>Username:</label>
+      <input
+        type="text"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="Enter your username"
       />
       <button onClick={handleSubmit}>Sign Up</button>
       <p>{message}</p>
