@@ -34,7 +34,7 @@ def generate_user_keys(user_id):
 
     # Specify the path to the USB drive
     #usb_drive_path = "C:\\Users\\Jeremy\\Desktop\\keys"
-    usb_drive_path = "C:\\Users\\SunHa\\OneDrive\\Desktop\\CMPE-130AshSetup"
+    usb_drive_path = "C:\\SJSU\\CMPE_130\\Congo\\Keys"
 
     # Specify the path to the user's private key directory on the USB drive
     user_private_key_dir = os.path.join(usb_drive_path, "private_keys", str(user_id))
@@ -63,7 +63,7 @@ def generate_user_keys(user_id):
 def read_private_key(user_id):
     # Specify the path to the USB drive
     #usb_drive_path = "C:\\Users\\Jeremy\\Desktop\\keys"
-    usb_drive_path = "C:\\Users\\SunHa\\OneDrive\\Desktop\\CMPE-130AshSetup"
+    usb_drive_path = "C:\\SJSU\\CMPE_130\\Congo\\Keys"
     
     # Specify the path to the user's private key directory on the USB drive
     user_private_key_dir = os.path.join(usb_drive_path, "private_keys", str(user_id))
