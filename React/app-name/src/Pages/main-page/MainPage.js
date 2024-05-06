@@ -18,11 +18,12 @@ const MainPage = () => {
   const handleAuthenticationClick = () => {
     navigate("/selection");
   };
-
+  
   const handleAddItemClick = () =>
   {
     navigate("/add-item");
-  }
+  };
+
 
   const handleItemClick = (id_get) =>
   {
@@ -116,8 +117,15 @@ const MainPage = () => {
       {/* Button to navigate to the authentication selection page */}
       <button onClick={handleAuthenticationClick}>Go to Authentication</button>
       <button onClick={handleAddItemClick}>Add Item</button>
-      <br/>
-      <input type="text" id="search" onChange={(e) => setName(e.target.value)} placeholder="Enter Item"/>
+
+      <br />
+      <input
+        type="text"
+        id="search"
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Enter Item"
+      />
+
       <button onClick={handleSubmit}>Submit</button>
       <br />
       {/*<img src={lebron}/>*/}
