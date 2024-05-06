@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
-import { itemPicked } from "../main-page/MainPage";
+import { itemPickedSP } from "./SearchPage";
 
 const ItemProfile = () => 
 {
   useEffect(() => {handleSubmit()}, []);
   const [message, setMessage] = useState("");
   const navigate = useNavigate(); // Hook for navigation
-  const itemID = itemPicked;
 
-  //console.log("ID in info page: " + itemID);
   
   const handleSubmit = async () => 
   {
     try 
     {
+      const itemID = itemPickedSP;
+      console.log("ID in info page: " + itemID);
       console.log("Submitting item request:", { itemID });
       const response = await api.post("/item_profile", { itemID: itemID });
       console.log("Response:", response.data);
@@ -170,7 +170,6 @@ const ItemProfile = () =>
   }
 
   return (
-    <body>
         <div>
         <button onClick={handleMainpage}>Go to Main Page</button>
         <br/>
@@ -178,7 +177,6 @@ const ItemProfile = () =>
             {addDiv()}
         </div>
         </div>
-    </body>
   );
 };
 
