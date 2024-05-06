@@ -1,6 +1,8 @@
 # main.py (FastAPI backend)
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Response
 from fastapi import Depends, Request
+from fastapi import File, Form, UploadFile
+
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,7 +16,10 @@ from endpoints.itemEndpoints import query_item, item_profile, add_item
 from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemID, addItem, Item
 from database import SessionLocal, Base, engine
 from messaging.messages import get_username_by_client_id
+from endpoints.fileEndpoints import query_Files, queryFiles
 import json
+from typing import Annotated
+
 # from endpoints.friendEndpoints import add_friend_to_account
 
 from messaging.messages import store_message, get_messages
@@ -90,3 +95,10 @@ async def item_profile_handler(item: getItemID):
 async def add_item_handler(item: addItem):
     db = SessionLocal()
     return add_item(db, item)
+
+@app.post("/files")
+async def file_handler(
+    file: Annotated[UploadFile, File()]
+    ):
+    db = SessionLocal()
+    return query_Files(db, file)

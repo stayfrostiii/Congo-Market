@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -23,13 +23,17 @@ const AuthenticationSelectionPage = () => {
   const handleChatForm = () => {
     navigate("/chat")
   }
+  const [file, setFile] = useState(null);
+
   const handleFileInputChange = async (event) => {
+    console.log(event)
     const file = event.target.files[0];
+    
     const formData = new FormData();
     formData.append("file", file);
 
     try {
-      const response = await axios.post("/api/upload", formData);
+      const response = await axios.post("http://127.0.0.1:8000/files", formData);
       console.log("File uploaded successfully:", response.data);
 
       // Save the file to the locally stored congo database in the file category
@@ -46,19 +50,7 @@ const AuthenticationSelectionPage = () => {
       console.error("Error uploading file:", error);
     }
   };
-  const handleSubmit = async () => {
-    try {
-      // Get the uploaded file data from the locally stored congo database
-      const response = await axios.get("sqlite:///./congo.db");
-      const fileData = response.data;
 
-      // Submit the file data to the table
-      await axios.post("sqlite:///./congo.db", fileData); // Replace "/api/submit" with the appropriate API endpoint
-      console.log("File data submitted to the table");
-    } catch (error) {
-      console.error("Error submitting file data:", error);
-    }
-  };
   return (
     <div>
       <h2>Welcome to Our Marketplace!</h2>
@@ -72,8 +64,13 @@ const AuthenticationSelectionPage = () => {
 
       <button onClick={handleFriendForm}>Friends</button>
       <button onClick={handleChatForm}>Chat</button>
-      <button><input type="file" onChange={handleFileInputChange} /></button>
-      <button onClick={handleSubmit}>Submit</button>
+      <form>
+        <div>
+          <button><input type="file" onChange={handleFileInputChange} /></button>
+        </div>
+        <button type="submit">Upload</button>
+      </form>
+      { file && <p>{file.name}</p>}
     </div>
   );
 };
