@@ -3,13 +3,82 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./AddFriendForm.css";
 
+  // Node class for linked list
+  class Node {
+    constructor(firstName, lastName, idNumber) {
+      this.firstName = firstName;   //this = current instance of class, similar to C++
+      this.lastName = lastName;
+      this.idNumber = idNumber;
+      this.next = null;
+    }
+  }
+
+  // Linked list class
+  class LinkedList {
+    constructor() {
+      this.head = null;
+    }
+
+    append(firstName, lastName, idNumber) {
+      const newNode = new Node(firstName, lastName, idNumber);
+      if (!this.head) {
+        this.head = newNode;
+      } else {
+        let current = this.head;
+        while (current.next) {
+          current = current.next;
+        }
+        current.next = newNode;
+      }
+    }
+
+    toArray() {       //Turns the linked list into an array
+      const result = [];
+      let current = this.head; 
+      while (current) {
+        result.push(current);   //add node to end of result array
+        current = current.next;
+      }
+      return result;
+    }
+
+    quicksort() {
+      // Implement quicksort algorithm
+      // This is a simplified version for demonstration purposes
+      // You may need to modify it for better performance and edge cases handling
+      const sort = (list) => {        //sort arrow function that takes in parameter list 
+        if (!list || !list.length) {
+          return [];
+        }
+        const pivot = list[0];      //pivot is first element of list
+        const smaller = [];
+        const greater = [];
+        for (let i = 1; i < list.length; i++) {
+          if (list[i].firstName < pivot.firstName) {
+            smaller.push(list[i]);                  //if firstname of elements in list are lower letters, they get added to end of "smaller" array
+          } else {
+            greater.push(list[i]);                  //if firstname of elements in list are higher letters, they get added to end of "higher" array
+          }
+        }
+        return sort(smaller).concat(pivot, sort(greater));      //recursively sort the smaller and greater arrays until they are properly sorted, then concatenate them together to form one single sorted array
+      };
+      const sorted = sort(this.toArray());    //first turns linked list into an array, then passing that linked list transformed array into the sort function that was just created
+      this.head = sorted[0];                  //because sorted now, put the first "least value" element/first name into the head of the linked list
+      let current = this.head;                //linked list traversal
+      for (let i = 1; i < sorted.length; i++) {
+        current.next = sorted[i];             //since sorted is now a sorted array, we can add it to each linked list index
+        current = current.next;           //iterate/traverse
+      }
+      current.next = null;          
+    }
+  }
+
 const AddFriendForm = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [idNumber, setIdNumber] = useState("");
   const [deleteID, setDeleteID] = useState("");
   const [message, setMessage] = useState("");
-
   const [friends, setFriends] = useState([]);
 
   const navigate = useNavigate(); // Hook for navigation
@@ -41,6 +110,7 @@ const AddFriendForm = () => {
     }
   };
 
+  
   const handleDelete = async (e) => {
     e.preventDefault();
     try {
@@ -56,20 +126,52 @@ const AddFriendForm = () => {
     }
   };
 
+/*
   const fetchFriendsList = async () => {
     try {
-        // Send a GET request to the backend to fetch the friends list
-        const response = await axios.get("http://localhost:8000/friends");
-        setFriends(response.data);
+      // Send a GET request to the backend to fetch the friends list
+      const response = await axios.get("http://localhost:8000/friends");
+      // Convert the fetched data into a linked list
+      const linkedList = new LinkedList();          //create new linked list class
+      response.data.forEach((friend) => {
+        linkedList.append(friend.firstName, friend.lastName, friend.idNumber);    //add each piece of data retrieved from sql database into the linked list
+      });
+      // Sort the linked list by first name
+      linkedList.quicksort();                                           //quicksorts the linkedlist 
+      // Update the state with the sorted friends list
+      setFriends(linkedList.toArray());                         //turns linked list into an array to be able to change state of friends
     } catch (error) {
-        console.error("Error fetching friends list:", error);
+      console.error("Error fetching friends list:", error);
+    }
+  };*/
+
+  const fetchFriendsList = async () => {
+    try {
+      // Send a GET request to the backend to fetch the friends list
+      const response = await axios.get("http://localhost:8000/friends");
+      if (response.data.length === 0) {
+        // If the response data is empty, set friends to an empty array
+        setFriends([]);   //set friends to an empty state if there is no data in friends_list column (Because it is all deleted)
+      } else {
+        // Convert the fetched data into a linked list
+        const linkedList = new LinkedList();
+        response.data.forEach((friend) => {
+          linkedList.append(friend.firstName, friend.lastName, friend.idNumber);  //add each piece of data retrieved from sql database into the linked list
+        });
+
+        linkedList.quicksort();           //quicksorts the linkedlist by first name
+        
+        setFriends(linkedList.toArray());   //turns linked list into an array to be able to change state of friends
+      }
+    } catch (error) {
+      console.error("Error fetching friends list:", error);
     }
 };
 
   useEffect(() => {
       // Fetch friends list when component mounts
       fetchFriendsList();
-  }, [idNumber, deleteID]);
+  }, [idNumber, deleteID]);     //runs every time idNumber or deleteID is modified
 
   return (
     <div>
@@ -129,7 +231,7 @@ const AddFriendForm = () => {
           Delete Friend
         </button>
       </form>
-
+{/*
       <div>
         <h2 className="friends-header">Friends List</h2>
         <table>
@@ -150,7 +252,31 @@ const AddFriendForm = () => {
                 ))}
             </tbody>
         </table>
-    </div>
+              </div> */}
+
+        {/* Display the friends list */}
+      <div>
+        <h2 className="friends-header">Friends List</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>ID Number</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* Map over the sorted friends list and display each friend */}
+            {friends.map((friend, index) => ( //for each friend in friends, generate a new row with first, last, and ID
+              <tr key={index}>
+                <td>{friend.firstName}</td> {/*Next 3 lines display first, last, and id of current friend in "friends" */}
+                <td>{friend.lastName}</td>
+                <td>{friend.idNumber}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <p>{message}</p>
       {/* Button to navigate back to the authentication selection page */}
