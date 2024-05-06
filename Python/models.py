@@ -20,16 +20,19 @@ class FriendModel(BaseModel):   #For Friend's List
     last_name: str
     id_number: int
 
-class Account(Base):
-    __tablename__ = "account_test"
+class queryItem(BaseModel):
+    name: str
 
-    id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True)
-    password = Column(String)
-    public_key = Column(String)  # New column to store public key
-    private_key = Column(String)  # New column to store public key
+class getItemID(BaseModel):
+    itemID: int
 
-#temp table for messaging
+class addItem(BaseModel):
+    name: str
+    desc: str
+    price: str
+    tags: str
+
+# #temp table for messaging
 class Message(Base):
     __tablename__ = "messages"
 
@@ -42,24 +45,32 @@ class Message(Base):
     sender = relationship("Account", back_populates="sent_messages", foreign_keys=[sender_id])
     recipient = relationship("Account", back_populates="received_messages", foreign_keys=[recipient_id])
 
-class queryItem(BaseModel):
-    name: str
 
-class getItemID(BaseModel):
-    itemID: int
+class Account(Base):
+    __tablename__ = "account_test"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True)
+    password = Column(String)
+    public_key = Column(String)  # New column to store public key
+    private_key = Column(String)  # New column to store public key
+
+    sent_messages = relationship("Message", back_populates="sender", foreign_keys=[Message.sender_id])
+    received_messages = relationship("Message", back_populates="recipient", foreign_keys=[Message.recipient_id])
 
 class Item(Base):
     __tablename__ = "item"
 
     itemkey = Column(String, primary_key = True, index = True)
+    tags = Column(String)
     name = Column(String)
     desc = Column(String)
     itemID = Column(Integer)
     price = Column(Float)
-    time = Column(Float)
-    date = Column(Integer)
+    time = Column(String)
+    date = Column(String)
     owner = Column(Integer)
-    distCenter = Column(Integer)
+    distCenter = Column(String)
 
 
 class Friend:
