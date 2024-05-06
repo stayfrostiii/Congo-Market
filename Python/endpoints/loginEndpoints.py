@@ -50,7 +50,7 @@ def create_account(db: Session, account: AccountCreate):
             user_id = quadratic_probe(db, user_id)
         
         # Create new account with hashed password, salt, and user ID
-        new_account = Account(id=user_id, user_id = user_id, email=account.email, hashed_password=hashed_password, salt=salt, public_key=public_key_pem)
+        new_account = Account(id=user_id, user_id = user_id, email=account.email, hashed_password=hashed_password, salt=salt, public_key=public_key_pem, username = account.username)
         db.merge(new_account)  # Use merge instead of add
         db.commit()
         return {"message": "Account created successfully"}

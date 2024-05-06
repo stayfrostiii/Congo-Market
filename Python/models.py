@@ -9,7 +9,7 @@ from datetime import datetime
 class AccountCreate(BaseModel):
     email: str
     password: str
-
+    username: str
     # Pydantic model for login request body
 class Login(BaseModel):
     email: str
@@ -43,7 +43,7 @@ class Account(Base):
     salt = Column(String)  # Store public key as a string
     public_key = Column(TEXT)  # New column to store public key
     friends_list = Column(TEXT)
-
+    username = Column(TEXT)
     sent_messages = relationship("Message", back_populates="sender", foreign_keys=[Message.sender_id])
     received_messages = relationship("Message", back_populates="recipient", foreign_keys=[Message.recipient_id])
 
