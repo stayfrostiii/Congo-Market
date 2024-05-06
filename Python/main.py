@@ -9,9 +9,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from ConnectionManager import ConnectionManager
-from endpoints.loginEndpoints import create_account, login 
-from endpoints.itemEndpoints import query_item, item_profile
-from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemID, Item
+from endpoints.loginEndpoints import create_account, login, add_credit_card
+from endpoints.itemEndpoints import query_item, item_profile, add_item
+from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemID, addItem, Item, Account, CreditCard
 from database import SessionLocal, Base, engine
 import json
 from endpoints.friendEndpoints import add_friend_to_account
@@ -67,6 +67,10 @@ async def login_handler(login_data: Login, response: Response):
     db = SessionLocal()
     return login(db, login_data, response)  # Pass the login_data object directly
 
+@app.post("/add_card/{user_id}")
+async def add_card_handler(user_id: int, credit_card_data: CreditCard):
+    db = SessionLocal()
+    return add_credit_card(db, user_id, credit_card_data)
 
 @app.post("/query_item")
 async def item_handler(item: queryItem):

@@ -15,7 +15,12 @@ class Login(BaseModel):
     email: str
     password: str
 
-class FriendModel(BaseModel):   #For Friend's List
+class CreditCard(BaseModel):
+    card_number: str
+    expiry_date: str
+    cvv: str
+
+class FriendModel(BaseModel): #temp table for messaging
     firstName: str
     lastName: str
     idNumber: str
@@ -43,7 +48,8 @@ class Account(Base):
     salt = Column(String)  # Store public key as a string
     public_key = Column(TEXT)  # New column to store public key
     friends_list = Column(TEXT)
-
+    username = Column(TEXT)
+    credit_card = Column(TEXT)
     sent_messages = relationship("Message", back_populates="sender", foreign_keys=[Message.sender_id])
     received_messages = relationship("Message", back_populates="recipient", foreign_keys=[Message.recipient_id])
 

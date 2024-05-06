@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import Cookie, Depends, HTTPException, Response, status
-from models import AccountCreate, Login, Account
+from models import AccountCreate, Login, Account, CreditCard
 from loginEncryption.generate_user_keys import generate_user_keys, email_to_user_id, read_private_key
 from loginEncryption.encrypt_data import generate_salt, hash_password
 from loginEncryption.token_authentication import create_access_token, encrypt_message, decrypt_message, read_server_keys
@@ -106,7 +106,7 @@ def login(db: Session, login_data: Login, response: Response):
         raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         db.close()
-
+"""
 def add_information(db: Session, data_model, information):
     try:
         # Validate the input data
@@ -130,7 +130,7 @@ def add_information(db: Session, data_model, information):
         db.close()
 
 """
-def add_credit_card(db: Session, user_id: int, credit_card_data: CreditCardBase):
+def add_credit_card(db: Session, user_id: int, credit_card_data: CreditCard):
     try:
         # Retrieve the account with the provided user ID
         account = db.query(Account).filter(Account.user_id == user_id).first()
@@ -142,7 +142,6 @@ def add_credit_card(db: Session, user_id: int, credit_card_data: CreditCardBase)
         # Concatenate credit card information into a string
         credit_card_info = "|".join([
             credit_card_data.card_number,
-            credit_card_data.card_holder_name,
             credit_card_data.expiration_date,
             credit_card_data.cvv
         ])
@@ -153,12 +152,14 @@ def add_credit_card(db: Session, user_id: int, credit_card_data: CreditCardBase)
 
         # Read the server's public and private keys
         public_key, private_key = read_server_keys(public_key_path, private_key_path)
+
+        credit_card_info = credit_card_data.cvv
         
-        # Encrypt the credit card information
+        # Encrypt the credit card information 
         encrypted_info = encrypt_message(public_key, credit_card_info)
         
         # Store the encrypted information in the database
-        account.encrypted_credit_card_info = encrypted_info
+        account.credit_card = encrypted_info
         
         # Commit the transaction
         db.commit()
@@ -210,4 +211,3 @@ def get_credit_card_data(db: Session, user_id: int):
         raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         db.close()
-"""

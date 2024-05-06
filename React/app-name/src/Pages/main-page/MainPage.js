@@ -19,8 +19,12 @@ const MainPage = () => {
     navigate("/selection");
   };
 
+  const handleAddItemClick = () => {
+    navigate("/add-item");
+  };
+
   const handleItemClick = (id_get) => {
-    console.log(id_get);
+    //console.log(id_get);
     itemPicked = id_get;
     navigate("/item_page");
   };
