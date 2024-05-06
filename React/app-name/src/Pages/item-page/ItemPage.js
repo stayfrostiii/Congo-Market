@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
-import { itemPickedSP } from "./SearchPage";
+import { itemPickedSP, searchVSP } from "./SearchPage";
+
+let searchVIP = "";
 
 const ItemProfile = () => 
 {
+  searchVIP = searchVSP;
+  console.log("searchVSP = " + searchVSP);
   useEffect(() => {handleSubmit()}, []);
   const [message, setMessage] = useState("");
   const navigate = useNavigate(); // Hook for navigation
 
-  
   const handleSubmit = async () => 
   {
     try 
@@ -50,7 +53,12 @@ const ItemProfile = () =>
   {
     //console.log("here");
     navigate("/");
-  }
+  };
+
+  const handleSearchClick = () =>
+  {
+    navigate("/search_page");
+  };
 
   const findNextPort = (port, portArr) =>
   {
@@ -171,13 +179,15 @@ const ItemProfile = () =>
 
   return (
         <div>
-        <button onClick={handleMainpage}>Go to Main Page</button>
-        <br/>
-        <div>
-            {addDiv()}
-        </div>
+          <button onClick={handleMainpage}>Go to Main Page</button>
+          <button onClick={handleSearchClick}>Search</button>
+          <br/>
+          <div>
+              {addDiv()}
+          </div>
         </div>
   );
 };
 
+export { searchVIP };
 export default ItemProfile;

@@ -3,15 +3,18 @@ import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import "./SearchPage.css";
 import lebron from "../../binary/lebron.jpg";
+import { searchVIP } from "./ItemPage";
 
 var itemPickedSP = 0;
+let searchVSP = "";
 
 const SearchPage = () => {
   useEffect(() => {
     handleSubmit();
   }, []);
-  const [searchV, setSearchV] = useState("");
+  let [searchV, setSearchV] = useState("");
   const [message, setMessage] = useState("");
+  const [tester, setTester] = useState("");
   const [counter, setCounter] = useState(0);
   const navigate = useNavigate(); // Hook for navigation
 
@@ -22,20 +25,23 @@ const SearchPage = () => {
 
   const handleItemClick = (id_get) =>
   {
-    console.log(id_get);
+    console.log("id = " + id_get + " searchV = " + searchVSP);
     itemPickedSP = id_get;
     navigate("/item_page");
   };
 
   const handleSubmit = async () => {
     try {
-      console.log("Submitting item request:", { searchV });
+      if (searchVIP != "")
+        searchV = searchVIP;
+      console.log("Submitting item request:", { searchVIP });
       const response = await api.post("/query_item", { searchV: searchV });
       console.log("Response:", response.data);
       setMessage(response.data.message);
       setCounter(response.data.counter);
-      setSearchV("");
-      document.getElementById("search").value = "";
+      setTester(response.data.tester);
+      searchVSP = searchV;
+      document.getElementById("search").value = searchV;
     } catch (error) {
       console.error("Error:", error);
       if (error.response) {
@@ -58,6 +64,7 @@ const SearchPage = () => {
   const addDiv = () => {
     let items = message;
     //console.log("Add div:" + message);
+    console.log("info:" + tester);
 
     var indexComma = 0;
     var indexLine = 0;
@@ -96,7 +103,7 @@ const SearchPage = () => {
             </div>
             <img class="image" src={lebron} alt="" />
             <p class="item-name">
-              {nameAdd}, {itemkey}
+              {nameAdd}, {itemID}
             </p>
             <p class="price">${price}</p>
           </button>
@@ -130,5 +137,5 @@ const SearchPage = () => {
   );
 };
 
-export { itemPickedSP };
+export { itemPickedSP, searchVSP };
 export default SearchPage;

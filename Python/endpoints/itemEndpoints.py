@@ -3,74 +3,33 @@ from sqlalchemy import asc
 from fastapi import HTTPException
 from models import queryItem, getItemKey, addItem, searchItem, Item
 from datetime import datetime
-# from search.searchAlgo import sortArr
+from search.searchAlgo import switch, sortArr
 
 def isfloat(var):
     return isinstance(var, float)
 
-def switch(argument):
-    if argument == "": return argument
-    if (argument in "book" or 
-        argument in "movie" or 
-        "book" in argument or 
-        "movie" in argument
-        ): return "a"
-    if (argument in "electronics" or
-        "electronic" in argument
-        ): return "b"
-    if (argument in "computers" or
-        "computer" in argument
-        ): return "c"
-    if (argument in "garden" or 
-        argument in "tools" or 
-        "garden" in argument or 
-        "tool" in argument
-        ): return "d"
-    if (argument in "beauty" or 
-        argument in "health" or 
-        "beauty" in argument or 
-        "health" in argument
-        ): return "e"
-    if (argument in "toys" or
-        "toy" in argument
-        ): return "f"
-    if (argument in "handmade" or
-        "handmade" in argument
-        ): return "g"
-    if (argument in "sports" or 
-        argument in "outdoors" or 
-        "sport" in argument or 
-        "outdoor" in argument
-        ): return "h"
-    if (argument in "automotive" or 
-        argument in "industrial" or 
-        "automotive" in argument or 
-        "industrial" in argument
-        ): return "i"
-    if (argument in "collectibles" or
-        "collectible" in argument
-        ): return "j"
-    else: return argument
-
 def query_item(db: Session, item: queryItem):
     try:
         searchV = item.searchV.lower()
-        result = switch(searchV)
-        if (result != searchV):
-            item_obj = db.query(Item).filter(Item.itemkey.like(f'%{result}%')).all()
+        preTag = switch(searchV)
+        if (preTag != searchV):
+            item_obj = db.query(Item).filter(Item.itemkey.like(f'%{preTag}%')).all()
         else:
             item_obj = db.query(Item).all()
         if item_obj is None:
             raise HTTPException(status_code=404, detail="Item not found")
         else:   
             temp = ""
-            unparsedArr = [""] * len(item_obj)
+            itemArr = ""
             counter = 0
-            for obj in item_obj:
 
+            itemArr = sortArr(item_obj, searchV)
+
+            # This for loop will call the parsing function and sort all of the queries by rating in itemArr
+            for obj in item_obj:
                 temp = obj.name + ";" + obj.itemkey + "," + str(obj.price) + "^" + str(obj.itemID) + "|" + temp
                 counter = counter + 1
-            return {"message" : temp + "@", "counter" : counter}
+            return {"message" : temp + "@", "counter" : counter, "tester" : itemArr}
 
     except HTTPException as http_error:
         # Re-raise HTTPException to return specific error responses

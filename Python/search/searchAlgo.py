@@ -1,34 +1,62 @@
 
 from models import Item
+import re
+
+class TreeNode(object):
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+        self.height = 1
+
+# class AVL_Tree(object):
+#     def insert(self, root, key):
+
+        
+
 
 class StrWRate:
-    rating: int
-    string: str
-
-def compareParsed(str1, str2):
-    return
+    def __init__(self, rating: int, string: str):
+        self.rating = rating
+        self.string = string
 
 # createKeywordStr will take a string and the keywords from the search to dissect and give a rating to the item
-def createKeywordStr(string, searchKW):
+# Return an item of type StrWRate, which will hold string to print and rating
+def findRating(obj, searchV):
 
-    indexComma = str(string).index(",")
-    indexPeriod = str(string).index(".")
-    parsedString = string[:indexComma]
+    unparsedName = obj.name
+    unparsedTags = obj.tags
+    unparsedDesc = obj.desc
 
-    return
+    parsedName = str(unparsedName).split(" ")
+    parsedTags = str(unparsedTags).split(";")
+    parsedDesc = str(unparsedDesc).split(" ")
+
+    parsedTotal = parsedTags
+    parsedTotal += parsedName
+    parsedTotal += parsedDesc
+
+    rating = 0
+
+    for word in parsedTotal:
+        if searchV in word or word in searchV: 
+            rating += 1
+
+    return rating
 
 # item_obj will hold an object that has the information
 # The format will be end up being words separated by ";" and 
 # keywords will hold an array of words separate by ";" given by the user
 # The goal is to return a string with "array" of items to be printed 
 # formatted as: name;itemkey,price|name;itemkey,price|...
-def sortArr(item_obj, searchV):
-    keywordDB = [] * len(item_obj)
-    searchKW = str(searchV).split(" ")
-    keywords = "lmao"
+def sortArr(item_obj, searchV: str):
+    keywordDB = []
+    keywords = ""
     for obj in item_obj:
-        temp = obj.name + "," + obj.itemkey + "." + str(obj.price) + "^" + str(obj.itemID)
-        keywordDB.append(createKeywordStr(temp, searchKW))
+        strToPrint = obj.name + ";" + obj.itemkey + "," + str(obj.price) + "^" + str(obj.itemID) + "|"
+        rating = findRating(obj, searchV)
+        item = StrWRate(rating, strToPrint)
+        keywordDB.append(item)
     return keywords
 
 # Custom switch-case function since python doesn't have a built in version
