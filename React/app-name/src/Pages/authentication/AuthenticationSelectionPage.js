@@ -44,7 +44,6 @@ const AuthenticationSelectionPage = () => {
       };
 
       // Make a request to save the file data to the congo database
-      await axios.post("sqlite:///./congo.db", fileData); // Replace "/api/files" with the appropriate API endpoint
       console.log("File data saved to the congo database");
     } catch (error) {
       console.error("Error uploading file:", error);
