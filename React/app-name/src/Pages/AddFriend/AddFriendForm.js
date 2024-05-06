@@ -8,7 +8,14 @@ const AddFriendForm = () => {
   const [lastName, setLastName] = useState("");
   const [idNumber, setIdNumber] = useState("");
   const [message, setMessage] = useState("");
+  const [friends, setFriends] = useState([]);
   const navigate = useNavigate(); // Hook for navigation
+
+
+const handleGoBack = () => {
+  navigate("/selection");
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +37,22 @@ const AddFriendForm = () => {
       setMessage("An error occurred. Please try again later.");
     }
   };
+
+  const handleDelete = async (friendId) => {
+    try {
+      // Send a DELETE request to the backend to remove the friend
+      const response = await axios.delete(`http://localhost:8000/friends/${friendId}`);
+      console.log("Friend removed successfully:", response.data);
+      // Optionally, you can update the UI to reflect the friend being removed
+      // For example, remove the friend from a list displayed on the frontend
+      setFriends(friends.filter(friend => friend.id !== friendId));
+      setMessage("Friend removed successfully");
+    } catch (error) {
+      console.error("Error removing friend:", error);
+      setMessage("An error occurred. Please try again later.");
+    }
+  };
+
 
   return (
     <div>
@@ -72,6 +95,18 @@ const AddFriendForm = () => {
           Add Friend
         </button>
       </form>
+
+      <h3>Friends List</h3>
+      <ul>
+        {/* Display list of friends */}
+        {friends.map((friend) => (
+          <li key={friend.id}>
+            {friend.firstName} {friend.lastName} (ID: {friend.idNumber})
+            <button onClick={() => handleDelete(friend.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+
       <p>{message}</p>
       {/* Button to navigate back to the authentication selection page */}
       <button onClick={handleGoBack}>
@@ -81,4 +116,4 @@ const AddFriendForm = () => {
   );
 };
 
-// export default AddFriendForm;
+ export default AddFriendForm;
