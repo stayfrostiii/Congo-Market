@@ -58,9 +58,9 @@ async def create_account_handler(account: AccountCreate):
 
 # Endpoint to add a friend to an account's friends list
 @app.post("/friends")
-async def add_friend_handler(friend: FriendModel):
+async def add_friend_handler(friend: FriendModel, request: Request):
     db = SessionLocal()
-    return add_friend_to_account(db, friend)
+    return add_friend_to_account(db, friend, request)
 
 @app.post("/login")
 async def login_handler(login_data: Login, response: Response):
