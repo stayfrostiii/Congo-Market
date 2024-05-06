@@ -11,7 +11,7 @@ const SignUpPage = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log("Submitting sign-up request:", { email, password });
+      console.log("Submitting sign-up request:", { email, password, username });
       const response = await api.post("/create_account", {
         email,
         password,
