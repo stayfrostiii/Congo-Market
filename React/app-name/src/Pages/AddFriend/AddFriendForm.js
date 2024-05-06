@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./AddFriendForm.css";
@@ -9,6 +9,9 @@ const AddFriendForm = () => {
   const [idNumber, setIdNumber] = useState("");
   const [deleteID, setDeleteID] = useState("");
   const [message, setMessage] = useState("");
+
+  const [friends, setFriends] = useState([]);
+
   const navigate = useNavigate(); // Hook for navigation
 
 
@@ -53,25 +56,20 @@ const AddFriendForm = () => {
     }
   };
 
-/*
-  const handleDelete = async () => {
+  const fetchFriendsList = async () => {
     try {
-      // Send a DELETE request to the backend to delete the friend
-      const response = await axios.delete("http://localhost:8000/friends", {
-        idNumber: idNumber,
-      });
-      console.log("Friend removed successfully:", response.data);
-      // Clear the form after successfully removing the friend
-      setFirstName("");
-      setLastName("");
-      setIdNumber("");
-      setMessage("Friend removed successfully");
+        // Send a GET request to the backend to fetch the friends list
+        const response = await axios.get("http://localhost:8000/friends");
+        setFriends(response.data);
     } catch (error) {
-      console.error("Error removing friend:", error);
-      setMessage("An error occurred. Please try again later.");
+        console.error("Error fetching friends list:", error);
     }
-  };*/
+};
 
+  useEffect(() => {
+      // Fetch friends list when component mounts
+      fetchFriendsList();
+  }, [idNumber, deleteID]);
 
   return (
     <div>
@@ -131,6 +129,28 @@ const AddFriendForm = () => {
           Delete Friend
         </button>
       </form>
+
+      <div>
+        <h2 className="friends-header">Friends List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>ID Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {friends.map((friend, index) => (
+                    <tr key={index}>
+                        <td>{friend.firstName}</td>
+                        <td>{friend.lastName}</td>
+                        <td>{friend.idNumber}</td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    </div>
 
       <p>{message}</p>
       {/* Button to navigate back to the authentication selection page */}

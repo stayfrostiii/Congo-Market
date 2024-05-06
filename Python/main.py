@@ -11,11 +11,13 @@ from sqlalchemy.orm import sessionmaker
 from ConnectionManager import ConnectionManager
 from endpoints.loginEndpoints import create_account, login 
 from endpoints.itemEndpoints import query_item, item_profile, add_item
-from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemID, addItem, Item
+from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemID, addItem, Item, Account
 from database import SessionLocal, Base, engine
 from messaging.messages import get_username_by_client_id
 import json
-from endpoints.friendEndpoints import add_friend_to_account, delete_friend_from_account
+
+from endpoints.friendEndpoints import add_friend_to_account, delete_friend_from_account, fetch_friends_list
+
 
 from messaging.messages import store_message, get_messages
 # Create tables in the database
@@ -75,18 +77,11 @@ async def delete_friend_handler(id_number: int, request: Request):
     db = SessionLocal()
     return delete_friend_from_account(db, id_number, request)
 
-"""
-@app.delete("/friends")
-async def delete_friend_handler(friend: FriendModel, request: Request):
+@app.get("/friends")
+async def get_friends_list(request: Request):
     db = SessionLocal()
-    return delete_friend_from_account(db, friend, request)
-    
+    return fetch_friends_list(db, request)
 
-@app.delete("/friends")
-async def delete_friend_handler(id_number: int, request: Request):
-    db = SessionLocal()
-    return delete_friend_from_account(db, id_number, request)
-"""
 
 @app.post("/login")
 async def login_handler(login_data: Login, response: Response):
