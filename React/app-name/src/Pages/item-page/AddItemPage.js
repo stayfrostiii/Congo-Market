@@ -23,9 +23,11 @@ const MainPage = () =>
 
   const handleSubmit = async () => 
   {
-    tags = pTag + ";" + uTags;
     try 
     {
+      if (pTag == "")
+        throw "deez nuts";
+      tags = pTag + ";" + uTags;
       console.log("Submitting item request:", { name, desc, price, tags });
       const response = await api.post("/add_item", { 
         name: name,
