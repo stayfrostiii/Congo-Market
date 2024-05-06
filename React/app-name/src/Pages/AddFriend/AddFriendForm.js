@@ -53,7 +53,6 @@ const handleGoBack = () => {
     }
   };
 
-
   return (
     <div>
       <h2 className="friend-header">Add Friend</h2>
@@ -116,4 +115,5 @@ const handleGoBack = () => {
   );
 };
 
- export default AddFriendForm;
+export default AddFriendForm;
+

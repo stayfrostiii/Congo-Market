@@ -7,6 +7,7 @@ import LoginPage from "./Pages/authentication/LoginPage";
 import AddFriendForm from "./Pages/AddFriend/AddFriendForm";
 import ChatPage from "./Pages/Chat/chat";
 import ItemPage from "./Pages/item-page/ItemPage";
+import AddItemPage from "./Pages/item-page/AddItemPage";
 
 function App() {
   useEffect(() => {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/add_friend" element={<AddFriendForm />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/item_page" element={<ItemPage />} />
+        <Route path="/add-item" element={<AddItemPage />} />
       </Routes>
     </Router>
 

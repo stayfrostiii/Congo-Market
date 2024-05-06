@@ -10,8 +10,8 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from ConnectionManager import ConnectionManager
 from endpoints.loginEndpoints import create_account, login 
-from endpoints.itemEndpoints import query_item, item_profile
-from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemID, Item
+from endpoints.itemEndpoints import query_item, item_profile, add_item
+from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemID, addItem, Item
 from database import SessionLocal, Base, engine
 from messaging.messages import get_username_by_client_id
 import json
@@ -92,3 +92,8 @@ async def item_handler(item: queryItem):
 async def item_profile_handler(item: getItemID):
     db = SessionLocal()
     return item_profile(db, item)
+
+@app.post("/add_item")
+async def add_item_handler(item: addItem):
+    db = SessionLocal()
+    return add_item(db, item)
