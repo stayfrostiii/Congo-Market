@@ -15,7 +15,7 @@ from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryIte
 from database import SessionLocal, Base, engine
 from messaging.messages import get_username_by_client_id
 import json
-from endpoints.friendEndpoints import add_friend_to_account, remove_friend_from_account
+from endpoints.friendEndpoints import add_friend_to_account, delete_friend_from_account
 
 from messaging.messages import store_message, get_messages
 # Create tables in the database
@@ -70,12 +70,23 @@ async def add_friend_handler(friend: FriendModel, request: Request):
     db = SessionLocal()
     return add_friend_to_account(db, friend, request)
 
-@app.delete("/friends/{friend_id}")
-async def remove_friend_handler(friend_id: int, request: Request):
+@app.delete("/friends/{id_number}")
+async def delete_friend_handler(id_number: int, request: Request):
     db = SessionLocal()
-    friend = FriendModel(idNumber=friend_id)
-    return remove_friend_from_account(db, friend, request)
+    return delete_friend_from_account(db, id_number, request)
 
+"""
+@app.delete("/friends")
+async def delete_friend_handler(friend: FriendModel, request: Request):
+    db = SessionLocal()
+    return delete_friend_from_account(db, friend, request)
+    
+
+@app.delete("/friends")
+async def delete_friend_handler(id_number: int, request: Request):
+    db = SessionLocal()
+    return delete_friend_from_account(db, id_number, request)
+"""
 
 @app.post("/login")
 async def login_handler(login_data: Login, response: Response):
