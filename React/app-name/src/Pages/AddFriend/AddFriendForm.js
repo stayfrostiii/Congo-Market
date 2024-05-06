@@ -81,7 +81,6 @@ const AddFriendForm = () => {
       <button onClick={handleGoBack}>
         Go Back to Authentication Selection
       </button>
-      <div className="friendList"></div>
     </div>
   );
 };
