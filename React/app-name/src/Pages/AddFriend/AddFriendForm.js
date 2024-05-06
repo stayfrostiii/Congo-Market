@@ -148,25 +148,6 @@ const AddFriendForm = () => {
     }
   };
 
-/*
-  const fetchFriendsList = async () => {
-    try {
-      // Send a GET request to the backend to fetch the friends list
-      const response = await axios.get("http://localhost:8000/friends");
-      // Convert the fetched data into a linked list
-      const linkedList = new LinkedList();          //create new linked list class
-      response.data.forEach((friend) => {
-        linkedList.append(friend.firstName, friend.lastName, friend.idNumber);    //add each piece of data retrieved from sql database into the linked list
-      });
-      // Sort the linked list by first name
-      linkedList.quicksort();                                           //quicksorts the linkedlist 
-      // Update the state with the sorted friends list
-      setFriends(linkedList.toArray());                         //turns linked list into an array to be able to change state of friends
-    } catch (error) {
-      console.error("Error fetching friends list:", error);
-    }
-  };*/
-
   const fetchFriendsList = async () => {
     try {
       // Send a GET request to the backend to fetch the friends list
@@ -220,13 +201,6 @@ const AddFriendForm = () => {
     catch (error) {
       console.error("Error fetching friends list:", error);
     }
-    /*
-    const isFound = linkedList.binarySearch(searchFirstName);
-    if (isFound) {
-       setMessage(`Friend ${searchFirstName} found.`);
-     } else {
-       setMessage(`Friend ${searchFirstName} does not exist.`);
-     }*/
    };
 
   return (
@@ -287,28 +261,6 @@ const AddFriendForm = () => {
           Delete Friend
         </button>
       </form>
-{/*
-      <div>
-        <h2 className="friends-header">Friends List</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>ID Number</th>
-                </tr>
-            </thead>
-            <tbody>
-                {friends.map((friend, index) => (
-                    <tr key={index}>
-                        <td>{friend.firstName}</td>
-                        <td>{friend.lastName}</td>
-                        <td>{friend.idNumber}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-              </div> */}
 
         {/* Display the friends list */}
       <div>
