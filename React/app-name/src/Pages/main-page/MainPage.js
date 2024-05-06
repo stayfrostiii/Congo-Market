@@ -18,8 +18,7 @@ const MainPage = () => {
   const handleAuthenticationClick = () => {
     navigate("/selection");
   };
-
-
+  
   const handleAddItemClick = () =>
   {
     navigate("/add-item");
@@ -118,6 +117,7 @@ const MainPage = () => {
       {/* Button to navigate to the authentication selection page */}
       <button onClick={handleAuthenticationClick}>Go to Authentication</button>
       <button onClick={handleAddItemClick}>Add Item</button>
+
       <br />
       <input
         type="text"
