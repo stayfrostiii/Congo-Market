@@ -16,9 +16,9 @@ class Login(BaseModel):
     password: str
 
 class FriendModel(BaseModel):   #For Friend's List
-    first_name: str
-    last_name: str
-    id_number: str
+    firstName: str
+    lastName: str
+    idNumber: str
     
 #temp table for messaging
 class Message(Base):
@@ -68,12 +68,6 @@ class Item(Base):
     owner = Column(Integer)
     distCenter = Column(Integer)
 
-
-class Friend:
-    def __init__(self, first_name, last_name, id_number):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.id_number = id_number
 
 class Node:
     def __init__(self, friend):

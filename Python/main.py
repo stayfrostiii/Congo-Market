@@ -1,6 +1,6 @@
 # main.py (FastAPI backend)
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Response
-from fastapi import Depends
+from fastapi import Depends, Request
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 from ConnectionManager import ConnectionManager
 from endpoints.loginEndpoints import create_account, login 
 from endpoints.itemEndpoints import query_item, item_profile
-from models import AccountCreate, Login, FriendModel, Friend, Node, LinkedList, queryItem, getItemID, Item
+from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemID, Item
 from database import SessionLocal, Base, engine
 from messaging.messages import get_username_by_client_id
 import json
@@ -66,9 +66,9 @@ async def create_account_handler(account: AccountCreate):
 
 # Endpoint to add a friend to an account's friends list
 @app.post("/friends")
-async def add_friend_handler(friend: FriendModel):
+async def add_friend_handler(friend: FriendModel, request: Request):
     db = SessionLocal()
-    return add_friend_to_account(db, friend)
+    return add_friend_to_account(db, friend, request)
 
 @app.post("/login")
 async def login_handler(login_data: Login, response: Response):
