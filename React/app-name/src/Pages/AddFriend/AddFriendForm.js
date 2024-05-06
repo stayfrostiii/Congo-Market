@@ -80,9 +80,9 @@ class LinkedList {
       let mid = Math.floor((left + right) / 2);
       if (this.toArray()[mid].firstName === firstName) {
         return true;  // Friend found
-      } else if (this.toArray()[mid].firstName < firstName) {
+      } else if (this.toArray()[mid].firstName < firstName) {   //if middle element is less than arg, then make left traversal start from middle and go higher
         left = mid + 1;
-      } else {
+      } else {    //implies middle element is greated, so keep going down from right side
         right = mid - 1;
       }
     }
@@ -190,6 +190,7 @@ const AddFriendForm = () => {
        response.data.forEach((friend) => {
          linkedList.append(friend.firstName, friend.lastName, friend.idNumber);  //add each piece of data retrieved from sql database into the linked list
        });
+       linkedList.quicksort(); //possibly delete if it doesn't make program faster
        const isFound = linkedList.binarySearch(searchFirstName);
         if (isFound) {
           setMessage(`Friend ${searchFirstName} found.`);

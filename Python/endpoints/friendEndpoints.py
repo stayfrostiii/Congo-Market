@@ -67,19 +67,19 @@ def fetch_friends_list(db: Session, request: Request):
            raise HTTPException(status_code=404, detail="Account not found")
 
        # Split the friends_list into individual friend details
-       friends_list = account.friends_list.split(",")
-       friends = []
-       for friend_details in friends_list:
+       friends_list = account.friends_list.split(",")       #split entries in friends column by the comma
+       friends = []                                     #initialize empty list called friends
+       for friend_details in friends_list:      #for loop to iterate through entires
            if not friend_details:
                continue  # Skip empty strings
            print("Friend details:", friend_details)
-           friend_info = friend_details.split(":")
-           if len(friend_info) != 3:
+           friend_info = friend_details.split(":")      #splits friend detailed between every comma by the colon ID:F:L
+           if len(friend_info) != 3:                    #must have 3 elements per comma separated entry (ID:F:L)
                raise ValueError("Invalid friend details format")
-           friend = {"idNumber": friend_info[0], "firstName": friend_info[1], "lastName": friend_info[2]}
-           friends.append(friend)
+           friend = {"idNumber": friend_info[0], "firstName": friend_info[1], "lastName": friend_info[2]}   #creates dictionary that maps values to respective names/keys
+           friends.append(friend)       #add separated info to the friends list 
 
-       return friends
+       return friends       #returns the array
    except Exception as e:
        print("Error:", e)
        raise HTTPException(status_code=500, detail="Internal server error")
