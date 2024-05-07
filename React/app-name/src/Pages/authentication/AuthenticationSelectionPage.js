@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import DeleteAccountButton from "./DeleteAccountButton";
 
 import Header from "../global/Header";
 
@@ -64,24 +65,21 @@ const AuthenticationSelectionPage = () => {
     }
   };
 
-
-
   return (
     <div>
     <Header/>
       <h2>Welcome to Our Marketplace!</h2>
       <p>Please select an option:</p>
       {/* Button to navigate back to the main page */}
-      <button onClick={handleAuthentication}>Accounts</button>
+      <button onClick={handleAuthentication}>Sign Out</button>
+      <DeleteAccountButton /> {/* Render the DeleteAccountButton component */}
       <button onClick={handleCreditForm}>Credit Card</button>
       <button onClick={handleGoToMainClick}>Go to Main Page</button>
-
       <button onClick={handleFriendForm}>Friends</button>
       <button onClick={handleChatForm}>Chat</button>
       <button>
         <input type="file" onChange={handleFileInputChange} />
       </button>
-
       <button onClick={handleSubmit}>Submit</button>
     </div>
   );

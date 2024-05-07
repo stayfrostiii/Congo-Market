@@ -74,9 +74,6 @@ const LoginPage = () => {
       <button onClick={handleSubmit}>Login</button>
       <p>{message}</p>
       {/* Button to navigate back to the authentication selection page */}
-      <button onClick={handleGoBack}>
-        Go Back to Authentication Selection
-      </button>
     </div>
   );
 };

@@ -2,54 +2,47 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException, Request
 from models import Account, FriendModel
 
-def add_friend_to_account(db: Session, friend: FriendModel, request: Request):
-    # Simulate a user ID, you can replace this with an actual user ID from your database
-    user_id = 1486774  # example hard-coded id number
+def add_friend_to_account(db: Session, user_id: int, friend: FriendModel, request: Request):
     try:
-        # Retrieve the account from the database using the provided user_id
-        account = db.query(Account).filter(Account.user_id == user_id).first()
+        account = db.query(Account).filter(Account.user_id == user_id).first()  #assign variable account the queried account in the database
         if not account:
-            raise HTTPException(status_code=404, detail="Account not found")
+            raise HTTPException(status_code=404, detail="Account not found")            #HTTP Exception if account does not exist
 
-        # Initialize friends_list if it's None
-        if account.friends_list is None:
-            account.friends_list = ""
+        if account.friends_list is None:                            # Initialize friends_list if it's None if the account has been found
+            account.friends_list = ""               
 
-        # Check if friend with the same ID number already exists in the friends_list
-        if friend.idNumber in account.friends_list.split(","):
+        if friend.idNumber in account.friends_list.split(","):      #Split friends_list to see if ID exists           
             raise HTTPException(status_code=400, detail="Friend already in friends list")
 
-        # Add the friend to the account's friends_list
-        friends = account.friends_list.split(",")
-        friend_details = f"{friend.idNumber}:{friend.firstName}:{friend.lastName}"
+        friends = account.friends_list.split(",")           #Add each entry in friends_list into friends list
+        friend_details = f"{friend.idNumber}:{friend.firstName}:{friend.lastName}"  #f = f-string, special string that allows you to create unique strings
         friends.insert(0, friend_details)  # Insert at the beginning
-        account.friends_list = ",".join(friends)
+        account.friends_list = ",".join(friends)        #insert back into column the friends list 
 
-        db.commit()
+        db.commit()         #commit changes to database
         return {"message": "Friend added successfully"}
     except Exception as e:
-        db.rollback()
+        db.rollback()           #undo any change since last commit if there is exception
         print("Error:", e)
         raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         db.close()
 
-def delete_friend_from_account(db: Session, id_number: int, request: Request):
-    user_id = 1486774  # Example hard-coded user ID
+def delete_friend_from_account(db: Session, user_id: int, id_number: int):
     try:
         account = db.query(Account).filter(Account.user_id == user_id).first()
         if not account:
             raise HTTPException(status_code=404, detail="Account not found")
 
         # Remove the friend from the account's friends_list
-        friends = account.friends_list.split(",")   #splits friends_list into list of individual entries
-        friends = [friend for friend in friends if friend.split(":")[0] != str(id_number)]  #filters our the column by finding id to be deleted
-        account.friends_list = ",".join(friends)        #creates/joins the new list of people with the deleted/filtered friend removed
+        friends = account.friends_list.split(",")
+        friends = [friend for friend in friends if friend.split(":")[0] != str(id_number)]
+        account.friends_list = ",".join(friends)
 
         db.commit()
         return {"message": "Friend deleted successfully"}
-    except HTTPException as e:
-        raise e
+    except HTTPException as http_error:
+        raise http_error
     except Exception as e:
         db.rollback()
         print("Error:", e)
@@ -57,9 +50,7 @@ def delete_friend_from_account(db: Session, id_number: int, request: Request):
     finally:
         db.close()
 
-def fetch_friends_list(db: Session, request: Request):
-   # Simulate a user ID, you can replace this with an actual user ID from your request
-   user_id = 1486774  # example hard-coded id number
+def fetch_friends_list(db: Session, user_id: int, request: Request):
    try:
        # Retrieve the account from the database using the provided user_id
        account = db.query(Account).filter(Account.user_id == user_id).first()

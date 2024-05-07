@@ -8,8 +8,9 @@
 }
 
 .friend-header {
-    text-align: center;
+    text-align: left;
     margin-bottom: 25px;
+    margin-left: 75px;
 }
 
 .fname {
@@ -28,18 +29,40 @@
     margin: 20px 20px 0 0;
 }
 
-.submit-button {
-    margin-left: 95px;
+.add-submit-button {
+    margin-left: 110px;
     cursor: pointer;
     background-color: rgb(125, 125, 125);
     border-width: 1px;
     border-style: solid;
+    margin-bottom: 35px;
 }
 
-.submit-button:hover {
+.add-submit-button:hover {
     opacity: 0.9;
 }
 
-.submit-button:active {
+.add-submit-button:active {
     opacity: 0.5;
+}
+
+.delete-submit-button {
+    margin-left: 105px;
+    cursor: pointer;
+    background-color: rgb(125, 125, 125);
+    border-width: 1px;
+    border-style: solid;
+    margin-bottom: 35px;
+}
+
+.delete-submit-button:hover {
+    opacity: 0.9;
+}
+
+.delete-submit-button:active {
+    opacity: 0.5;
+}
+
+.input-row {
+    margin-left: 10px;
 }
