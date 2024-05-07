@@ -104,5 +104,5 @@
 }
 
 .submit-button:focus {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
 }
