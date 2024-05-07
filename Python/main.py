@@ -4,7 +4,7 @@ from fastapi import Depends, Request
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import create_engine, Column, String, Integer, select, and_
+from sqlalchemy import create_engine, Column, String, Integer, select, or_, and_
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -48,54 +48,31 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int, db: Session =
     try:
         username = get_username_by_client_id(db,client_id)
         while True:
-            data = await websocket.receive_text()  # Receive message from client
-            # Process the received message, e.g., save it to the database
+            data = await websocket.receive_text()  
             message_data = json.loads(data)
             message_content = message_data.get("message", "")  # Get the value of "message" or an empty string if not found
-            await manager.broadcast(f"{username}: {message_content}")
+            recipient_username = message_data.get("recipient", "")
             sender_id = client_id
-            recipient_id = client_id
+            query = db.query(Account).filter(Account.username == recipient_username).first()
+            recipient_id = query.user_id
             store_message(sender_id, recipient_id, message_data.get("message", ""))
     except WebSocketDisconnect:
         manager.disconnect(websocket)  # Disconnect client
         await manager.broadcast(f"{client_id} has left the chat")
         
-# @app.get("/get_message/sender={client_id}&recipient={recipient_name}", response_model= List[str])
-# async def get_message_list(client_id: int, recipient_name: str, db: Session = Depends(get_db)):
-#     recipient = db.query(Account).filter(Account.username == recipient_name).first()
-#     if recipient:
-#         recipient_id = recipient.user_id
-#         # Query the Message table using the sender ID and recipient ID
-#         query = db.query(Message).filter(Message.sender_id == client_id, Message.recipient_id == recipient_id).all()
-#         message_list = [message.content for message in query]
-#         # Return messages as a list of strings
-#         return message_list  # Access the content attribute in the result tuple
-#     else:
-#         # If recipient is not found, return an empty list
-#         return []
- 
-@app.get("/get_message/sender={client_id}&recipient={recipient_name}", response_model=Dict[str, List[str]])
+@app.get("/get_message/sender={client_id}&recipient={recipient_name}", response_model=List[Dict[str,str]])
 async def get_message_list(client_id: int, recipient_name: str, db: Session = Depends(get_db)):
-    recipient = db.query(Account).filter(Account.username == recipient_name).first()
-    if recipient:
-        recipient_id = recipient.user_id
-        # Join Message and Account tables to get messages along with sender usernames
-        query = db.query(Message, Account).join(Account, Message.sender_id == Account.user_id).filter(Message.sender_id == client_id, Message.recipient_id == recipient_id).all()
-        
-        # Construct the dictionary with usernames and corresponding messages
-        message_dict = {}
-        for message, account in query:
-            username = account.username
-            if username not in message_dict:
-                message_dict[username] = []
-            message_dict[username].append(message.content)
+   recipient_id = db.query(Account).filter(Account.username == recipient_name).first().user_id
+   condition_1 = and_(Message.sender_id == client_id, Message.recipient_id == recipient_id)
+   condition_2 = and_(Message.sender_id == recipient_id, Message.recipient_id == client_id)
+   results = db.query(Message).filter(or_(condition_1,condition_2)).all()
+   return [{"sender_username": result.sender.username, "content": result.content} for result in results]
 
-        return message_dict
-    else:
-        # If recipient is not found, return an empty dictionary
-        return {}   
-    
-
+@app.get("/get_name/user={userId}", response_model=str) 
+async def get_name(userId: int, db: Session = Depends(get_db)):
+    name = db.query(Account).filter(Account.user_id == userId).first()
+    return name.username
+      
 # Endpoint to create a new account with encrypted email, password, and public key
 @app.post("/create_account")
 async def create_account_handler(account: AccountCreate):
