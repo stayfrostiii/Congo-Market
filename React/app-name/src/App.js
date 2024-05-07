@@ -10,6 +10,7 @@ import ChatPage from "./Pages/Chat/chat";
 import ItemPage from "./Pages/item-page/ItemPage";
 import AddItemPage from "./Pages/item-page/AddItemPage";
 import CreditCardPage from "./Pages/authentication/AddCardDetails";
+import SearchPage from "./Pages/item-page/SearchPage";
 
 function App() {
   useEffect(() => {
@@ -20,16 +21,17 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="/" element={<Auth />} />
+        <Route path="/main_page" element={<MainPage />} />
         <Route path="/selection" element={<AuthenticationSelectionPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/add_friend" element={<AddFriendForm />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/item_page" element={<ItemPage />} />
-        <Route path="/add-item" element={<AddItemPage />} />
-        <Route path="/auth" element={<Auth />} />
+        <Route path="/add_item" element={<AddItemPage />} />
         <Route path="/card" element={<CreditCardPage />} />
+        <Route path="/search_page" element={<SearchPage />} />
       </Routes>
     </Router>
   );

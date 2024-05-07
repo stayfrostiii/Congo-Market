@@ -28,9 +28,9 @@ class FriendModel(BaseModel): #temp table for messaging
     idNumber: str
 
 class queryItem(BaseModel):
-    name: str
+    searchV: str
 
-class getItemID(BaseModel):
+class getItemKey(BaseModel):
     itemID: int
 
 class addItem(BaseModel):
@@ -38,6 +38,9 @@ class addItem(BaseModel):
     desc: str
     price: str
     tags: str
+
+class searchItem(BaseModel):
+    itemkey: str
 
 #temp table for messaging
 class Message(Base):
