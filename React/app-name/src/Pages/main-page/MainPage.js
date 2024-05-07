@@ -45,6 +45,7 @@ const MainPage = () =>
     navigate("/search_page");
   };
 
+
   const handleAddItemClick = () =>
   {
     navigate("/add_item");
@@ -143,6 +144,7 @@ const MainPage = () =>
       <button onClick={handleAuthenticationClick}>Go to Authentication</button>
       <button onClick={handleSearchClick}>Search</button>
       <button onClick={handleAddItemClick}>Add Item</button>
+
       <p>{userId}</p>
       <input
         type="hidden"
@@ -151,6 +153,7 @@ const MainPage = () =>
         placeholder="Enter Item"
       />
       <br/>
+
       {/*<img src={lebron}/>*/}
       <div class="item-holder">{addDiv()}</div>
     </div>
