@@ -9,7 +9,6 @@
   display: flex;
   justify-content: center; /* Center horizontally */
   background-color: black;
-  margin-bottom: 10px;
 }
 
 .search-input {
@@ -44,8 +43,6 @@
 .left-side {
   width: 30%;
   background-image: linear-gradient(rgb(0, 0, 0), rgb(9, 2, 27));
-  display: flex;
-  flex-direction: column;
   align-items: center; /* Center items horizontally */
 }
 

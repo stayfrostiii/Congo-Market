@@ -66,7 +66,7 @@ const ChatComponent = ({ userId, websocket, log, username, onEnter }) => {
       <div className="chat-messages">
         {messages.map((msg, index) => (
           <div key={index} className="chat-message">
-            <div className="content">{msg}</div>
+            <div>{msg}</div>
           </div>
         ))}
       </div>

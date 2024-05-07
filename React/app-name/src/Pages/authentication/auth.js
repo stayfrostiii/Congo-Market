@@ -17,7 +17,7 @@ const Auth = () => {
 
   return (
     <div>
-      <div class="content">
+      <div class="content-auth">
         <img id="header-img" src={logo}/>
         <br/>
         <h2>Welcome to Our Marketplace!</h2>
