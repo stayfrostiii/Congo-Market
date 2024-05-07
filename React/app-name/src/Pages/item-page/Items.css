@@ -1,21 +1,4 @@
 
-body
-{
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-.item-holder
-{
-    overflow-y: auto;
-    overflow-x: hidden;
-    max-height: calc(100vh - 200px);
-    width: 100vw;
-    height: calc(100vh - 125px);
-    position: fixed;
-    bottom: 0;
-    display: inline-block;
-}
-
 .item
 {
     color: black;
@@ -26,14 +9,15 @@ body
     height: 200px;
     max-height: 200px;
     margin-bottom: 10px;
-    margin-left: 5px;
+    margin-left: 7.5px;
     float: left;
 
     border-radius: 10px;
     border-style: solid;
-    border-color: black;
-    border-width: 2px;
+    border-color: rgb(97, 97, 97);
+    border-width: 3px;
     flex-direction: column;
+    color: white;
 }
 
 .indicators
@@ -62,8 +46,6 @@ body
 
 .image
 {
-    /*background: url('../../../../../../../../CMPE_131/OFS_Binary/lebron.jpg');
-    background-size: cover;*/
     height: 100px;
     min-height: 100px;
     width: 100px;
@@ -77,8 +59,7 @@ body
     border-width: 2px;
 }
 
-.item-name, .price
+.item-info
 {
-    font-size: 12px;
-    text-align: center;
+    font-size: 14px;
 }
