@@ -78,9 +78,9 @@ async def delete_friend_handler(user_id: int, id_number: int):
     return delete_friend_from_account(db, user_id, id_number)
 
 @app.get("/friends/{user_id}")                #Endpoint to fetch/get friends list from account's friends list
-async def get_friends_list(user_id: int, request: Request):
+async def get_friends_list(user_id: int):
     db = SessionLocal()
-    return fetch_friends_list(db, user_id, request)
+    return fetch_friends_list(db, user_id)
 
 
 @app.post("/login")

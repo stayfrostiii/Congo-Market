@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./AddFriendForm.css";
 
-// Node class for linked list
+// Node class for linked list to store account information
 class Node {
   constructor(firstName, lastName, idNumber) {
     this.firstName = firstName; //this = current instance of class, similar to C++
@@ -200,29 +200,31 @@ const AddFriendForm = () => {
 
   useEffect(() => {
     // Fetch friends list when component mounts
-    fetchFriendsList();
-  }, [idNumber, deleteID]); //runs every time idNumber or deleteID is modified
+    if (userId !== null) {
+      fetchFriendsList();
+    }
+  }, [userId, idNumber, deleteID]);
 
-  const handleSearch = async () => {
+  const handleSearch = async (e) => {
+    e.preventDefault();
     try {
       // Send a GET request to the backend to fetch the friends list
       const response = await axios.get(
         `http://localhost:8000/friends/${userId}`
       );
+      console.log("Response data:", response.data); // Log the response data
       if (response.data.length === 0) {
         // If the response data is empty, set friends to an empty array
         setFriends([]); //set friends to an empty state if there is no data in friends_list column (Because it is all deleted)
-        setMessage("No friends found.");
       } else {
-        // Convert the fetched data into an array of friend objects
-        const friends = response.data;
-
-        // Check if any friend matches the search criteria
-        const foundFriend = friends.find(
-          (friend) => friend.firstName === searchFirstName
-        );
-
-        if (foundFriend) {
+        // Convert the fetched data into a linked list
+        const linkedList = new LinkedList();
+        response.data.forEach((friend) => {
+          linkedList.append(friend.firstName, friend.lastName, friend.idNumber); //add each piece of data retrieved from sql database into the linked list
+        });
+        linkedList.quicksort(); //possibly delete if it doesn't make program faster
+        const isFound = linkedList.binarySearch(searchFirstName);
+        if (isFound) {
           setMessage(`Friend ${searchFirstName} found.`);
         } else {
           setMessage(`Friend ${searchFirstName} does not exist.`);
@@ -230,80 +232,89 @@ const AddFriendForm = () => {
       }
     } catch (error) {
       console.error("Error fetching friends list:", error);
-      setMessage("An error occurred while fetching friends list.");
     }
   };
   return (
     <div>
+      {" "}
+      {/*Add Friend*/}
       <h2 className="friend-header">Add Friend</h2>
       <form onSubmit={handleSubmit}>
-        <label>
+        <label className="input-row">
           First Name:
           <input
             className="fname"
             type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            placeholder="Enter First Name Here"
+            value={firstName} //value of this input textbox is for firstName state
+            onChange={(e) => setFirstName(e.target.value)} //changes firstName state
           />
         </label>
         <br />
         <br />
-        <label>
+        <label className="input-row">
           Last Name:
           <input
             className="lname"
             type="text"
+            placeholder="Enter Last Name Here"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
           />
         </label>
         <br />
         <br />
-        <label>
+        <label className="input-row">
           ID Number:
           <input
             className="idnum"
             type="text"
+            placeholder="Enter ID Number Here"
             value={idNumber}
             onChange={(e) => setIdNumber(e.target.value)}
           />
         </label>
         <br />
         <br />
-        <button className="submit-button" type="submit">
+        <button className="add-submit-button" type="submit">
           Add Friend
         </button>
       </form>
-
+      <h2 className="friend-header">Delete Friend</h2>
+      {/*Delete Function*/}
       <form onSubmit={handleDelete}>
-        <label>
+        <label className="input-row">
           ID Number:
           <input
             className="idnum"
             type="text"
+            placeholder="Enter ID to Delete Here"
             value={deleteID}
             onChange={(e) => setDeleteID(e.target.value)}
           />
         </label>
         <br />
         <br />
-        <button className="submit-button" type="submit">
+        <button className="delete-submit-button" type="submit">
           Delete Friend
         </button>
       </form>
-
       {/* Display the friends list */}
       <div>
-        <h2 className="friends-header">Friends List</h2>
+        <h2 className="friend-header">Friends List</h2>
         <table>
           <thead>
             <tr>
-              <th>First Name</th>
+              {" "}
+              {/*Table Row*/}
+              <th>First Name</th> {/*Table Header*/}
               <th>Last Name</th>
               <th>ID Number</th>
             </tr>
           </thead>
           <tbody>
+            {" "}
+            {/*Body Content*/}
             {/* Map over the sorted friends list and display each friend */}
             {friends.map(
               (
@@ -321,20 +332,22 @@ const AddFriendForm = () => {
           </tbody>
         </table>
       </div>
-
-      <label>
-        Search First Name:
-        <input
-          className="search-input"
-          type="text"
-          value={searchFirstName}
-          onChange={(e) => setSearchFirstName(e.target.value)}
-        />
-      </label>
-      <button className="submit-button" onClick={handleSearch}>
-        Search
-      </button>
-
+      {/*Search for Friend*/}
+      <form onSubmit={handleSearch}>
+        <label>
+          Search First Name:
+          <input
+            className="search-input"
+            type="text"
+            placeholder="Enter First Name to Search"
+            value={searchFirstName}
+            onChange={(e) => setSearchFirstName(e.target.value)}
+          />
+        </label>
+        <button className="submit-button" type="submit">
+          Search
+        </button>
+      </form>
       <p>{message}</p>
       {/* Button to navigate back to the authentication selection page */}
       <button onClick={handleGoBack}>
