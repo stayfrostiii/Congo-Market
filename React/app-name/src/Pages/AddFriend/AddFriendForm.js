@@ -217,12 +217,14 @@ const AddFriendForm = () => {
         // If the response data is empty, set friends to an empty array
         setFriends([]); //set friends to an empty state if there is no data in friends_list column (Because it is all deleted)
       } else {
-        // Convert the fetched data into a linked list
-        const linkedList = new LinkedList();
+        const linkedList = new LinkedList(); // Convert the fetched data into a linked list
+
         response.data.forEach((friend) => {
           linkedList.append(friend.firstName, friend.lastName, friend.idNumber); //add each piece of data retrieved from sql database into the linked list
         });
-        linkedList.quicksort(); //possibly delete if it doesn't make program faster
+
+        linkedList.quicksort(); 
+
         const isFound = linkedList.binarySearch(searchFirstName);
         if (isFound) {
           setMessage(`Friend ${searchFirstName} found.`);
@@ -339,10 +341,7 @@ const AddFriendForm = () => {
             {/*Body Content*/}
             {/* Map over the sorted friends list and display each friend */}
             {friends.map(
-              (
-                friend,
-                index //for each friend in friends, generate a new row with first, last, and ID
-              ) => (
+              (friend, index ) => (   //for each friend in friends, generate a new row with first, last, and ID
                 <tr key={index}>
                   <td>{friend.firstName}</td>
                   {/*Next 3 lines display first, last, and id of current friend in "friends" */}
