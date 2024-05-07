@@ -42,17 +42,40 @@ const ChatList = ({ onUpdate }) => {
     }
   };
 
+  const quickSort = (arr) => {
+    if (arr.length <= 1) {
+      return arr;
+    }
+
+    const pivot = arr[Math.floor(arr.length / 2)]; // Select pivot
+
+    const less = [];
+    const equal = [];
+    const greater = [];
+
+    arr.forEach((item) => {
+      if (item.localeCompare(pivot) < 0) {
+        less.push(item);
+      } else if (item.localeCompare(pivot) > 0) {
+        greater.push(item);
+      } else {
+        equal.push(item);
+      }
+    });
+
+    return [...quickSort(less), ...equal, ...quickSort(greater)];
+  };
+
+  const sortUsernamesAlphabetically = () => {
+    const sortedUsernames = quickSort([...usernames]);
+    setUsernames(sortedUsernames);
+  };
+
   const handleSearchInputChange = async (event) => {};
 
   const onEnter = async (event) => {
     if (event.key === "Enter") {
       onUpdate(event.currentTarget.value);
-      // const recipient_name = event.currentTarget.value;
-      // const response = await fetch(
-      //   `http://localhost:8000/get_message/sender=${client_id}&recipient=${recipient_name}`
-      // );
-      // const messages = await response.json();
-      // console.log(messages);
     }
   };
 
@@ -67,7 +90,8 @@ const ChatList = ({ onUpdate }) => {
           className="search-input"
         />
       </div>
-
+      <button onClick={sortUsernamesAlphabetically}>Sort A-Z</button>
+      <button onClick={fetchUsernames}>Reset</button>
       <div className="usernames-container">
         <h2>All Usernames</h2>
         <ul className="user-list">
