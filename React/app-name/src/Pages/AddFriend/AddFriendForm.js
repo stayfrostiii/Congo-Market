@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./AddFriendForm.css";
 
-// Node class for linked list
+// Node class for linked list to store account information
 class Node {
   constructor(firstName, lastName, idNumber) {
     this.firstName = firstName; //this = current instance of class, similar to C++
@@ -234,7 +234,7 @@ const AddFriendForm = () => {
     }
   };
   return (
-    <div>
+    <div> {/*Add Friend*/}
       <h2 className="friend-header">Add Friend</h2>
       <form onSubmit={handleSubmit}>
         <label>
@@ -242,8 +242,8 @@ const AddFriendForm = () => {
           <input
             className="fname"
             type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+            value={firstName}                   //value of this input textbox is for firstName state
+            onChange={(e) => setFirstName(e.target.value)}      //changes firstName state
           />
         </label>
         <br />
@@ -275,6 +275,7 @@ const AddFriendForm = () => {
         </button>
       </form>
 
+        {/*Delete Function*/}
       <form onSubmit={handleDelete}>
         <label>
           ID Number:
@@ -297,13 +298,13 @@ const AddFriendForm = () => {
         <h2 className="friends-header">Friends List</h2>
         <table>
           <thead>
-            <tr>
-              <th>First Name</th>
+            <tr>                    {/*Table Row*/}
+              <th>First Name</th>   {/*Table Header*/}
               <th>Last Name</th>
               <th>ID Number</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody>           {/*Body Content*/}
             {/* Map over the sorted friends list and display each friend */}
             {friends.map(
               (
@@ -322,6 +323,7 @@ const AddFriendForm = () => {
         </table>
       </div>
 
+            {/*Search for Friend*/}
       <label>
         Search First Name:
         <input
