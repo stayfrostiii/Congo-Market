@@ -45,8 +45,6 @@ class LinkedList {
 
   quicksort() {
     // Implement quicksort algorithm
-    // This is a simplified version for demonstration purposes
-    // You may need to modify it for better performance and edge cases handling
     const sort = (list) => {
       //sort arrow function that takes in parameter list
       if (!list || !list.length) {
@@ -199,7 +197,6 @@ const AddFriendForm = () => {
   };
 
   useEffect(() => {
-    // Fetch friends list when component mounts
     if (userId !== null) {
       fetchFriendsList();
     }
@@ -237,6 +234,8 @@ const AddFriendForm = () => {
       console.error("Error fetching friends list:", error);
     }
   };
+
+
   return (
     <div>
       {" "}

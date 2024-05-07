@@ -3,7 +3,6 @@ from fastapi import HTTPException, Request
 from models import Account, FriendModel
 
 def add_friend_to_account(db: Session, user_id: int, friend: FriendModel, request: Request):
-    # Simulate a user ID, you can replace this with an actual user ID from your database
     try:
         account = db.query(Account).filter(Account.user_id == user_id).first()  #assign variable account the queried account in the database
         if not account:
