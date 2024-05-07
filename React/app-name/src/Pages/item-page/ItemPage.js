@@ -52,7 +52,7 @@ const ItemProfile = () =>
   const handleMainpage = () =>
   {
     //console.log("here");
-    navigate("/");
+    navigate("/main_page");
   };
 
   const handleSearchClick = () =>

@@ -16,7 +16,7 @@ const AddItemPage = () =>
   
   const handleMainPageClick = () => 
   {
-    navigate("/");
+    navigate("/main_page");
   };
 
   const handleSubmit = async () => 

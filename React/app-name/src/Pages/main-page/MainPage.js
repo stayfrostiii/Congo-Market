@@ -7,13 +7,32 @@ import lebron from "../../binary/lebron.jpg";
 let itemPicked = 0;
 
 const MainPage = () => {
-  useEffect(() => {
-    handleSubmit();
-  }, []);
+
+  const [userId, setUserId] = useState(null); // State to store the user ID
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [counter, setCounter] = useState(0);
   const navigate = useNavigate(); // Hook for navigation
+
+  useEffect(() => {
+    handleSubmit();
+    // Function to retrieve the user ID from the token
+    const getUserIdFromToken = () => {
+      console.log("id:" + document.cookie);
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        .split("=")[1];
+      // Decode the token to get the user ID
+      // Here you would use your actual decoding logic for JWT tokens
+      const decodedToken = token;
+      setUserId(decodedToken); // Set the user ID in the state
+    };
+
+    // Call the function to retrieve the user ID
+    getUserIdFromToken();
+
+  }, [userId], []);
 
   const handleAuthenticationClick = () => {
     navigate("/selection");
@@ -123,6 +142,7 @@ const MainPage = () => {
       <button onClick={handleAuthenticationClick}>Go to Authentication</button>
       <button onClick={handleSearchClick}>Search</button>
       <button onClick={handleAddItemClick}>Add Item</button>
+      <p>{userId}</p>
       <input
         type="hidden"
         id="search"

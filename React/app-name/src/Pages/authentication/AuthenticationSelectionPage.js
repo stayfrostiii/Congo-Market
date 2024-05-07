@@ -7,7 +7,7 @@ const AuthenticationSelectionPage = () => {
 
   const handleAuthentication = () => {
     document.cookie = `token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-    navigate("/auth");
+    navigate("/");
   };
 
   const handleCreditForm = () => {
@@ -15,7 +15,7 @@ const AuthenticationSelectionPage = () => {
   };
 
   const handleGoToMainClick = () => {
-    navigate("/");
+    navigate("/main_page");
   };
 
   const handleFriendForm = () => {

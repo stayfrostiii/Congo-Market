@@ -20,7 +20,7 @@ const SearchPage = () => {
 
   const handleMainPageClick = () => 
   {
-    navigate("/");
+    navigate("/main_page");
   };
 
   const handleItemClick = (id_get) =>
