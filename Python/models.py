@@ -31,7 +31,7 @@ class queryItem(BaseModel):
     searchV: str
 
 class getItemKey(BaseModel):
-    itemID: int
+    itemkey: str
 
 class addItem(BaseModel):
     name: str
@@ -41,7 +41,7 @@ class addItem(BaseModel):
     owner: int
 
 class searchItem(BaseModel):
-    itemkey: str
+    owner: int
 
 #temp table for messaging
 class Message(Base):

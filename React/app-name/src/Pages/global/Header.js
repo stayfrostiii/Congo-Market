@@ -3,6 +3,8 @@ import React from "react";
 import "./Global.css"
 import logo from "../../binary/logo.jpg"
 
+
+
 const Header = () =>
 {
     const navigate = useNavigate(); // Hook for navigation

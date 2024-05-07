@@ -125,6 +125,10 @@ async def add_item_handler(item: addItem):
     db = SessionLocal()
     return add_item(db, item)
 
+@app.post("/owner_item")
+async def search_item_handler(item: searchItem):
+    db = SessionLocal()
+    return search_item(db, item)
 
 @app.get("/search_users", response_model=List[str])
 async def search_users(db: Session = Depends(get_db)):
@@ -137,8 +141,4 @@ async def search_users(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {e}")
 
-@app.post("/add_item")
-async def search_item_handler(item: searchItem):
-    db = SessionLocal()
-    return search_item(db, item)
 
