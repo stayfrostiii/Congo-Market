@@ -22,6 +22,11 @@
 .user-suggestions li {
   padding: 8px;
   border-bottom: 1px solid #ccc;
+  cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.user-suggestions li:hover {
+  background-color: #f0f0f0; /* Change background color on hover */
 }
 
 .chat-page-container {
@@ -34,6 +39,7 @@
   background-color: #f0f0f0;
   display: flex;
   flex-direction: column;
+  align-items: center; /* Center items horizontally */
 }
 
 .right-side {
@@ -66,4 +72,16 @@
 
 .chat-input button {
   width: 80px;
+}
+
+.user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 80%; /* Set a fixed width for the user list */
+}
+
+.usernames-container {
+  width: 80%; /* Set the width of the container */
+  margin-top: 20px; /* Add some space between the search input and the usernames */
 }
