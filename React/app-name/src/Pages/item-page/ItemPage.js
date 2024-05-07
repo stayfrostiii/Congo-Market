@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
-import { itemPicked } from "../main-page/MainPage";
+import { itemPickedSP, searchVSP } from "./SearchPage";
+
+let searchVIP = "";
 
 const ItemProfile = () => 
 {
+  searchVIP = searchVSP;
+  console.log("searchVSP = " + searchVSP);
   useEffect(() => {handleSubmit()}, []);
   const [message, setMessage] = useState("");
   const navigate = useNavigate(); // Hook for navigation
-  const itemID = itemPicked;
 
-  //console.log("ID in info page: " + itemID);
-  
   const handleSubmit = async () => 
   {
     try 
     {
+      const itemID = itemPickedSP;
+      console.log("ID in info page: " + itemID);
       console.log("Submitting item request:", { itemID });
       const response = await api.post("/item_profile", { itemID: itemID });
       console.log("Response:", response.data);
@@ -50,7 +53,12 @@ const ItemProfile = () =>
   {
     //console.log("here");
     navigate("/");
-  }
+  };
+
+  const handleSearchClick = () =>
+  {
+    navigate("/search_page");
+  };
 
   const findNextPort = (port, portArr) =>
   {
@@ -170,16 +178,16 @@ const ItemProfile = () =>
   }
 
   return (
-    <body>
         <div>
-        <button onClick={handleMainpage}>Go to Main Page</button>
-        <br/>
-        <div>
-            {addDiv()}
+          <button onClick={handleMainpage}>Go to Main Page</button>
+          <button onClick={handleSearchClick}>Search</button>
+          <br/>
+          <div>
+              {addDiv()}
+          </div>
         </div>
-        </div>
-    </body>
   );
 };
 
+export { searchVIP };
 export default ItemProfile;
