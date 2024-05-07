@@ -1,3 +1,29 @@
+.chat-list-container {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+}
+
+.search-input {
+  width: 80%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.user-suggestions {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user-suggestions li {
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+}
+
 .chat-page-container {
   display: flex;
   height: 100vh;
@@ -6,6 +32,8 @@
 .left-side {
   width: 30%;
   background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
 }
 
 .right-side {
