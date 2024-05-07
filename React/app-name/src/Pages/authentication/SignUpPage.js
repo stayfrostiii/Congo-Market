@@ -18,6 +18,10 @@ const SignUpPage = () => {
         username,
       });
       console.log("Response:", response.data);
+      const token = response.data.token;
+
+      // Set the token as an HTTP-only cookie
+      document.cookie = `token=${token}; Path=/; SameSite=Strict`;
       setMessage(response.data.message);
       setEmail("");
       setPassword("");
