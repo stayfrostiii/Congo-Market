@@ -19,7 +19,6 @@ const MainPage = () => {
     navigate("/selection");
   };
 
-
   const handleAddItemClick = () =>
   {
     navigate("/add-item");
