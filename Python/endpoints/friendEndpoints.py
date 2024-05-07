@@ -4,7 +4,7 @@ from models import Account, FriendModel
 
 def add_friend_to_account(db: Session, friend: FriendModel, request: Request):
     # Simulate a user ID, you can replace this with an actual user ID from your database
-    user_id = 1486774  # example hard-coded id number
+    user_id = 1463720  # example hard-coded id number
     try:
         # Retrieve the account from the database using the provided user_id
         account = db.query(Account).filter(Account.user_id == user_id).first()
@@ -35,7 +35,7 @@ def add_friend_to_account(db: Session, friend: FriendModel, request: Request):
         db.close()
 
 def delete_friend_from_account(db: Session, id_number: int, request: Request):
-    user_id = 1486774  # Example hard-coded user ID
+    user_id = 1463720  # Example hard-coded user ID
     try:
         account = db.query(Account).filter(Account.user_id == user_id).first()
         if not account:
@@ -59,7 +59,7 @@ def delete_friend_from_account(db: Session, id_number: int, request: Request):
 
 def fetch_friends_list(db: Session, request: Request):
    # Simulate a user ID, you can replace this with an actual user ID from your request
-   user_id = 1486774  # example hard-coded id number
+   user_id = 1463720  # example hard-coded id number
    try:
        # Retrieve the account from the database using the provided user_id
        account = db.query(Account).filter(Account.user_id == user_id).first()

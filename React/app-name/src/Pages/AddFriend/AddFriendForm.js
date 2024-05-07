@@ -99,17 +99,12 @@ const AddFriendForm = () => {
   const [deleteID, setDeleteID] = useState("");
   const [message, setMessage] = useState("");
   const [friends, setFriends] = useState([]);
-
   const [searchFirstName, setSearchFirstName] = useState("");
-
-
   const navigate = useNavigate(); // Hook for navigation
-
 
   const handleGoBack = () => {
     navigate("/selection");
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
