@@ -3,20 +3,43 @@ import React, { useState, useEffect } from 'react';
 const ChatComponent = ({ userId, websocket, log, username, onEnter }) => {
   const [messages, setMessages] = useState([]);
 
+  const caesarDecipher = (message, shift) => {
+    return message.replace(/[a-zA-Z]/g, (char) => {
+      const charCode = char.charCodeAt(0);
+      const offset = charCode >= 65 && charCode <= 90 ? 65 : 97;
+      // To handle negative shifts correctly, add 26 to ensure positive result
+      return String.fromCharCode(
+        ((charCode - offset - shift + 26) % 26) + offset
+      );
+    });
+  };
+
   useEffect(() => {
     setMessages([]);
     for (const key of log) {
       const { sender_username, content } = key;
+      const decryptedMessage = caesarDecipher(content, 3);
       setMessages((prevMessages) => [
         ...prevMessages,
-        `${sender_username}: ${content}`,
+        `${sender_username}: ${decryptedMessage}`,
       ]);
     }
   }, [log]);
 
+  const caesarCipher = (message, shift) => {
+    return message.replace(/[a-zA-Z]/g, (char) => {
+      const charCode = char.charCodeAt(0);
+      const offset = charCode >= 65 && charCode <= 90 ? 65 : 97;
+      return String.fromCharCode(((charCode - offset + shift) % 26) + offset);
+    });
+  };
+
   const onServerCall = (data) => {
     if (data.trim() !== "") {
-      websocket.send(JSON.stringify({ message: data, recipient: username }));
+      const encryptedMessage = caesarCipher(data, 3);
+      websocket.send(
+        JSON.stringify({ message: encryptedMessage, recipient: username })
+      );
     }
     onEnter(username);
   };

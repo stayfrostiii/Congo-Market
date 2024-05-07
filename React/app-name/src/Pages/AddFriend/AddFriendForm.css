@@ -8,8 +8,10 @@
 }
 
 .friend-header {
-    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: left;
     margin-bottom: 25px;
+    margin-left: 75px;
 }
 
 .fname {
@@ -24,22 +26,80 @@
     margin-left: 4px;
 }
 
+.delete-text {
+    width: 235px;
+}
+
 .friendList {
     margin: 20px 20px 0 0;
 }
 
-.submit-button {
-    margin-left: 95px;
+.add-submit-button {
+    margin-left: 110px;
     cursor: pointer;
     background-color: rgb(125, 125, 125);
     border-width: 1px;
     border-style: solid;
+    margin-bottom: 35px;
 }
 
-.submit-button:hover {
+.add-submit-button:hover {
     opacity: 0.9;
 }
 
-.submit-button:active {
+.add-submit-button:active {
     opacity: 0.5;
+}
+
+.delete-submit-button {
+    margin-left: 105px;
+    cursor: pointer;
+    background-color: rgb(125, 125, 125);
+    border-width: 1px;
+    border-style: solid;
+    margin-bottom: 35px;
+}
+
+.delete-submit-button:hover {
+    opacity: 0.9;
+}
+
+.delete-submit-button:active {
+    opacity: 0.5;
+}
+
+.search-submit-button {
+    margin-left: 25px;
+    cursor: pointer;
+    background-color: rgb(125, 125, 125);
+    border-width: 1px;
+    border-style: solid;
+    margin-bottom: 35px;
+}
+
+.search-submit-button:hover {
+    opacity: 0.9;
+}
+
+.search-submit-button:active {
+    opacity: 0.5;
+}
+
+.search-msg {
+    margin-left: 10px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.the-table {
+    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 40px;
+}
+
+.return-button {
+    margin-bottom: 300px;
+}
+
+.input-row {
+    margin-left: 10px;
+    font-family: 'Courier New', Courier, monospace;
 }

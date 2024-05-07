@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import "./AddItem.css";
 
+import Header from "../global/Header";
+
 const AddItemPage = () => 
 {
   const [name, setName] = useState("");
@@ -11,13 +13,29 @@ const AddItemPage = () =>
   const [uTags, setTags] = useState("");
   const [message, setMessage] = useState("");
   const [pTag, setPTag] = useState("");
+  const [userId, setUserId] = useState(null); // State to store the user ID
   const navigate = useNavigate(); // Hook for navigation
   let tags;
-  
-  const handleMainPageClick = () => 
-  {
-    navigate("/main_page");
-  };
+  var owner;
+
+  useEffect(() => {
+    handleSubmit();
+    // Function to retrieve the user ID from the token
+    const getUserIdFromToken = () => {
+      console.log("id:" + document.cookie);
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        .split("=")[1];
+      // Decode the token to get the user ID
+      // Here you would use your actual decoding logic for JWT tokens
+      const decodedToken = token;
+      setUserId(decodedToken); // Set the user ID in the state
+    };
+
+    // Call the function to retrieve the user ID
+    getUserIdFromToken();
+  }, [userId], []);
 
   const handleSubmit = async () => 
   {
@@ -25,12 +43,14 @@ const AddItemPage = () =>
     {
       if (pTag == "") throw "deez nuts";
       tags = pTag + ";" + uTags;
+      owner = parseInt(userId);
       console.log("Submitting item request:", { name, desc, price, tags });
       const response = await api.post("/add_item", { 
         name: name,
         desc: desc,
         price: price,
-        tags
+        tags,
+        owner
       });
       console.log("Response:", response.data);
       setMessage(response.data.message);
@@ -71,38 +91,42 @@ const AddItemPage = () =>
 
   return (
     <div>
-      <h1>Add Item</h1>
-      <button onClick={handleMainPageClick}>Go to Main Page</button>
+      <Header/>
       <br/>
+      <h1 class="title">Add Item</h1>
       <br/>
-      <input type="text" id="name" onChange={(e) => setName(e.target.value)} placeholder="Enter Name"/>
-      <br/>
-      <input type="text" id="desc"  onChange={(e) => setDesc(e.target.value)}  placeholder="Enter Description"/>
-      <br/>
-      <input type="text" id="price"  onChange={(e) => setPrice(e.target.value)}  placeholder="Enter Price"/>
-      <br/>
-      <label for="tags">Select Preset Tag:&nbsp;</label>
-        <select name="tags" onChange={(e) => setPTag(e.target.value)}>
-            <option value="" disabled selected hidden></option>
-            <option value="A">Book/Movie</option>
-            <option value="B">Electronics</option>
-            <option value="C">Computers</option>
-            <option value="D">Garden/Tools</option>
-            <option value="E">Beauty/Health</option>
-            <option value="F">Toys</option>
-            <option value="G">Handmade</option>
-            <option value="H">Sports/Outdoors</option>
-            <option value="I">Automotive/Industrial</option>
-            <option value="J">Collectibles</option>
-            <option value="K">Other</option>
-        </select>
-      <br/>
-      <input type="text" id="tag"  onChange={(e) => setTags(e.target.value)}  placeholder="Enter Tags (separate by ;)"/>
-      <br/>
-      <br/>
-      <button onClick={handleSubmit}>Submit</button>
-      <br/>
-      {message}
+      <div id="adder-holder">
+        <input type="text" id="name" onChange={(e) => setName(e.target.value)} placeholder="Enter Name"/>
+        <br/>
+        <input type="text" id="desc"  onChange={(e) => setDesc(e.target.value)}  placeholder="Enter Description"/>
+        <br/>
+        <input type="text" id="price"  onChange={(e) => setPrice(e.target.value)}  placeholder="Enter Price"/>
+        <br/>
+        <div id="pTags">
+        <label for="tags">Select Preset Tag:&nbsp;</label>
+          <select name="tags" onChange={(e) => setPTag(e.target.value)}>
+              <option value="" disabled selected hidden></option>
+              <option value="A">Book/Movie</option>
+              <option value="B">Electronics</option>
+              <option value="C">Computers</option>
+              <option value="D">Garden/Tools</option>
+              <option value="E">Beauty/Health</option>
+              <option value="F">Toys</option>
+              <option value="G">Handmade</option>
+              <option value="H">Sports/Outdoors</option>
+              <option value="I">Automotive/Industrial</option>
+              <option value="J">Collectibles</option>
+              <option value="K">Other</option>
+          </select>
+          </div>
+          <input type="text" id="tag"  onChange={(e) => setTags(e.target.value)}  placeholder="Enter Tags (separate by ;)"/>
+        <br/>
+        <br/>
+        <button onClick={handleSubmit}>Submit</button>
+        <br/>
+        <br/>
+        {message}
+      </div>
     </div>
   );
 };

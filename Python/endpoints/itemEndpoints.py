@@ -44,22 +44,23 @@ def query_item(db: Session, item: queryItem):
 
 def item_profile(db: Session, item: getItemKey):
     try:
-        item_obj = db.query(Item).filter(Item.itemID == item.itemID).all()
-        if item_obj is None:
+        obj = db.query(Item).filter(Item.itemkey == item.itemkey).first()
+        if obj is None:
             raise HTTPException(status_code=404, detail="Item not found")
         else:   
             temp = [""] * 10
-            for obj in item_obj:
-                temp[0] = obj.itemkey
-                temp[1] = obj.name
-                temp[2] = obj.desc
-                temp[3] = obj.itemID
-                temp[4] = obj.price
-                temp[5] = obj.time
-                temp[6] = obj.date
-                temp[7] = obj.owner
-                temp[8] = obj.distCenter
-                temp[9] = obj.tags
+            temp[0] = obj.itemkey
+            temp[1] = obj.name
+            temp[2] = obj.desc
+            temp[3] = obj.itemID
+            temp[4] = obj.price
+            temp[5] = obj.time
+            temp[6] = obj.date
+            temp[7] = obj.owner
+            temp[8] = obj.distCenter
+            temp[9] = obj.tags
+            obj.pageVisits += 0.5
+            db.commit()
             return {"message" : temp}
 
     except HTTPException as http_error:
@@ -88,7 +89,6 @@ def add_item(db: Session, item: addItem):
             currentTime = currentDTStr[12:19]
 
             firstTag = item.tags.split(';')
-
             ikey = firstTag[0] + str(newIndex)
 
             new_item = Item(
@@ -99,7 +99,9 @@ def add_item(db: Session, item: addItem):
                 itemID=newIndex, 
                 price=float(item.price),
                 date = currentDate,
-                time = currentTime
+                time = currentTime,
+                owner = item.owner,
+                pageVisits = 0
                 )
             db.add(new_item)
             db.commit()
@@ -120,23 +122,16 @@ def add_item(db: Session, item: addItem):
 
 def search_item(db: Session, item: searchItem):
     try:
-        item_obj = db.query(Item).filter(Item.itemkey[0] == item.itemkey[0]).all()
+        item_obj = db.query(Item).filter(Item.owner == item.owner).all()
         if item_obj is None:
             raise HTTPException(status_code=404, detail="Item not found")
         else:   
-            temp = [""] * 10
+            temp = ""
+            counter = 0
             for obj in item_obj:
-                temp[0] = obj.itemkey
-                temp[1] = obj.name
-                temp[2] = obj.desc
-                temp[3] = obj.itemID
-                temp[4] = obj.price
-                temp[5] = obj.time
-                temp[6] = obj.date
-                temp[7] = obj.owner
-                temp[8] = obj.distCenter
-                temp[9] = obj.tags
-            return {"message" : temp}
+                temp = obj.name + ";" + obj.itemkey + "," + str(obj.price) + "^" + str(obj.itemID) + "|" + temp
+                counter += 1
+            return {"message" : temp, "counter" : counter}
 
     except HTTPException as http_error:
         # Re-raise HTTPException to return specific error responses

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
 
+import Header from "../global/Header";
+
 const CreditCardPage = () => {
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
@@ -67,6 +69,7 @@ const CreditCardPage = () => {
 
   return (
     <div>
+      <Header/>
       <h1>Enter Credit Card Details</h1>
       <label>Card Number:</label>
       <input

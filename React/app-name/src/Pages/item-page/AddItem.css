@@ -1,1 +1,20 @@
 
+#adder-holder
+{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+#name, #desc, #price, #tag
+{
+    background-color: rgb(219, 219, 219);
+    border-style: solid;
+    border-color: rgb(97, 97, 97);
+    border-width: 2px;
+}
+
+#pTags
+{
+    margin-right: 182px;
+}
