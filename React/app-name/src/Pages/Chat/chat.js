@@ -6,6 +6,18 @@ import "./chat.css";
 const ChatPage = () => {
   const [websocket, setWebsocket] = useState(null);
   const [userId, setUserId] = useState(null); // State to store the user ID
+  const [messages, setMessages] = useState([]);
+  const [username, setUsername] = useState("");
+
+  const pass = async (username) => {
+    const recipient_name = username;
+    const response = await fetch(
+      `http://localhost:8000/get_message/sender=${userId}&recipient=${recipient_name}`
+    );
+    const data = await response.json();
+    setMessages(data);
+    setUsername(username);
+  };
 
   useEffect(() => {
     // Function to retrieve the user ID from the token
@@ -22,22 +34,34 @@ const ChatPage = () => {
 
     // Call the function to retrieve the user ID
     getUserIdFromToken();
+  }, []); // Run only once when the component mounts
 
-    const ws = new WebSocket(`ws://localhost:8000/ws/${userId}`);
-    setWebsocket(ws);
+  useEffect(() => {
+    if (userId) {
+      const ws = new WebSocket(`ws://localhost:8000/ws/${userId}`);
+      setWebsocket(ws);
 
-    return () => {
-      ws.close();
-    };
-  }, [userId]);
+      return () => {
+        ws.close();
+      };
+    }
+  }, [userId]); // Establish WebSocket connection when userId changes
 
   return (
     <div className="chat-page-container">
       <div className="left-side">
-        <ChatList />
+        <ChatList onUpdate={pass} />
       </div>
       <div className="right-side">
-        {websocket && <ChatComponent websocket={websocket} />}
+        {websocket && (
+          <ChatComponent
+            client={userId}
+            username={username}
+            log={messages}
+            websocket={websocket}
+            onEnter={pass}
+          />
+        )}
       </div>
     </div>
   );
