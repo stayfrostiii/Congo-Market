@@ -67,20 +67,20 @@ async def create_account_handler(account: AccountCreate):
     db = SessionLocal()
     return create_account(db, account)
 
-@app.post("/friends")           # Endpoint to add a friend to an account's friends list
-async def add_friend_handler(friend: FriendModel, request: Request):
+@app.post("/friends/{user_id}")           # Endpoint to add a friend to an account's friends list
+async def add_friend_handler(user_id: int, friend: FriendModel, request: Request):
     db = SessionLocal()
-    return add_friend_to_account(db, friend, request)
+    return add_friend_to_account(db, user_id, friend, request)
 
-@app.delete("/friends/{id_number}")     #End point to delete friend FROM account friend list
-async def delete_friend_handler(id_number: int, request: Request):
+@app.delete("/friends/{user_id}/{id_number}")     # Endpoint to delete friend FROM account friend list
+async def delete_friend_handler(user_id: int, id_number: int):
     db = SessionLocal()
-    return delete_friend_from_account(db, id_number, request)
+    return delete_friend_from_account(db, user_id, id_number)
 
-@app.get("/friends")                #Endpoint to fetch/get friends list from account's friends list
-async def get_friends_list(request: Request):
+@app.get("/friends/{user_id}")                #Endpoint to fetch/get friends list from account's friends list
+async def get_friends_list(user_id: int, request: Request):
     db = SessionLocal()
-    return fetch_friends_list(db, request)
+    return fetch_friends_list(db, user_id, request)
 
 
 @app.post("/login")
