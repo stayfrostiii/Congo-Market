@@ -1,46 +1,83 @@
 import React, { useState, useEffect } from "react";
+import ChatComponent from "./ChatComponent";
 
-const ChatList = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [userSuggestions, setUserSuggestions] = useState([]);
+const ChatList = ({ onUpdate }) => {
+  const [usernames, setUsernames] = useState([]);
+  const [client_id, setclientId] = useState(null); // State to store the user ID
+  const [messages, setMessages] = useState([]); // State to store messages
 
-  // Function to fetch user suggestions from the backend
-  const fetchUserSuggestions = async (query) => {
+  useEffect(() => {
+    fetchUsernames();
+  }, []);
+
+  useEffect(() => {
+    // Function to retrieve the user ID from the token
+    const getUserIdFromToken = () => {
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        .split("=")[1];
+      // Decode the token to get the user ID
+      // Here you would use your actual decoding logic for JWT tokens
+      const decodedToken = token;
+      setclientId(decodedToken); // Set the user ID in the state
+    };
+
+    // Call the function to retrieve the user ID
+    getUserIdFromToken();
+  }, []); // Run only once when the component mounts
+
+  const fetchUsernames = async () => {
     try {
-      // Make a request to the backend API to fetch user suggestions based on the query
-      const response = await fetch(`/api/users?q=${query}`);
-      const data = await response.json();
-      setUserSuggestions(data.users);
+      const response = await fetch("http://localhost:8000/search_users");
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const text = await response.text(); // Get the response text
+      const data = JSON.parse(text); // Parse the response text as JSON
+      setUsernames(data);
+      console.log("Parsed data:", data);
     } catch (error) {
-      console.error("Error fetching user suggestions:", error);
+      console.error("Error parsing JSON:", error);
     }
   };
 
-  // Event handler for typing in the search bar
-  const handleSearchInputChange = (event) => {
-    const query = event.target.value;
-    setSearchQuery(query);
-    fetchUserSuggestions(query); // Fetch user suggestions as the user types
+  const handleSearchInputChange = async (event) => {};
+
+  const onEnter = async (event) => {
+    if (event.key === "Enter") {
+      onUpdate(event.currentTarget.value);
+      // const recipient_name = event.currentTarget.value;
+      // const response = await fetch(
+      //   `http://localhost:8000/get_message/sender=${client_id}&recipient=${recipient_name}`
+      // );
+      // const messages = await response.json();
+      // console.log(messages);
+    }
   };
 
   return (
-    <div className="chat-list-container">
-      <input
-        type="text"
-        value={searchQuery}
-        onChange={handleSearchInputChange}
-        placeholder="Search for users..."
-        className="search-input"
-      />
-      {userSuggestions.length > 0 && (
-        <ul className="user-suggestions">
-          {userSuggestions.map((user) => (
-            <li key={user.id}>{user.username}</li>
+    <div>
+      <div className="chat-list-container">
+        <input
+          type="text"
+          onChange={handleSearchInputChange}
+          onKeyDown={onEnter}
+          placeholder="Search for users..."
+          className="search-input"
+        />
+      </div>
+
+      <div className="usernames-container">
+        <h2>All Usernames</h2>
+        <ul className="user-list">
+          {usernames.map((username, index) => (
+            <li key={index}>{username}</li>
           ))}
         </ul>
-      )}
+      </div>
     </div>
   );
 };
-
 export default ChatList;
+
