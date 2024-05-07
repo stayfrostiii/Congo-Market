@@ -12,6 +12,7 @@ class AccountCreate(BaseModel):
     username: str
 
     # Pydantic model for login request body
+
 class Login(BaseModel):
     email: str
     password: str
@@ -25,7 +26,19 @@ class FriendModel(BaseModel): #temp table for messaging
     firstName: str
     lastName: str
     idNumber: str
-    
+
+class queryItem(BaseModel):
+    name: str
+
+class getItemID(BaseModel):
+    itemID: int
+
+class addItem(BaseModel):
+    name: str
+    desc: str
+    price: str
+    tags: str
+
 #temp table for messaging
 class Message(Base):
     __tablename__ = "messages"
@@ -51,30 +64,23 @@ class Account(Base):
     friends_list = Column(TEXT)
     username = Column(TEXT)
     credit_card = Column(TEXT)
+
     sent_messages = relationship("Message", back_populates="sender", foreign_keys=[Message.sender_id])
     received_messages = relationship("Message", back_populates="recipient", foreign_keys=[Message.recipient_id])
-
-
-
-class queryItem(BaseModel):
-    name: str
-
-class getItemID(BaseModel):
-    itemID: int
 
 class Item(Base):
     __tablename__ = "item"
 
     itemkey = Column(String, primary_key = True, index = True)
+    tags = Column(String)
     name = Column(String)
     desc = Column(String)
     itemID = Column(Integer)
     price = Column(Float)
-    time = Column(Float)
-    date = Column(Integer)
+    time = Column(String)
+    date = Column(String)
     owner = Column(Integer)
-    distCenter = Column(Integer)
-
+    distCenter = Column(String)
 
 class Node:
     def __init__(self, friend):

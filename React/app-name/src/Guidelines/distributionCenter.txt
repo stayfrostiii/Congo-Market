@@ -1,0 +1,11 @@
+Distribution Center Guidelines:
+
+a - San Jose
+b - Portland
+c - Salt Lake City
+d - Minneapolis
+e - Kansas City
+f - Dallas
+g - Atlanta
+h - New York
+

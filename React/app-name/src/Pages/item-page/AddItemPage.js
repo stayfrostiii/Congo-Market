@@ -5,7 +5,8 @@ import "./AddItem.css";
 
 let itemPicked = 0;
 
-const MainPage = () => {
+const MainPage = () => 
+{
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
   const [price, setPrice] = useState(0);
@@ -14,21 +15,25 @@ const MainPage = () => {
   const [pTag, setPTag] = useState("");
   const navigate = useNavigate(); // Hook for navigation
   let tags;
-
-  const handleMainPageClick = () => {
+  
+  const handleMainPageClick = () => 
+  {
     navigate("/");
   };
 
-  const handleSubmit = async () => {
-    try {
-      if (pTag == "") throw "deez nuts";
+  const handleSubmit = async () => 
+  {
+    try 
+    {
+      if (pTag == "")
+        throw "deez nuts";
       tags = pTag + ";" + uTags;
       console.log("Submitting item request:", { name, desc, price, tags });
-      const response = await api.post("/add_item", {
+      const response = await api.post("/add_item", { 
         name: name,
         desc: desc,
         price: price,
-        tags,
+        tags
       });
       console.log("Response:", response.data);
       setMessage(response.data.message);
@@ -41,17 +46,24 @@ const MainPage = () => {
       document.getElementById("desc").value = "";
       document.getElementById("price").value = "";
       document.getElementById("tag").value = "";
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       console.error("Error:", error);
-      if (error.response) {
+      if (error.response) 
+      {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         console.error("Server responded with status:", error.response.status);
         console.error("Response data:", error.response.data);
-      } else if (error.request) {
+      } 
+      else if (error.request) 
+      {
         // The request was made but no response was received
         console.error("No response received:", error.request);
-      } else {
+      } 
+      else 
+      {
         // Something happened in setting up the request that triggered an error
         console.error("Error setting up request:", error.message);
       }
@@ -63,55 +75,35 @@ const MainPage = () => {
   return (
     <div>
       <button onClick={handleMainPageClick}>Go to Main Page</button>
-      <br />
-      <br />
-      <input
-        type="text"
-        id="name"
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Enter Name"
-      />
-      <br />
-      <input
-        type="text"
-        id="desc"
-        onChange={(e) => setDesc(e.target.value)}
-        placeholder="Enter Description"
-      />
-      <br />
-      <input
-        type="text"
-        id="price"
-        onChange={(e) => setPrice(e.target.value)}
-        placeholder="Enter Price"
-      />
-      <br />
+      <br/>
+      <br/>
+      <input type="text" id="name" onChange={(e) => setName(e.target.value)} placeholder="Enter Name"/>
+      <br/>
+      <input type="text" id="desc"  onChange={(e) => setDesc(e.target.value)}  placeholder="Enter Description"/>
+      <br/>
+      <input type="text" id="price"  onChange={(e) => setPrice(e.target.value)}  placeholder="Enter Price"/>
+      <br/>
       <label for="tags">Select Preset Tag:&nbsp;</label>
-      <select name="tags" onChange={(e) => setPTag(e.target.value)}>
-        <option value="" disabled selected hidden></option>
-        <option value="A">Book/Movie</option>
-        <option value="B">Electronics</option>
-        <option value="C">Computers</option>
-        <option value="D">Garden/Tools</option>
-        <option value="E">Beauty/Health</option>
-        <option value="F">Toys</option>
-        <option value="G">Handmade</option>
-        <option value="H">Sports/Outdoors</option>
-        <option value="I">Automotive/Industrial</option>
-        <option value="J">Collectibles</option>
-        <option value="K">Other</option>
-      </select>
-      <br />
-      <input
-        type="text"
-        id="tag"
-        onChange={(e) => setTags(e.target.value)}
-        placeholder="Enter Tags (separate by ;)"
-      />
-      <br />
-      <br />
+        <select name="tags" onChange={(e) => setPTag(e.target.value)}>
+            <option value="" disabled selected hidden></option>
+            <option value="A">Book/Movie</option>
+            <option value="B">Electronics</option>
+            <option value="C">Computers</option>
+            <option value="D">Garden/Tools</option>
+            <option value="E">Beauty/Health</option>
+            <option value="F">Toys</option>
+            <option value="G">Handmade</option>
+            <option value="H">Sports/Outdoors</option>
+            <option value="I">Automotive/Industrial</option>
+            <option value="J">Collectibles</option>
+            <option value="K">Other</option>
+        </select>
+      <br/>
+      <input type="text" id="tag"  onChange={(e) => setTags(e.target.value)}  placeholder="Enter Tags (separate by ;)"/>
+      <br/>
+      <br/>
       <button onClick={handleSubmit}>Submit</button>
-      <br />
+      <br/>
       {message}
     </div>
   );

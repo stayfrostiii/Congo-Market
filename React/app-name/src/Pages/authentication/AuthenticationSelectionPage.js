@@ -62,6 +62,8 @@ const AuthenticationSelectionPage = () => {
     }
   };
 
+
+
   return (
     <div>
       <h2>Welcome to Our Marketplace!</h2>
@@ -76,6 +78,7 @@ const AuthenticationSelectionPage = () => {
       <button>
         <input type="file" onChange={handleFileInputChange} />
       </button>
+
       <button onClick={handleSubmit}>Submit</button>
     </div>
   );
