@@ -197,7 +197,6 @@ const AddFriendForm = () => {
   };
 
   useEffect(() => {
-    // Fetch friends list when component mounts
     if (userId !== null) {
       fetchFriendsList();
     }
@@ -236,7 +235,7 @@ const AddFriendForm = () => {
     }
   };
 
-  
+
   return (
     <div>
       {" "}
