@@ -9,13 +9,16 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from ConnectionManager import ConnectionManager
-from endpoints.loginEndpoints import create_account, login 
+from endpoints.loginEndpoints import create_account, login, add_credit_card
 from endpoints.itemEndpoints import query_item, item_profile, add_item, search_item
-from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemKey, addItem, searchItem, Item
+from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemKey, addItem, searchItem, Item, Account, CreditCard
+
 from database import SessionLocal, Base, engine
 from messaging.messages import get_username_by_client_id
 import json
-from endpoints.friendEndpoints import add_friend_to_account, remove_friend_from_account
+
+from endpoints.friendEndpoints import add_friend_to_account, delete_friend_from_account, fetch_friends_list
+
 
 from messaging.messages import store_message, get_messages
 # Create tables in the database
@@ -64,17 +67,20 @@ async def create_account_handler(account: AccountCreate):
     db = SessionLocal()
     return create_account(db, account)
 
-# Endpoint to add a friend to an account's friends list
-@app.post("/friends")
+@app.post("/friends")           # Endpoint to add a friend to an account's friends list
 async def add_friend_handler(friend: FriendModel, request: Request):
     db = SessionLocal()
     return add_friend_to_account(db, friend, request)
 
-@app.delete("/friends/{friend_id}")
-async def remove_friend_handler(friend_id: int, request: Request):
+@app.delete("/friends/{id_number}")     #End point to delete friend FROM account friend list
+async def delete_friend_handler(id_number: int, request: Request):
     db = SessionLocal()
-    friend = FriendModel(idNumber=friend_id)
-    return remove_friend_from_account(db, friend, request)
+    return delete_friend_from_account(db, id_number, request)
+
+@app.get("/friends")                #Endpoint to fetch/get friends list from account's friends list
+async def get_friends_list(request: Request):
+    db = SessionLocal()
+    return fetch_friends_list(db, request)
 
 
 @app.post("/login")
@@ -82,6 +88,10 @@ async def login_handler(login_data: Login, response: Response):
     db = SessionLocal()
     return login(db, login_data, response)  # Pass the login_data object directly
 
+@app.post("/add_card/{user_id}")
+async def add_card_handler(user_id: int, credit_card_data: CreditCard):
+    db = SessionLocal()
+    return add_credit_card(db, user_id, credit_card_data)
 
 @app.post("/query_item")
 async def item_handler(item: queryItem):

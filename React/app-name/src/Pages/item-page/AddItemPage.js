@@ -13,7 +13,7 @@ const AddItemPage = () =>
   const [pTag, setPTag] = useState("");
   const navigate = useNavigate(); // Hook for navigation
   let tags;
-
+  
   const handleMainPageClick = () => 
   {
     navigate("/");
