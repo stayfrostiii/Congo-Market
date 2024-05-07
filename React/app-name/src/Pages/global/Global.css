@@ -16,6 +16,7 @@ button
     border-style: solid;
     border-color: rgb(99, 99, 99);
     border-width: 2px;
+    font-family:'Courier New', Courier, monospace;
 }
 
 .header-btns
@@ -24,7 +25,6 @@ button
     width: 100vw;
     height: 64px;
     justify-content: space-between;
-    font-family:'Courier New', Courier, monospace;
 }
 
 .header-btns button
