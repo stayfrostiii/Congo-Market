@@ -235,6 +235,8 @@ const AddFriendForm = () => {
       console.error("Error fetching friends list:", error);
     }
   };
+
+  
   return (
     <div>
       {" "}
