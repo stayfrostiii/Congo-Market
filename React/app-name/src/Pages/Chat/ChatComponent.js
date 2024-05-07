@@ -14,6 +14,14 @@ const ChatComponent = ({ userId, websocket, log, username, onEnter }) => {
     });
   };
 
+  const caesarCipher = (message, shift) => {
+    return message.replace(/[a-zA-Z]/g, (char) => {
+      const charCode = char.charCodeAt(0);
+      const offset = charCode >= 65 && charCode <= 90 ? 65 : 97;
+      return String.fromCharCode(((charCode - offset + shift) % 26) + offset);
+    });
+  };
+
   useEffect(() => {
     setMessages([]);
     for (const key of log) {
@@ -26,13 +34,7 @@ const ChatComponent = ({ userId, websocket, log, username, onEnter }) => {
     }
   }, [log]);
 
-  const caesarCipher = (message, shift) => {
-    return message.replace(/[a-zA-Z]/g, (char) => {
-      const charCode = char.charCodeAt(0);
-      const offset = charCode >= 65 && charCode <= 90 ? 65 : 97;
-      return String.fromCharCode(((charCode - offset + shift) % 26) + offset);
-    });
-  };
+ 
 
   const onServerCall = (data) => {
     if (data.trim() !== "") {
