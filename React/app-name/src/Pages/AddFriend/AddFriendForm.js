@@ -355,7 +355,7 @@ const AddFriendForm = () => {
       </div>
 
       {/* Button to navigate back to the authentication selection page */}
-      <button onClick={handleGoBack}>
+      <button className="return-button" onClick={handleGoBack}>
         Go Back to Authentication Selection
       </button>
     </div>

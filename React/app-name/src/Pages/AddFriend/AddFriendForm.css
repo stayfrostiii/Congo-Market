@@ -95,6 +95,10 @@
     margin-bottom: 40px;
 }
 
+.return-button {
+    margin-bottom: 300px;
+}
+
 .input-row {
     margin-left: 10px;
     font-family: 'Courier New', Courier, monospace;
