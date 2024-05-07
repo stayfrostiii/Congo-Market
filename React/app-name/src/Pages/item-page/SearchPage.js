@@ -34,13 +34,13 @@ const SearchPage = () => {
     try {
       if (searchVIP != "")
         searchV = searchVIP;
-      console.log("Submitting item request:", { searchVIP });
+      console.log("Submitting item request:", { searchV });
       const response = await api.post("/query_item", { searchV: searchV });
       console.log("Response:", response.data);
       setMessage(response.data.message);
       setCounter(response.data.counter);
       setTester(response.data.tester);
-      searchVSP = searchV;
+      //searchVSP = searchV;
       document.getElementById("search").value = searchV;
     } catch (error) {
       console.error("Error:", error);

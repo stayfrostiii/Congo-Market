@@ -29,7 +29,7 @@ def query_item(db: Session, item: queryItem):
             for obj in item_obj:
                 temp = obj.name + ";" + obj.itemkey + "," + str(obj.price) + "^" + str(obj.itemID) + "|" + temp
                 counter = counter + 1
-            return {"message" : temp + "@", "counter" : counter, "tester" : itemArr}
+            return {"message" : itemArr, "counter" : counter, "tester" : temp}
 
     except HTTPException as http_error:
         # Re-raise HTTPException to return specific error responses
@@ -76,8 +76,12 @@ def add_item(db: Session, item: addItem):
     try:
         if (isfloat(float(item.price))):
             item_obj = db.query(Item).order_by(asc(Item.itemID)).all()
-            obj = item_obj.pop()
-            newIndex = obj.itemID + 1
+            newIndex = 0
+            if not item_obj:
+                newIndex = 1 
+            else:
+                obj = item_obj.pop()
+                newIndex = obj.itemID + 1
             currentDT = datetime.now()
             currentDTStr = str(currentDT)
             currentDate = currentDTStr[:10]
