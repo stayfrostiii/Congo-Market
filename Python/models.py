@@ -59,6 +59,7 @@ class Account(Base):
     __tablename__ = "account_test"
 
     id = Column(Integer, primary_key=True, index=True)
+    status = Column(Integer)
     user_id = Column(Integer)  # Store user ID as a string
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)

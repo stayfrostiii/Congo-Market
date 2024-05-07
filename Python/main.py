@@ -9,7 +9,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from ConnectionManager import ConnectionManager
-from endpoints.loginEndpoints import create_account, login, add_credit_card
+from endpoints.loginEndpoints import create_account, login, add_credit_card, delete_account
 from endpoints.itemEndpoints import query_item, item_profile, add_item, search_item
 from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemKey, addItem, searchItem, Item, Account, CreditCard
 
@@ -87,6 +87,11 @@ async def get_friends_list(request: Request):
 async def login_handler(login_data: Login, response: Response):
     db = SessionLocal()
     return login(db, login_data, response)  # Pass the login_data object directly
+
+@app.post("/delAccount/{user_id}")
+async def delete_account_handler(user_id: int):
+    db = SessionLocal()
+    return delete_account(db, user_id)
 
 @app.post("/add_card/{user_id}")
 async def add_card_handler(user_id: int, credit_card_data: CreditCard):
