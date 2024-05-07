@@ -1,3 +1,8 @@
+.overall
+{
+    overflow-x: hidden;
+}
+
 .chat-list-container {
   padding: 10px;
   border-bottom: 1px solid #ccc;

@@ -3,6 +3,8 @@ import ChatComponent from './ChatComponent';
 import ChatList from "./ChatList";
 import "./chat.css";
 
+import Header from "../global/Header";
+
 const ChatPage = () => {
   const [websocket, setWebsocket] = useState(null);
   const [userId, setUserId] = useState(null); // State to store the user ID
@@ -48,12 +50,14 @@ const ChatPage = () => {
   }, [userId]); // Establish WebSocket connection when userId changes
 
   return (
-    <div className="chat-page-container">
-      <div className="left-side">
-        <ChatList onUpdate={pass} />
-      </div>
-      <div className="right-side">
-        {websocket && (
+    <div class="overall">
+      <Header/>
+      <div className="chat-page-container">
+        <div className="left-side">
+          <ChatList onUpdate={pass} />
+        </div>
+        <div className="right-side">
+          {websocket && (
           <ChatComponent
             client={userId}
             username={username}
@@ -62,6 +66,7 @@ const ChatPage = () => {
             onEnter={pass}
           />
         )}
+        </div>
       </div>
     </div>
   );

@@ -4,10 +4,12 @@ import api from "../../api";
 import "./MainPage.css";
 import lebron from "../../binary/lebron.jpg";
 
+import Header from "../global/Header";
+
 let itemPicked = 0;
 
-const MainPage = () => {
-
+const MainPage = () => 
+{
   const [userId, setUserId] = useState(null); // State to store the user ID
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
@@ -136,8 +138,7 @@ const MainPage = () => {
 
   return (
     <div>
-      <h1>Welcome to Our Marketplace!</h1>
-      <p>This is the main page content.</p>
+    <Header/>
       {/* Button to navigate to the authentication selection page */}
       <button onClick={handleAuthenticationClick}>Go to Authentication</button>
       <button onClick={handleSearchClick}>Search</button>

@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./AddFriendForm.css";
 
+import Header from "../global/Header";
+
 // Node class for linked list to store account information
 class Node {
   constructor(firstName, lastName, idNumber) {
@@ -234,122 +236,125 @@ const AddFriendForm = () => {
     }
   };
   return (
-    <div> {/*Add Friend*/}
-      <h2 className="friend-header">Add Friend</h2>
-      <form onSubmit={handleSubmit}>
-        <label className="input-row">
-          First Name:
-          <input
-            className="fname"
-            type="text"
-            placeholder="Enter First Name Here"
-            value={firstName}                   //value of this input textbox is for firstName state
-            onChange={(e) => setFirstName(e.target.value)}      //changes firstName state
-          />
-        </label>
-        <br />
-        <br />
-        <label className="input-row">
-          Last Name:
-          <input
-            className="lname"
-            type="text"
-            placeholder="Enter Last Name Here"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </label>
-        <br />
-        <br />
-        <label className="input-row">
-          ID Number:
-          <input
-            className="idnum"
-            type="text"
-            placeholder="Enter ID Number Here"
-            value={idNumber}
-            onChange={(e) => setIdNumber(e.target.value)}
-          />
-        </label>
-        <br />
-        <br />
-        <button className="add-submit-button" type="submit">
-          Add Friend
-        </button>
-      </form>
+    <div>
+      <Header/>
+      <div> {/*Add Friend*/}
+        <h2 className="friend-header">Add Friend</h2>
+        <form onSubmit={handleSubmit}>
+          <label className="input-row">
+            First Name:
+            <input
+              className="fname"
+              type="text"
+              placeholder="Enter First Name Here"
+              value={firstName}                   //value of this input textbox is for firstName state
+              onChange={(e) => setFirstName(e.target.value)}      //changes firstName state
+            />
+          </label>
+          <br />
+          <br />
+          <label className="input-row">
+            Last Name:
+            <input
+              className="lname"
+              type="text"
+              placeholder="Enter Last Name Here"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </label>
+          <br />
+          <br />
+          <label className="input-row">
+            ID Number:
+            <input
+              className="idnum"
+              type="text"
+              placeholder="Enter ID Number Here"
+              value={idNumber}
+              onChange={(e) => setIdNumber(e.target.value)}
+            />
+          </label>
+          <br />
+          <br />
+          <button className="add-submit-button" type="submit">
+            Add Friend
+          </button>
+        </form>
 
-      <h2 className="friend-header">Delete Friend</h2>
-        {/*Delete Function*/}
-      <form onSubmit={handleDelete}>
-        <label className="input-row">
-          ID Number:
+        <h2 className="friend-header">Delete Friend</h2>
+          {/*Delete Function*/}
+        <form onSubmit={handleDelete}>
+          <label className="input-row">
+            ID Number:
+            <input
+              className="idnum"
+              type="text"
+              placeholder="Enter ID to Delete Here"
+              value={deleteID}
+              onChange={(e) => setDeleteID(e.target.value)}
+            />
+          </label>
+          <br />
+          <br />
+          <button className="delete-submit-button" type="submit">
+            Delete Friend
+          </button>
+        </form>
+
+        {/* Display the friends list */}
+        <div>
+          <h2 className="friend-header">Friends List</h2>
+          <table>
+            <thead>
+              <tr>                    {/*Table Row*/}
+                <th>First Name</th>   {/*Table Header*/}
+                <th>Last Name</th>
+                <th>ID Number</th>
+              </tr>
+            </thead>
+            <tbody>           {/*Body Content*/}
+              {/* Map over the sorted friends list and display each friend */}
+              {friends.map(
+                (
+                  friend,
+                  index //for each friend in friends, generate a new row with first, last, and ID
+                ) => (
+                  <tr key={index}>
+                    <td>{friend.firstName}</td>{" "}
+                    {/*Next 3 lines display first, last, and id of current friend in "friends" */}
+                    <td>{friend.lastName}</td>
+                    <td>{friend.idNumber}</td>
+                  </tr>
+                )
+              )}
+            </tbody>
+          </table>
+        </div>
+
+              {/*Search for Friend*/}
+        <form onSubmit={handleSearch}>
+        <label>
+          Search First Name:
           <input
-            className="idnum"
+            className="search-input"
             type="text"
-            placeholder="Enter ID to Delete Here"
-            value={deleteID}
-            onChange={(e) => setDeleteID(e.target.value)}
+            placeholder="Enter First Name to Search"
+            value={searchFirstName}
+            onChange={(e) => setSearchFirstName(e.target.value)}
           />
         </label>
-        <br />
-        <br />
-        <button className="delete-submit-button" type="submit">
-          Delete Friend
+        <button className="submit-button" type="submit">
+          Search
         </button>
-      </form>
+        </form>
 
-      {/* Display the friends list */}
-      <div>
-        <h2 className="friend-header">Friends List</h2>
-        <table>
-          <thead>
-            <tr>                    {/*Table Row*/}
-              <th>First Name</th>   {/*Table Header*/}
-              <th>Last Name</th>
-              <th>ID Number</th>
-            </tr>
-          </thead>
-          <tbody>           {/*Body Content*/}
-            {/* Map over the sorted friends list and display each friend */}
-            {friends.map(
-              (
-                friend,
-                index //for each friend in friends, generate a new row with first, last, and ID
-              ) => (
-                <tr key={index}>
-                  <td>{friend.firstName}</td>{" "}
-                  {/*Next 3 lines display first, last, and id of current friend in "friends" */}
-                  <td>{friend.lastName}</td>
-                  <td>{friend.idNumber}</td>
-                </tr>
-              )
-            )}
-          </tbody>
-        </table>
+        <p>{message}</p>
+        {/* Button to navigate back to the authentication selection page */}
+        <button onClick={handleGoBack}>
+          Go Back to Authentication Selection
+        </button>
       </div>
-
-            {/*Search for Friend*/}
-      <form onSubmit={handleSearch}>
-      <label>
-        Search First Name:
-        <input
-          className="search-input"
-          type="text"
-          placeholder="Enter First Name to Search"
-          value={searchFirstName}
-          onChange={(e) => setSearchFirstName(e.target.value)}
-        />
-      </label>
-      <button className="submit-button" type="submit">
-        Search
-      </button>
-      </form>
-
-      <p>{message}</p>
-      {/* Button to navigate back to the authentication selection page */}
-      <button onClick={handleGoBack}>
-        Go Back to Authentication Selection
-      </button>
     </div>
   );
 };
