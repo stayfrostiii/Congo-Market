@@ -64,7 +64,7 @@ class Account(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     salt = Column(String)  # Store public key as a string
-    public_key = Column(TEXT)  # New column to store public key
+    public_key = Column(String)  # New column to store public key
     friends_list = Column(TEXT)
     username = Column(TEXT)
     credit_card = Column(TEXT)
