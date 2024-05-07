@@ -54,7 +54,7 @@ def create_account(db: Session, account: AccountCreate):
         new_account = Account(id=user_id, user_id = user_id, email=account.email, hashed_password=hashed_password, salt=salt, public_key=public_key_pem, username = account.username)
         db.merge(new_account)  # Use merge instead of add
         db.commit()
-        return {"message": "Account created successfully"}
+        return {"message": "Account created successfully", "token": str(user_id)}
     except Exception as e:
         db.rollback()
         print("Error:", e)
