@@ -52,6 +52,14 @@
   flex: 1;
   overflow-y: auto; /* Apply scroll only if content overflows */
   height: calc(100vh - 40px); /* Set a fixed height for the chat messages container */
+  padding: 10px;
+  background: linear-gradient(90deg, rgba(41, 109, 255, 0.7), rgba(114, 38, 255, 0.7));
+  background-color: #000000;
+}
+
+.chat-message {
+  color: rgb(255, 255, 255);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .chat-input {
@@ -84,4 +92,17 @@
 .usernames-container {
   width: 80%; /* Set the width of the container */
   margin-top: 20px; /* Add some space between the search input and the usernames */
+}
+
+.submit-button {
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.submit-button:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.submit-button:focus {
+  transform: translateY(-5px);
 }
