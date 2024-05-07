@@ -229,6 +229,7 @@ const AddFriendForm = () => {
         } else {
           setMessage(`Friend ${searchFirstName} does not exist.`);
         }
+        setSearchFirstName("")
       }
     } catch (error) {
       console.error("Error fetching friends list:", error);
@@ -280,13 +281,14 @@ const AddFriendForm = () => {
           Add Friend
         </button>
       </form>
+
       <h2 className="friend-header">Delete Friend</h2>
       {/*Delete Function*/}
       <form onSubmit={handleDelete}>
         <label className="input-row">
           ID Number:
           <input
-            className="idnum"
+            className="delete-text"
             type="text"
             placeholder="Enter ID to Delete Here"
             value={deleteID}
@@ -299,16 +301,36 @@ const AddFriendForm = () => {
           Delete Friend
         </button>
       </form>
+
+      <h2 className="friend-header">Search Friend</h2>
+      {/*Search for Friend*/}
+      <form onSubmit={handleSearch}>
+        <label className="input-row">
+          Search First Name:
+          <input
+            className="search-input"
+            type="text"
+            placeholder="Enter First Name to Search"
+            value={searchFirstName}
+            onChange={(e) => setSearchFirstName(e.target.value)}
+          />
+        </label>
+        <button className="search-submit-button" type="submit">
+          Search
+        </button>
+      </form>
+
+      <p className="search-msg">{message}</p>
+
       {/* Display the friends list */}
       <div>
         <h2 className="friend-header">Friends List</h2>
-        <table>
+        <table className="the-table">
           <thead>
             <tr>
-              {" "}
               {/*Table Row*/}
-              <th>First Name</th> {/*Table Header*/}
-              <th>Last Name</th>
+              <th>First Name  &#160;  &#160;  &#160;</th> {/*Table Header*/}
+              <th>Last Name  &#160;  &#160;  &#160;</th>
               <th>ID Number</th>
             </tr>
           </thead>
@@ -322,7 +344,7 @@ const AddFriendForm = () => {
                 index //for each friend in friends, generate a new row with first, last, and ID
               ) => (
                 <tr key={index}>
-                  <td>{friend.firstName}</td>{" "}
+                  <td>{friend.firstName}</td>
                   {/*Next 3 lines display first, last, and id of current friend in "friends" */}
                   <td>{friend.lastName}</td>
                   <td>{friend.idNumber}</td>
@@ -332,23 +354,7 @@ const AddFriendForm = () => {
           </tbody>
         </table>
       </div>
-      {/*Search for Friend*/}
-      <form onSubmit={handleSearch}>
-        <label>
-          Search First Name:
-          <input
-            className="search-input"
-            type="text"
-            placeholder="Enter First Name to Search"
-            value={searchFirstName}
-            onChange={(e) => setSearchFirstName(e.target.value)}
-          />
-        </label>
-        <button className="submit-button" type="submit">
-          Search
-        </button>
-      </form>
-      <p>{message}</p>
+
       {/* Button to navigate back to the authentication selection page */}
       <button onClick={handleGoBack}>
         Go Back to Authentication Selection
