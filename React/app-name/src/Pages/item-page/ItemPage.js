@@ -175,10 +175,12 @@ const ItemProfile = () =>
         <div>
           <Header/>
           <br/>
-          <h1 class="title">Item Info</h1>
-          <br/>
-          <div>
-              {addDiv()}
+          <div class="title">
+            <h1 class="title">Item Info</h1>
+            <br/>
+            <div>
+                {addDiv()}
+            </div>
           </div>
         </div>
   );
