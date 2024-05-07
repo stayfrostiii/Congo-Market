@@ -36,11 +36,6 @@ const AddItemPage = () =>
     // Call the function to retrieve the user ID
     getUserIdFromToken();
   }, [userId], []);
-  
-  const handleMainPageClick = () => 
-  {
-    navigate("/main_page");
-  };
 
   const handleSubmit = async () => 
   {
@@ -97,39 +92,41 @@ const AddItemPage = () =>
   return (
     <div>
       <Header/>
-      <h1>Add Item</h1>
-      <button onClick={handleMainPageClick}>Go to Main Page</button>
       <br/>
-      <p>{userId}</p>
+      <h1 class="title">Add Item</h1>
       <br/>
-      <input type="text" id="name" onChange={(e) => setName(e.target.value)} placeholder="Enter Name"/>
-      <br/>
-      <input type="text" id="desc"  onChange={(e) => setDesc(e.target.value)}  placeholder="Enter Description"/>
-      <br/>
-      <input type="text" id="price"  onChange={(e) => setPrice(e.target.value)}  placeholder="Enter Price"/>
-      <br/>
-      <label for="tags">Select Preset Tag:&nbsp;</label>
-        <select name="tags" onChange={(e) => setPTag(e.target.value)}>
-            <option value="" disabled selected hidden></option>
-            <option value="A">Book/Movie</option>
-            <option value="B">Electronics</option>
-            <option value="C">Computers</option>
-            <option value="D">Garden/Tools</option>
-            <option value="E">Beauty/Health</option>
-            <option value="F">Toys</option>
-            <option value="G">Handmade</option>
-            <option value="H">Sports/Outdoors</option>
-            <option value="I">Automotive/Industrial</option>
-            <option value="J">Collectibles</option>
-            <option value="K">Other</option>
-        </select>
-      <br/>
-      <input type="text" id="tag"  onChange={(e) => setTags(e.target.value)}  placeholder="Enter Tags (separate by ;)"/>
-      <br/>
-      <br/>
-      <button onClick={handleSubmit}>Submit</button>
-      <br/>
-      {message}
+      <div id="adder-holder">
+        <input type="text" id="name" onChange={(e) => setName(e.target.value)} placeholder="Enter Name"/>
+        <br/>
+        <input type="text" id="desc"  onChange={(e) => setDesc(e.target.value)}  placeholder="Enter Description"/>
+        <br/>
+        <input type="text" id="price"  onChange={(e) => setPrice(e.target.value)}  placeholder="Enter Price"/>
+        <br/>
+        <div id="pTags">
+        <label for="tags">Select Preset Tag:&nbsp;</label>
+          <select name="tags" onChange={(e) => setPTag(e.target.value)}>
+              <option value="" disabled selected hidden></option>
+              <option value="A">Book/Movie</option>
+              <option value="B">Electronics</option>
+              <option value="C">Computers</option>
+              <option value="D">Garden/Tools</option>
+              <option value="E">Beauty/Health</option>
+              <option value="F">Toys</option>
+              <option value="G">Handmade</option>
+              <option value="H">Sports/Outdoors</option>
+              <option value="I">Automotive/Industrial</option>
+              <option value="J">Collectibles</option>
+              <option value="K">Other</option>
+          </select>
+          </div>
+          <input type="text" id="tag"  onChange={(e) => setTags(e.target.value)}  placeholder="Enter Tags (separate by ;)"/>
+        <br/>
+        <br/>
+        <button onClick={handleSubmit}>Submit</button>
+        <br/>
+        <br/>
+        {message}
+      </div>
     </div>
   );
 };

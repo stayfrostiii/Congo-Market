@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
-import "./MainPage.css";
+import "./YourItems.css";
+import "./Items.css";
 import lebron from "../../binary/lebron.jpg";
 
 import Header from "../global/Header";
 
-let itemPicked = 0;
+let itemPickedMP = "";
+let searchVIP = "";
 
-const MainPage = () => 
+const YourItems = () => 
 {
   const [userId, setUserId] = useState(null); // State to store the user ID
-  const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [counter, setCounter] = useState(0);
   const navigate = useNavigate(); // Hook for navigation
+  var owner;
 
   useEffect(() => {
     handleSubmit();
+    itemPickedMP = "";
     // Function to retrieve the user ID from the token
     const getUserIdFromToken = () => {
       console.log("id:" + document.cookie);
@@ -36,38 +39,31 @@ const MainPage = () =>
 
   }, [userId], []);
 
-  const handleAuthenticationClick = () => {
-    navigate("/selection");
-  };
-
   const handleSearchClick = () =>
   {
     navigate("/search_page");
   };
-
 
   const handleAddItemClick = () =>
   {
     navigate("/add_item");
   };
 
-
   const handleItemClick = (id_get) =>
   {
-    //console.log(id_get);
-    itemPicked = id_get;
+    console.log("id = " + id_get + " searchV = " + searchVIP);
+    itemPickedMP = id_get;
     navigate("/item_page");
   };
 
   const handleSubmit = async () => {
     try {
-      console.log("Submitting item request:", { name });
-      const response = await api.post("/query_item", { name: name });
+      owner = parseInt(userId);
+      console.log("Submitting item request:", { owner });
+      const response = await api.post("/owner_item", { owner });
       console.log("Response:", response.data);
       setMessage(response.data.message);
       setCounter(response.data.counter);
-      setName("");
-      document.getElementById("search").value = "";
     } catch (error) {
       console.error("Error:", error);
       if (error.response) {
@@ -89,27 +85,29 @@ const MainPage = () =>
 
   const addDiv = () => {
     let items = message;
-    //console.log("Add div:" + message);
 
     var indexComma = 0;
     var indexLine = 0;
     var indexSemi = 0;
+    var indexPlus = 0;
     var itemCount = counter;
-    let name = "";
+    let nameAdd = "";
     let price = "";
-    var itemID = 0;
 
     let html = [];
 
     for (let i = 0; i < itemCount; i++) {
-      indexComma = items.indexOf(",");
-      name = items.substring(0, indexComma);
-
       indexSemi = items.indexOf(";");
-      price = items.substring(indexComma + 1, indexSemi);
+      nameAdd = items.substring(0, indexSemi);
+
+      indexComma = items.indexOf(",");
+      const itemkey = items.substring(indexSemi + 1, indexComma);
+
+      indexPlus = items.indexOf("^");
+      price = items.substring(indexComma + 1, indexPlus);
 
       indexLine = items.indexOf("|");
-      const itemID = parseInt(items.substring(indexSemi + 1, indexLine));
+      const itemID = items.substring(indexPlus + 1, indexLine);
 
       items = items.substring(indexLine + 1);
 
@@ -117,16 +115,18 @@ const MainPage = () =>
 
       html.push(
         <div>
-          <button class="item" onClick={() => handleItemClick(itemID)}>
+          <button class="item" onClick={() => handleItemClick(itemkey)}>
             <div class="indicators">
               <p class="trade-ind"></p>
               <p class="friend-ind"></p>
             </div>
             <img class="image" src={lebron} alt="" />
-            <p class="item-name">
-              {name}, {itemID}
-            </p>
-            <p class="price">${price}</p>
+            <div class="item-info">
+              <p class="item-name">
+                {nameAdd}, {itemkey}
+              </p>
+              <p class="price">${price}</p>
+            </div>
           </button>
         </div>
       );
@@ -141,24 +141,19 @@ const MainPage = () =>
     <div>
     <Header/>
       {/* Button to navigate to the authentication selection page */}
-      <button onClick={handleAuthenticationClick}>Go to Authentication</button>
-      <button onClick={handleSearchClick}>Search</button>
-      <button onClick={handleAddItemClick}>Add Item</button>
-
-      <p>{userId}</p>
-      <input
-        type="hidden"
-        id="search"
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Enter Item"
-      />
       <br/>
-
+      <h1 class="title">Your Items</h1>
+      <p class="title">Account ID: {userId}</p>
+      <div class="title">
+        <button onClick={handleSearchClick}>Search</button>
+        <button onClick={handleAddItemClick}>Add Item</button>
+      </div>
+      <br/>
       {/*<img src={lebron}/>*/}
-      <div class="item-holder">{addDiv()}</div>
+      <div class="item-holderMP">{addDiv()}</div>
     </div>
   );
 };
 
-export { itemPicked };
-export default MainPage;
+export { itemPickedMP };
+export default YourItems;

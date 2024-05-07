@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import "./SearchPage.css";
+import "./Items.css";
 import lebron from "../../binary/lebron.jpg";
 import { searchVIP } from "./ItemPage";
 import Header from "../global/Header";
 
-var itemPickedSP = 0;
+let itemPickedSP = "";
 let searchVSP = "";
 
 const SearchPage = () => 
@@ -20,6 +21,7 @@ const SearchPage = () =>
 
   useEffect(() => {
     handleSubmit();
+    itemPickedSP = "";
     // Function to retrieve the user ID from the token
     const getUserIdFromToken = () => {
       console.log("id:" + document.cookie);
@@ -87,7 +89,6 @@ const SearchPage = () =>
     var itemCount = counter;
     let nameAdd = "";
     let price = "";
-    var itemID = 0;
 
     let html = [];
 
@@ -110,14 +111,14 @@ const SearchPage = () =>
 
       html.push(
         <div>
-          <button class="item" onClick={() => handleItemClick(itemID)}>
+          <button class="item" onClick={() => handleItemClick(itemkey)}>
             <div class="indicators">
               <p class="trade-ind"></p>
               <p class="friend-ind"></p>
             </div>
             <img class="image" src={lebron} alt="" />
             <p class="item-name">
-              {nameAdd}, {itemID}
+              {nameAdd}, {itemkey}
             </p>
             <p class="price">${price}</p>
           </button>
@@ -133,21 +134,21 @@ const SearchPage = () =>
   return (
     <div>
       <Header/>
-      <h1>Search</h1>
-      {/* Button to navigate to the authentication selection page */}
-      <p>{userId}</p>
       <br/>
-      <input
-        type="text"
-        id="search"
-        onChange={(e) => setSearchV(e.target.value)}
-        placeholder="Enter Item"
-      />
-
-      <button onClick={handleSubmit}>Submit</button>
+      <h1 class="title">Search</h1>
+      <br/>
+      <div id="searchbar">
+        <input
+          type="text"
+          id="search"
+          onChange={(e) => setSearchV(e.target.value)}
+          placeholder="Enter Item"
+        />
+        <button onClick={handleSubmit}>Submit</button>
+      </div>
       <br />
       {/*<img src={lebron}/>*/}
-      <div class="item-holder">{addDiv()}</div>
+      <div class="item-holderSP">{addDiv()}</div>
     </div>
   );
 };

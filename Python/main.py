@@ -137,6 +137,11 @@ async def file_handler(
     db = SessionLocal()
     return query_Files(db, file)
 
+@app.post("/owner_item")
+async def search_item_handler(item: searchItem):
+    db = SessionLocal()
+    return search_item(db, item)
+
 @app.get("/search_users", response_model=List[str])
 async def search_users(db: Session = Depends(get_db)):
     try:
@@ -148,8 +153,4 @@ async def search_users(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {e}")
 
-@app.post("/add_item")
-async def search_item_handler(item: searchItem):
-    db = SessionLocal()
-    return search_item(db, item)
 

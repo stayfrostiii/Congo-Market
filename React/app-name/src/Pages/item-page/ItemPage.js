@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import { itemPickedSP, searchVSP } from "./SearchPage";
+import { itemPickedMP } from "./YourItems";
 
 import Header from "../global/Header";
 
@@ -41,10 +42,18 @@ const ItemProfile = () =>
   {
     try 
     {
-      const itemID = itemPickedSP;
-      console.log("ID in info page: " + itemID);
-      console.log("Submitting item request:", { itemID });
-      const response = await api.post("/item_profile", { itemID: itemID });
+      let itemkey;
+      if (itemPickedMP == "")
+      {
+        itemkey = itemPickedSP;
+      }
+      else 
+      {
+        itemkey = itemPickedMP;
+      }
+      console.log("ID in info page: " + itemkey);
+      console.log("Submitting item request:", { itemkey });
+      const response = await api.post("/item_profile", { itemkey: itemkey });
       console.log("Response:", response.data);
       setMessage(response.data.message);
     } 
@@ -71,17 +80,6 @@ const ItemProfile = () =>
       // Display a generic error message to the user
       setMessage("An error occurred. Please try again later.");
     }
-  };
-
-  const handleMainpage = () =>
-  {
-    //console.log("here");
-    navigate("/main_page");
-  };
-
-  const handleSearchClick = () =>
-  {
-    navigate("/search_page");
   };
 
   const findNextPort = (port, portArr) =>
@@ -176,9 +174,8 @@ const ItemProfile = () =>
   return (
         <div>
           <Header/>
-          <button onClick={handleMainpage}>Go to Main Page</button>
-          <button onClick={handleSearchClick}>Search</button>
-          <p>{userId}</p>
+          <br/>
+          <h1 class="title">Item Info</h1>
           <br/>
           <div>
               {addDiv()}

@@ -19,6 +19,12 @@ button
     font-family:'Courier New', Courier, monospace;
 }
 
+.title
+{
+    text-align: center;
+    justify-content: center;
+}
+
 .header-btns
 {
     display: flex;
