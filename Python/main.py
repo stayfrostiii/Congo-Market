@@ -10,8 +10,8 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from ConnectionManager import ConnectionManager
 from endpoints.loginEndpoints import create_account, login, add_credit_card
-from endpoints.itemEndpoints import query_item, item_profile, add_item
-from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemID, addItem, Item, Account, CreditCard
+from endpoints.itemEndpoints import query_item, item_profile
+from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemID, Item, Account, CreditCard
 from database import SessionLocal, Base, engine
 import json
 from endpoints.friendEndpoints import add_friend_to_account

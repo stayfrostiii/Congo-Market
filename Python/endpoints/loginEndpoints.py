@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import BLOB
 from fastapi import Cookie, Depends, HTTPException, Response, status
 from models import AccountCreate, Login, Account, CreditCard
 from loginEncryption.generate_user_keys import generate_user_keys, email_to_user_id, read_private_key
 from loginEncryption.encrypt_data import generate_salt, hash_password
-from loginEncryption.token_authentication import create_access_token, encrypt_message, decrypt_message, read_server_keys
+from loginEncryption.token_authentication import create_access_token, encrypt_message, decrypt_message, read_server_keys, encrypt_message_str
 
 
 import traceback
@@ -50,7 +51,7 @@ def create_account(db: Session, account: AccountCreate):
             user_id = quadratic_probe(db, user_id)
         
         # Create new account with hashed password, salt, and user ID
-        new_account = Account(id=user_id, user_id = user_id, email=account.email, hashed_password=hashed_password, salt=salt, public_key=public_key_pem)
+        new_account = Account(id=user_id, user_id = user_id, email=account.email, hashed_password=hashed_password, salt=salt, public_key=public_key_pem, username = account.username)
         db.merge(new_account)  # Use merge instead of add
         db.commit()
         return {"message": "Account created successfully"}
@@ -141,8 +142,8 @@ def add_credit_card(db: Session, user_id: int, credit_card_data: CreditCard):
         
         # Concatenate credit card information into a string
         credit_card_info = "|".join([
-            credit_card_data.card_number,
-            credit_card_data.expiration_date,
+            credit_card_data.cardNumber,
+            credit_card_data.expiryDate,
             credit_card_data.cvv
         ])
         
@@ -152,11 +153,11 @@ def add_credit_card(db: Session, user_id: int, credit_card_data: CreditCard):
 
         # Read the server's public and private keys
         public_key, private_key = read_server_keys(public_key_path, private_key_path)
-
-        credit_card_info = credit_card_data.cvv
         
-        # Encrypt the credit card information 
-        encrypted_info = encrypt_message(public_key, credit_card_info)
+        # Encrypt the credit card information
+        encrypted_info = encrypt_message_str(public_key, credit_card_info)
+        print("Type of encrypted_info:", type(encrypted_info))  # Debug print
+        print("Content of encrypted_info:", encrypted_info)  # Debug print
         
         # Store the encrypted information in the database
         account.credit_card = encrypted_info
@@ -174,6 +175,10 @@ def add_credit_card(db: Session, user_id: int, credit_card_data: CreditCard):
         raise HTTPException(status_code=500, detail="Internal server error")
     finally:
         db.close()
+
+
+
+
 
 def get_credit_card_data(db: Session, user_id: int):
     try:

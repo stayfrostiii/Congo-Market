@@ -1,7 +1,7 @@
 #models.py
 from pydantic import BaseModel
 from database import Base
-from sqlalchemy import Column, String, Integer, Float, DateTime, ForeignKey, TEXT
+from sqlalchemy import Column, String, Integer, Float, DateTime, ForeignKey, TEXT, BLOB
 from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
@@ -9,15 +9,16 @@ from datetime import datetime
 class AccountCreate(BaseModel):
     email: str
     password: str
+    username: str
 
     # Pydantic model for login request body
 class Login(BaseModel):
     email: str
     password: str
-
+    
 class CreditCard(BaseModel):
-    card_number: str
-    expiry_date: str
+    cardNumber: str
+    expiryDate: str
     cvv: str
 
 class FriendModel(BaseModel): #temp table for messaging

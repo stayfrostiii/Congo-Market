@@ -49,6 +49,9 @@ const CreditCardPage = () => {
       if (error.response) {
         console.error("Server responded with status:", error.response.status);
         console.error("Response data:", error.response.data);
+
+        // Log validation errors
+        console.log("Validation Errors:", error.response.data.detail);
       } else if (error.request) {
         console.error("No response received:", error.request);
       } else {
