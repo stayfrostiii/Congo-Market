@@ -70,31 +70,42 @@ const CreditCardPage = () => {
   return (
     <div>
       <Header/>
-      <h1>Enter Credit Card Details</h1>
-      <label>Card Number:</label>
-      <input
-        type="text"
-        value={cardNumber}
-        onChange={(e) => setCardNumber(e.target.value)}
-        placeholder="Enter your card number"
-      />
-      <label>Expiry Date:</label>
-      <input
-        type="text"
-        value={expiryDate}
-        onChange={(e) => setExpiryDate(e.target.value)}
-        placeholder="MM/YY"
-      />
-      <label>CVV:</label>
-      <input
-        type="text"
-        value={cvv}
-        onChange={(e) => setCvv(e.target.value)}
-        placeholder="Enter your CVV"
-      />
-      <button onClick={handleSubmit}>Submit Payment</button>
-      <p>{message}</p>
-      <button onClick={handleGoBack}>Go Back</button>
+      <br/>
+      <h1 class="title">Enter Credit Card Details</h1>
+      <div class="title">
+        <div>
+          <label>Card Number:</label>
+          <input
+            type="text"
+            value={cardNumber}
+            onChange={(e) => setCardNumber(e.target.value)}
+            placeholder="Enter your card number"
+          />
+        </div>
+        <br/>
+        <div>
+          <label>Expiry Date:</label>
+          <input
+            type="text"
+            value={expiryDate}
+            onChange={(e) => setExpiryDate(e.target.value)}
+            placeholder="MM/YY"
+          />
+        </div>
+        <br/>
+        <div>
+          <label>CVV:</label>
+          <input
+            type="text"
+            value={cvv}
+            onChange={(e) => setCvv(e.target.value)}
+            placeholder="Enter your CVV"
+          />
+        </div>
+        <br/>
+        <button onClick={handleSubmit}>Submit Payment</button>
+        <p>{message}</p>
+      </div>
     </div>
   );
 };

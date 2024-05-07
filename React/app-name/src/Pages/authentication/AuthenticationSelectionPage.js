@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import DeleteAccountButton from "./DeleteAccountButton";
+import "./MainPage.css";
 
 import Header from "../global/Header";
 
@@ -59,23 +60,21 @@ const AuthenticationSelectionPage = () => {
   return (
     <div>
     <Header/>
-      <h2>Welcome to Our Marketplace!</h2>
-      <p>Please select an option:</p>
+    <br/>
+      <h1 class="title">Welcome to Our Marketplace!</h1>
       {/* Button to navigate back to the main page */}
-      <button onClick={handleAuthentication}>Sign Out</button>
-      <DeleteAccountButton /> {/* Render the DeleteAccountButton component */}
-      <button onClick={handleCreditForm}>Credit Card</button>
-      <button onClick={handleGoToMainClick}>Go to Main Page</button>
-      <button onClick={handleFriendForm}>Friends</button>
-      <button onClick={handleChatForm}>Chat</button>
-      <form>
+      <div class="content">
         <div>
-          <button><input type="file" onChange={handleFileInputChange} /></button>
+          <button onClick={handleAuthentication}>Sign Out</button>
+          <DeleteAccountButton /> {/* Render the DeleteAccountButton component */}
         </div>
-        <button type="submit">Upload</button>
-      </form>
-      { file && <p>{file.name}</p>}
-
+        <br/>
+        <form>
+          <button><input type="file" onChange={handleFileInputChange} /></button>
+          <button type="submit">Upload</button>
+        </form>
+        { file && <p>{file.name}</p>}
+      </div>
     </div>
   );
 };
