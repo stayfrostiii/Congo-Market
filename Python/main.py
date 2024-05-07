@@ -6,21 +6,23 @@ from fastapi import File, Form, UploadFile
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import create_engine, Column, String, Integer
+from sqlalchemy import create_engine, Column, String, Integer, select, or_, and_
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from ConnectionManager import ConnectionManager
-from endpoints.loginEndpoints import create_account, login 
-from endpoints.itemEndpoints import query_item, item_profile, add_item
-from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemID, addItem, Item
+from endpoints.loginEndpoints import create_account, login, add_credit_card, delete_account
+from endpoints.itemEndpoints import query_item, item_profile, add_item, search_item
+from models import AccountCreate, Login, FriendModel, queryItem, getItemKey, addItem, searchItem, Item, Account, CreditCard, Message
 from database import SessionLocal, Base, engine
 from messaging.messages import get_username_by_client_id
 from endpoints.fileEndpoints import query_Files, queryFiles
 import json
 from typing import Annotated
 
-from endpoints.friendEndpoints import add_friend_to_account, delete_friend_from_account
+from endpoints.friendEndpoints import add_friend_to_account, delete_friend_from_account, fetch_friends_list
+import unicodedata
+from typing import List, Dict
 
 from messaging.messages import store_message, get_messages
 # Create tables in the database
@@ -51,53 +53,67 @@ async def websocket_endpoint(websocket: WebSocket, client_id: int, db: Session =
     try:
         username = get_username_by_client_id(db,client_id)
         while True:
-            data = await websocket.receive_text()  # Receive message from client
-            # Process the received message, e.g., save it to the database
+            data = await websocket.receive_text()  
             message_data = json.loads(data)
             message_content = message_data.get("message", "")  # Get the value of "message" or an empty string if not found
-            await manager.broadcast(f"{username}: {message_content}")
+            recipient_username = message_data.get("recipient", "")
             sender_id = client_id
-            recipient_id = client_id
-            store_message(sender_id, recipient_id, data)
+            query = db.query(Account).filter(Account.username == recipient_username).first()
+            recipient_id = query.user_id
+            store_message(sender_id, recipient_id, message_data.get("message", ""))
     except WebSocketDisconnect:
         manager.disconnect(websocket)  # Disconnect client
         await manager.broadcast(f"{client_id} has left the chat")
+        
+@app.get("/get_message/sender={client_id}&recipient={recipient_name}", response_model=List[Dict[str,str]])
+async def get_message_list(client_id: int, recipient_name: str, db: Session = Depends(get_db)):
+   recipient_id = db.query(Account).filter(Account.username == recipient_name).first().user_id
+   condition_1 = and_(Message.sender_id == client_id, Message.recipient_id == recipient_id)
+   condition_2 = and_(Message.sender_id == recipient_id, Message.recipient_id == client_id)
+   results = db.query(Message).filter(or_(condition_1,condition_2)).all()
+   return [{"sender_username": result.sender.username, "content": result.content} for result in results]
 
+@app.get("/get_name/user={userId}", response_model=str) 
+async def get_name(userId: int, db: Session = Depends(get_db)):
+    name = db.query(Account).filter(Account.user_id == userId).first()
+    return name.username
+      
 # Endpoint to create a new account with encrypted email, password, and public key
 @app.post("/create_account")
 async def create_account_handler(account: AccountCreate):
-    db = SessionLocal()
+    db = SessionLocal()                 
     return create_account(db, account)
 
-# Endpoint to add a friend to an account's friends list
-@app.post("/friends")
-async def add_friend_handler(friend: FriendModel, request: Request):
+@app.post("/friends/{user_id}")           # Endpoint to add a friend to an account's friends list
+async def add_friend_handler(user_id: int, friend: FriendModel, request: Request):
     db = SessionLocal()
-    return add_friend_to_account(db, friend, request)
+    return add_friend_to_account(db, user_id, friend, request)
 
-@app.delete("/friends/{id_number}")
-async def delete_friend_handler(id_number: int, request: Request):
+@app.delete("/friends/{user_id}/{id_number}")     # Endpoint to delete friend FROM account friend list
+async def delete_friend_handler(user_id: int, id_number: int):
     db = SessionLocal()
-    return delete_friend_from_account(db, id_number, request)
+    return delete_friend_from_account(db, user_id, id_number)
 
-"""
-@app.delete("/friends")
-async def delete_friend_handler(friend: FriendModel, request: Request):
+@app.get("/friends/{user_id}")                #Endpoint to fetch/get friends list from account's friends list
+async def get_friends_list(user_id: int):
     db = SessionLocal()
-    return delete_friend_from_account(db, friend, request)
-    
+    return fetch_friends_list(db, user_id)
 
-@app.delete("/friends")
-async def delete_friend_handler(id_number: int, request: Request):
-    db = SessionLocal()
-    return delete_friend_from_account(db, id_number, request)
-"""
 
 @app.post("/login")
 async def login_handler(login_data: Login, response: Response):
     db = SessionLocal()
     return login(db, login_data, response)  # Pass the login_data object directly
 
+@app.post("/delAccount/{user_id}")
+async def delete_account_handler(user_id: int):
+    db = SessionLocal()
+    return delete_account(db, user_id)
+
+@app.post("/add_card/{user_id}")
+async def add_card_handler(user_id: int, credit_card_data: CreditCard):
+    db = SessionLocal()
+    return add_credit_card(db, user_id, credit_card_data)
 
 @app.post("/query_item")
 async def item_handler(item: queryItem):
@@ -105,7 +121,7 @@ async def item_handler(item: queryItem):
     return query_item(db, item)
 
 @app.post("/item_profile")
-async def item_profile_handler(item: getItemID):
+async def item_profile_handler(item: getItemKey):
     db = SessionLocal()
     return item_profile(db, item)
 
@@ -120,3 +136,20 @@ async def file_handler(
     ):
     db = SessionLocal()
     return query_Files(db, file)
+
+@app.get("/search_users", response_model=List[str])
+async def search_users(db: Session = Depends(get_db)):
+    try:
+        # Query all usernames from the database
+        users = db.query(Account.username).all()
+        # Extract usernames from the result
+        usernames = [user[0] for user in users]
+        return usernames
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {e}")
+
+@app.post("/add_item")
+async def search_item_handler(item: searchItem):
+    db = SessionLocal()
+    return search_item(db, item)
+

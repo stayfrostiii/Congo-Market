@@ -1,29 +1,35 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import DeleteAccountButton from "./DeleteAccountButton";
+
+import Header from "../global/Header";
 
 const AuthenticationSelectionPage = () => {
   const navigate = useNavigate(); // Hook for navigation
 
-  const handleSignUpClick = () => {
-    navigate("/signup");
-  };
-
-  const handleLoginClick = () => {
-    navigate("/login");
-  };
-
-  const handleGoToMainClick = () => {
+  const handleAuthentication = () => {
+    document.cookie = `token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
     navigate("/");
   };
 
+  const handleCreditForm = () => {
+    navigate("/card");
+  };
+
+  const handleGoToMainClick = () => {
+    navigate("/main_page");
+  };
+
   const handleFriendForm = () => {
-    navigate("/add_friend")
-  }
+    navigate("/add_friend");
+  };
   const handleChatForm = () => {
-    navigate("/chat")
+
+  navigate("/chat")
   }
   const [file, setFile] = useState(null);
+
 
   const handleFileInputChange = async (event) => {
     console.log(event)
@@ -40,7 +46,7 @@ const AuthenticationSelectionPage = () => {
       const fileData = {
         name: file.name,
         contents: file, // Pass the file object directly
-        userid: 123 // Replace with the actual user ID
+        userid: 123, // Replace with the actual user ID
       };
 
       // Make a request to save the file data to the congo database
@@ -52,15 +58,14 @@ const AuthenticationSelectionPage = () => {
 
   return (
     <div>
+    <Header/>
       <h2>Welcome to Our Marketplace!</h2>
       <p>Please select an option:</p>
-      {/* Button to navigate to the sign-up page */}
-      <button onClick={handleSignUpClick}>Sign Up</button>
-      {/* Button to navigate to the login page */}
-      <button onClick={handleLoginClick}>Log In</button>
       {/* Button to navigate back to the main page */}
+      <button onClick={handleAuthentication}>Sign Out</button>
+      <DeleteAccountButton /> {/* Render the DeleteAccountButton component */}
+      <button onClick={handleCreditForm}>Credit Card</button>
       <button onClick={handleGoToMainClick}>Go to Main Page</button>
-
       <button onClick={handleFriendForm}>Friends</button>
       <button onClick={handleChatForm}>Chat</button>
       <form>
@@ -70,6 +75,7 @@ const AuthenticationSelectionPage = () => {
         <button type="submit">Upload</button>
       </form>
       { file && <p>{file.name}</p>}
+
     </div>
   );
 };

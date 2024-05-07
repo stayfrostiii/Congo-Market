@@ -11,17 +11,24 @@ const SignUpPage = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log("Submitting sign-up request:", { email, password });
+      console.log("Submitting sign-up request:", { email, password, username });
       const response = await api.post("/create_account", {
         email,
         password,
         username,
       });
       console.log("Response:", response.data);
+      const token = response.data.token;
+
+      // Set the token as an HTTP-only cookie
+      document.cookie = `token=${token}; Path=/; SameSite=Strict`;
       setMessage(response.data.message);
       setEmail("");
       setPassword("");
       setUsername("");
+
+      // Redirect the user to another page, e.g., dashboard
+      navigate("/selection");
     } catch (error) {
       console.error("Error:", error);
       if (error.response) {
@@ -72,9 +79,6 @@ const SignUpPage = () => {
       <button onClick={handleSubmit}>Sign Up</button>
       <p>{message}</p>
       {/* Button to navigate back to the authentication selection page */}
-      <button onClick={handleGoBack}>
-        Go Back to Authentication Selection
-      </button>
     </div>
   );
 };
