@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
+import "./LoginSignUp.css";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -55,25 +56,34 @@ const LoginPage = () => {
   };
 
   return (
-    <div>
+    <div class="agesdgvadfbb">
+      <br/>
       <h1>Login Page</h1>
-      <label>Email:</label>
-      <input
-        type="text"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Enter your email"
-      />
-      <label>Password:</label>
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Enter your password"
-      />
-      <button onClick={handleSubmit}>Login</button>
-      <p>{message}</p>
-      {/* Button to navigate back to the authentication selection page */}
+      <div>
+        <label>Email:</label>
+        <input
+          type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+        />
+      </div>
+      <br/>
+      <div>
+        <label>Password:</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter your password"
+        />
+      </div>
+      <br/>
+      <div>
+        <button onClick={handleSubmit}>Login</button>
+        <p>{message}</p>
+        {/* Button to navigate back to the authentication selection page */}
+      </div>
     </div>
   );
 };

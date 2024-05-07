@@ -148,8 +148,8 @@ def findRating(obj, searchV):
         if ( searchV in word or word in searchV ) and not word in excluded: 
             rating += 4
             print("+1")
-        if (obj.pageVisits != 0):
-            rating = rating * obj.pageVisits
+    if (obj.pageVisits != 0):
+        rating = rating * obj.pageVisits
 
     return rating
 

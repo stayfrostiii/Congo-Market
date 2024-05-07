@@ -1,3 +1,9 @@
+
+body
+{
+    overflow-x: hidden;
+}
+
 .friend-container {
     display: flex;
     justify-content: space-between;
@@ -9,7 +15,7 @@
 
 .friend-header {
     font-family: 'Courier New', Courier, monospace;
-    text-align: left;
+    text-align: center;
     margin-bottom: 25px;
     margin-left: 75px;
 }
@@ -102,4 +108,15 @@
 .input-row {
     margin-left: 10px;
     font-family: 'Courier New', Courier, monospace;
+}
+
+.josh
+{
+    margin: 0 auto;
+}
+
+.search-friend
+{
+    display: flex;
+    flex-direction: column;
 }

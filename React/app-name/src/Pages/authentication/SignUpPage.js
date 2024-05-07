@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
+import "./LoginSignUp.css";
 
 const SignUpPage = () => {
   const [email, setEmail] = useState("");
@@ -53,32 +54,44 @@ const SignUpPage = () => {
   };
 
   return (
-    <div>
+    <div class="agesdgvadfbb">
+      <br/>
       <h1>Sign Up Page</h1>
-      <label>Email:</label>
-      <input
-        type="text"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Enter your email"
-      />
-      <label>Password:</label>
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Enter your password"
-      />
-      <label>Username:</label>
-      <input
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Enter your username"
-      />
-      <button onClick={handleSubmit}>Sign Up</button>
-      <p>{message}</p>
-      {/* Button to navigate back to the authentication selection page */}
+      <div>
+        <label>Email:</label>
+        <input
+          type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+        />
+      </div>
+      <br/>
+      <div>
+        <label>Password:</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter your password"
+        />
+      </div>
+      <br/>
+      <div>
+        <label>Username:</label>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Enter your username"
+        />
+      </div>
+      <br/>
+      <div>
+        <button onClick={handleSubmit}>Sign Up</button>
+        <p>{message}</p>
+        {/* Button to navigate back to the authentication selection page */}
+      </div>
     </div>
   );
 };
