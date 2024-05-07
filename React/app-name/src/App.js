@@ -21,7 +21,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="/" element={<Auth />} />
+        <Route path="/main_page" element={<MainPage />} />
         <Route path="/selection" element={<AuthenticationSelectionPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -29,7 +30,6 @@ function App() {
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/item_page" element={<ItemPage />} />
         <Route path="/add_item" element={<AddItemPage />} />
-        <Route path="/auth" element={<Auth />} />
         <Route path="/card" element={<CreditCardPage />} />
         <Route path="/search_page" element={<SearchPage />} />
       </Routes>

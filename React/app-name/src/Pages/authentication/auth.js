@@ -14,7 +14,7 @@ const Auth = () => {
   };
 
   const handleGoToMainClick = () => {
-    navigate("/");
+    navigate("/main_page");
   };
 
   return (
@@ -26,7 +26,7 @@ const Auth = () => {
       {/* Button to navigate to the login page */}
       <button onClick={handleLoginClick}>Log In</button>
       {/* Button to navigate back to the main page */}
-      <button onClick={handleGoToMainClick}>Go to Main Page</button>
+      {/* <button onClick={handleGoToMainClick}>Go to Main Page</button> */}
     </div>
   );
 };
