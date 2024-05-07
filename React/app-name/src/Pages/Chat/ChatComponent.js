@@ -1,32 +1,33 @@
 import React, { useState, useEffect } from 'react';
 
-const ChatComponent = ({ websocket }) => {
+const ChatComponent = ({ websocket, log }) => {
   const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState('');
 
   useEffect(() => {
-    // Event listener for incoming messages
-    websocket.onmessage = (event) => {
-      const data = event.data; 
-      setMessages((prevMessages) => [...prevMessages, data]);
-    };
+    setMessages([]);
 
-    return () => {
-      // Cleanup function
-      websocket.onmessage = null;
-    };
-  }, [websocket]);
-
-  const handleSendMessage = () => {
-    if (message.trim() !== '') {
-      websocket.send(JSON.stringify({ message }));
-      setMessage('');
+    for (const key in log) {
+      if (Array.isArray(log[key])) {
+        for (const item of log[key]) {
+          setMessages((prevMessages) => [...prevMessages, `${key}: ${item}`]);
+        }
+      }
     }
-  };
+
+    // log = {"1" : ["asdf", "asdf", "Gay"]}
+    // for (const key in log) => key === "1"
+    // log.get("1") === isArray?
+    // for (const item of log[key]) => item = every item in the array
+  }, [log]);
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      handleSendMessage();
+    if (event.key === "Enter") {
+      const data = event.target.value;
+      event.target.value = "";
+      setMessages((prevMessages) => [...prevMessages, data]);
+      if (data.trim() !== "") {
+        websocket.send(JSON.stringify({ message: data }));
+      }
     }
   };
 
@@ -42,15 +43,14 @@ const ChatComponent = ({ websocket }) => {
       <div className="chat-input">
         <input
           type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown} // Add keydown event handler
           placeholder="Type a message..."
         />
-        <button onClick={handleSendMessage}>Send</button>
       </div>
     </div>
   );
 };
 
 export default ChatComponent;
+
+//<button onClick={handleSendMessage}>Send</button>
