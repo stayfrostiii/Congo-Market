@@ -9,15 +9,16 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from ConnectionManager import ConnectionManager
-from endpoints.loginEndpoints import create_account, login 
-from endpoints.itemEndpoints import query_item, item_profile, add_item
-from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemID, addItem, Item, Account, Message
+from endpoints.loginEndpoints import create_account, login, add_credit_card
+from endpoints.itemEndpoints import query_item, item_profile, add_item, search_item
+from models import AccountCreate, Login, FriendModel, Node, LinkedList, queryItem, getItemKey, addItem, searchItem, Item, Account, CreditCard
 from database import SessionLocal, Base, engine
 from messaging.messages import get_username_by_client_id
 import json
-# from endpoints.friendEndpoints import add_friend_to_account
+from endpoints.friendEndpoints import add_friend_to_account, delete_friend_from_account, fetch_friends_list
 import unicodedata
 from typing import List, Dict
+
 from messaging.messages import store_message, get_messages
 # Create tables in the database
 Base.metadata.create_all(bind=engine)
@@ -101,17 +102,31 @@ async def create_account_handler(account: AccountCreate):
     db = SessionLocal()
     return create_account(db, account)
 
-# Endpoint to add a friend to an account's friends list
-@app.post("/friends")
+@app.post("/friends")           # Endpoint to add a friend to an account's friends list
 async def add_friend_handler(friend: FriendModel, request: Request):
     db = SessionLocal()
     return add_friend_to_account(db, friend, request)
+
+@app.delete("/friends/{id_number}")     #End point to delete friend FROM account friend list
+async def delete_friend_handler(id_number: int, request: Request):
+    db = SessionLocal()
+    return delete_friend_from_account(db, id_number, request)
+
+@app.get("/friends")                #Endpoint to fetch/get friends list from account's friends list
+async def get_friends_list(request: Request):
+    db = SessionLocal()
+    return fetch_friends_list(db, request)
+
 
 @app.post("/login")
 async def login_handler(login_data: Login, response: Response):
     db = SessionLocal()
     return login(db, login_data, response)  # Pass the login_data object directly
 
+@app.post("/add_card/{user_id}")
+async def add_card_handler(user_id: int, credit_card_data: CreditCard):
+    db = SessionLocal()
+    return add_credit_card(db, user_id, credit_card_data)
 
 @app.post("/query_item")
 async def item_handler(item: queryItem):
@@ -119,7 +134,7 @@ async def item_handler(item: queryItem):
     return query_item(db, item)
 
 @app.post("/item_profile")
-async def item_profile_handler(item: getItemID):
+async def item_profile_handler(item: getItemKey):
     db = SessionLocal()
     return item_profile(db, item)
 
@@ -127,6 +142,7 @@ async def item_profile_handler(item: getItemID):
 async def add_item_handler(item: addItem):
     db = SessionLocal()
     return add_item(db, item)
+
 
 @app.get("/search_users", response_model=List[str])
 async def search_users(db: Session = Depends(get_db)):
@@ -138,3 +154,9 @@ async def search_users(db: Session = Depends(get_db)):
         return usernames
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {e}")
+
+@app.post("/add_item")
+async def search_item_handler(item: searchItem):
+    db = SessionLocal()
+    return search_item(db, item)
+

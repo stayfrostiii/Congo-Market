@@ -1,7 +1,7 @@
 #models.py
 from pydantic import BaseModel
 from database import Base
-from sqlalchemy import Column, String, Integer, Float, DateTime, ForeignKey, TEXT
+from sqlalchemy import Column, String, Integer, Float, DateTime, ForeignKey, TEXT, BLOB
 from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
@@ -10,11 +10,17 @@ class AccountCreate(BaseModel):
     email: str
     password: str
     username: str
+
     # Pydantic model for login request body
 
 class Login(BaseModel):
     email: str
     password: str
+    
+class CreditCard(BaseModel):
+    cardNumber: str
+    expiryDate: str
+    cvv: str
 
 class FriendModel(BaseModel): #temp table for messaging
     firstName: str
@@ -22,9 +28,9 @@ class FriendModel(BaseModel): #temp table for messaging
     idNumber: str
 
 class queryItem(BaseModel):
-    name: str
+    searchV: str
 
-class getItemID(BaseModel):
+class getItemKey(BaseModel):
     itemID: int
 
 class addItem(BaseModel):
@@ -32,6 +38,9 @@ class addItem(BaseModel):
     desc: str
     price: str
     tags: str
+
+class searchItem(BaseModel):
+    itemkey: str
 
 #temp table for messaging
 class Message(Base):
@@ -57,6 +66,8 @@ class Account(Base):
     public_key = Column(TEXT)  # New column to store public key
     friends_list = Column(TEXT)
     username = Column(TEXT)
+    credit_card = Column(TEXT)
+
     sent_messages = relationship("Message", back_populates="sender", foreign_keys=[Message.sender_id])
     received_messages = relationship("Message", back_populates="recipient", foreign_keys=[Message.recipient_id])
 

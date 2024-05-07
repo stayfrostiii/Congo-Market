@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import "./AddItem.css";
 
-let itemPicked = 0;
-
-const MainPage = () => 
+const AddItemPage = () => 
 {
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
@@ -15,18 +13,17 @@ const MainPage = () =>
   const [pTag, setPTag] = useState("");
   const navigate = useNavigate(); // Hook for navigation
   let tags;
-
+  
   const handleMainPageClick = () => 
   {
-    navigate("/");
+    navigate("/main_page");
   };
 
   const handleSubmit = async () => 
   {
     try 
     {
-      if (pTag == "")
-        throw "deez nuts";
+      if (pTag == "") throw "deez nuts";
       tags = pTag + ";" + uTags;
       console.log("Submitting item request:", { name, desc, price, tags });
       const response = await api.post("/add_item", { 
@@ -74,6 +71,7 @@ const MainPage = () =>
 
   return (
     <div>
+      <h1>Add Item</h1>
       <button onClick={handleMainPageClick}>Go to Main Page</button>
       <br/>
       <br/>
@@ -109,4 +107,4 @@ const MainPage = () =>
   );
 };
 
-export default MainPage;
+export default AddItemPage;

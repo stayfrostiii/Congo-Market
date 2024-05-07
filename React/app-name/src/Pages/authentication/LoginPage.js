@@ -50,11 +50,6 @@ const LoginPage = () => {
     return data;
   };
 
-  const handleLogout = () => {
-    // Clear the session token by setting an expired cookie
-    document.cookie = `token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-  };
-
   const handleGoBack = () => {
     navigate("/selection");
   };
@@ -78,8 +73,6 @@ const LoginPage = () => {
       />
       <button onClick={handleSubmit}>Login</button>
       <p>{message}</p>
-      {/* Button to logout */}
-      <button onClick={handleLogout}>Logout</button>
       {/* Button to navigate back to the authentication selection page */}
       <button onClick={handleGoBack}>
         Go Back to Authentication Selection
