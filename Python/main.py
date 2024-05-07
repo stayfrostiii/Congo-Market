@@ -1,6 +1,8 @@
 # main.py (FastAPI backend)
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Response
 from fastapi import Depends, Request
+from fastapi import File, Form, UploadFile
+
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,7 +16,10 @@ from endpoints.itemEndpoints import query_item, item_profile, add_item, search_i
 from models import AccountCreate, Login, FriendModel, queryItem, getItemKey, addItem, searchItem, Item, Account, CreditCard, Message
 from database import SessionLocal, Base, engine
 from messaging.messages import get_username_by_client_id
+from endpoints.fileEndpoints import query_Files, queryFiles
 import json
+from typing import Annotated
+
 from endpoints.friendEndpoints import add_friend_to_account, delete_friend_from_account, fetch_friends_list
 import unicodedata
 from typing import List, Dict
@@ -90,9 +95,9 @@ async def delete_friend_handler(user_id: int, id_number: int):
     return delete_friend_from_account(db, user_id, id_number)
 
 @app.get("/friends/{user_id}")                #Endpoint to fetch/get friends list from account's friends list
-async def get_friends_list(user_id: int, request: Request):
+async def get_friends_list(user_id: int):
     db = SessionLocal()
-    return fetch_friends_list(db, user_id, request)
+    return fetch_friends_list(db, user_id)
 
 
 @app.post("/login")
@@ -124,6 +129,13 @@ async def item_profile_handler(item: getItemKey):
 async def add_item_handler(item: addItem):
     db = SessionLocal()
     return add_item(db, item)
+
+@app.post("/files")
+async def file_handler(
+    file: Annotated[UploadFile, File()]
+    ):
+    db = SessionLocal()
+    return query_Files(db, file)
 
 @app.post("/owner_item")
 async def search_item_handler(item: searchItem):
