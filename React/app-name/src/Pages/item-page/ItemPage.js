@@ -3,15 +3,39 @@ import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import { itemPickedSP, searchVSP } from "./SearchPage";
 
+import Header from "../global/Header";
+
 let searchVIP = "";
 
 const ItemProfile = () => 
 {
-  searchVIP = searchVSP;
-  console.log("searchVSP = " + searchVSP);
-  useEffect(() => {handleSubmit()}, []);
+  const [userId, setUserId] = useState(null); // State to store the user ID
   const [message, setMessage] = useState("");
   const navigate = useNavigate(); // Hook for navigation
+
+  searchVIP = searchVSP;
+  console.log("searchVSP = " + searchVSP);
+  useEffect(() => {
+    // Function to retrieve the user ID from the token
+    const getUserIdFromToken = () => {
+      console.log("id:" + document.cookie);
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        .split("=")[1];
+      // Decode the token to get the user ID
+      // Here you would use your actual decoding logic for JWT tokens
+      const decodedToken = token;
+      setUserId(decodedToken); // Set the user ID in the state
+    };
+
+    // Call the function to retrieve the user ID
+    getUserIdFromToken();
+  }, []);
+
+  useEffect(() => {
+    handleSubmit();
+  }, []);
 
   const handleSubmit = async () => 
   {
@@ -90,36 +114,8 @@ const ItemProfile = () =>
     let gRoute = ["af4", "be5", "ce4", "de2", "ee1", "ff1", "hh2"];
     let hRoute = ["ae6", "be6", "ce5", "dd2", "ee2", "fg3", "gg2"];
 
-    switch(message[8])
-    {
-      case 1:
-        sellerDC = "a";
-        break;
-      case 2:
-        sellerDC = "b";
-      break;
-      case 3:
-        sellerDC = "c";
-      break;
-      case 4:
-        sellerDC = "d";
-      break;
-      case 5:
-        sellerDC = "e";
-      break;
-      case 6:
-        sellerDC = "f";
-      break;
-      case 7:
-        sellerDC = "g";
-      break;
-      case 8:
-        sellerDC = "h";
-      break;
-    }
-
-    if (sellerDC != buyerDC)
-      switch(sellerDC)
+    if (message[8] != buyerDC)
+      switch(message[8])
       {
         case "a":
           temp = findNextPort(buyerDC, aRoute);
@@ -179,8 +175,10 @@ const ItemProfile = () =>
 
   return (
         <div>
+          <Header/>
           <button onClick={handleMainpage}>Go to Main Page</button>
           <button onClick={handleSearchClick}>Search</button>
+          <p>{userId}</p>
           <br/>
           <div>
               {addDiv()}

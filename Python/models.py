@@ -38,6 +38,7 @@ class addItem(BaseModel):
     desc: str
     price: str
     tags: str
+    owner: int
 
 class searchItem(BaseModel):
     itemkey: str
@@ -84,6 +85,7 @@ class Item(Base):
     date = Column(String)
     owner = Column(Integer)
     distCenter = Column(String)
+    pageVisits = Column(Float)
 
 class Node:
     def __init__(self, friend):

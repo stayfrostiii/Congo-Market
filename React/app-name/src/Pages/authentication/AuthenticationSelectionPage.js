@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import Header from "../global/Header";
+
 const AuthenticationSelectionPage = () => {
   const navigate = useNavigate(); // Hook for navigation
 
@@ -66,6 +68,7 @@ const AuthenticationSelectionPage = () => {
 
   return (
     <div>
+    <Header/>
       <h2>Welcome to Our Marketplace!</h2>
       <p>Please select an option:</p>
       {/* Button to navigate back to the main page */}

@@ -131,16 +131,25 @@ def findRating(obj, searchV):
     parsedTotal += parsedName
     parsedTotal += parsedDesc
 
-    #print(parsedTotal)
+    print(parsedTotal)
 
     rating = 0
+    excluded = ["a","about","actually","almost","also","although","always","am","an","and","any",
+                "are","as","at","be","became","become","but","by","can","could","did","do","does",
+                "each","either","else","for","from","had","has","have","hence","how","i","if","in",
+                "is","it","its","just","may","maybe","me","might","mine","must","my","neither","nor",
+                "not","of","oh","ok","when","where","whereas","wherever","whenever","whether","which",
+                "while","who","whom","whoever","whose","why","will","with","within","without","would",
+                "yes","yet","you","your"]
 
     for word in parsedTotal:
         word = word.lower()
-        #print(word + " - " + searchV)
-        if searchV in word or word in searchV: 
-            rating += 1
-            #print("+1")
+        print(word + " - " + searchV)
+        if ( searchV in word or word in searchV ) and not word in excluded: 
+            rating += 4
+            print("+1")
+        if (obj.pageVisits != 0):
+            rating = rating * obj.pageVisits
 
     return rating
 

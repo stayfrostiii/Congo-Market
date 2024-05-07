@@ -3,6 +3,8 @@ import ChatComponent from './ChatComponent';
 import ChatList from "./ChatList";
 import "./chat.css";
 
+import Header from "../global/Header";
+
 const ChatPage = () => {
   const [websocket, setWebsocket] = useState(null);
   const [userId, setUserId] = useState(null); // State to store the user ID
@@ -32,12 +34,15 @@ const ChatPage = () => {
   }, [userId]);
 
   return (
-    <div className="chat-page-container">
-      <div className="left-side">
-        <ChatList />
-      </div>
-      <div className="right-side">
-        {websocket && <ChatComponent websocket={websocket} />}
+    <div class="overall">
+      <Header/>
+      <div className="chat-page-container">
+        <div className="left-side">
+          <ChatList />
+        </div>
+        <div className="right-side">
+          {websocket && <ChatComponent websocket={websocket} />}
+        </div>
       </div>
     </div>
   );

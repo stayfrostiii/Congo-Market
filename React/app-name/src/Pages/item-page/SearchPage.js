@@ -4,24 +4,38 @@ import api from "../../api";
 import "./SearchPage.css";
 import lebron from "../../binary/lebron.jpg";
 import { searchVIP } from "./ItemPage";
+import Header from "../global/Header";
 
 var itemPickedSP = 0;
 let searchVSP = "";
 
-const SearchPage = () => {
-  useEffect(() => {
-    handleSubmit();
-  }, []);
+const SearchPage = () => 
+{
   let [searchV, setSearchV] = useState("");
+  const [userId, setUserId] = useState(null); // State to store the user ID
   const [message, setMessage] = useState("");
   const [tester, setTester] = useState("");
   const [counter, setCounter] = useState(0);
   const navigate = useNavigate(); // Hook for navigation
 
-  const handleMainPageClick = () => 
-  {
-    navigate("/main_page");
-  };
+  useEffect(() => {
+    handleSubmit();
+    // Function to retrieve the user ID from the token
+    const getUserIdFromToken = () => {
+      console.log("id:" + document.cookie);
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        .split("=")[1];
+      // Decode the token to get the user ID
+      // Here you would use your actual decoding logic for JWT tokens
+      const decodedToken = token;
+      setUserId(decodedToken); // Set the user ID in the state
+    };
+
+    // Call the function to retrieve the user ID
+    getUserIdFromToken();
+  }, [userId], []);
 
   const handleItemClick = (id_get) =>
   {
@@ -118,9 +132,10 @@ const SearchPage = () => {
 
   return (
     <div>
+      <Header/>
       <h1>Search</h1>
       {/* Button to navigate to the authentication selection page */}
-      <button onClick={handleMainPageClick}>Go to MainPage</button>
+      <p>{userId}</p>
       <br/>
       <input
         type="text"

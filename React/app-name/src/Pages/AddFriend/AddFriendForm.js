@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./AddFriendForm.css";
 
+import Header from "../global/Header";
+
 // Node class for linked list
 class Node {
   constructor(firstName, lastName, idNumber) {
@@ -206,6 +208,7 @@ const AddFriendForm = () => {
 
   return (
     <div>
+      <Header/>
       <h2 className="friend-header">Add Friend</h2>
       <form onSubmit={handleSubmit}>
         <label>

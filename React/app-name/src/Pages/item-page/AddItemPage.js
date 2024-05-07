@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import "./AddItem.css";
 
+import Header from "../global/Header";
+
 const AddItemPage = () => 
 {
   const [name, setName] = useState("");
@@ -11,8 +13,29 @@ const AddItemPage = () =>
   const [uTags, setTags] = useState("");
   const [message, setMessage] = useState("");
   const [pTag, setPTag] = useState("");
+  const [userId, setUserId] = useState(null); // State to store the user ID
   const navigate = useNavigate(); // Hook for navigation
   let tags;
+  var owner;
+
+  useEffect(() => {
+    handleSubmit();
+    // Function to retrieve the user ID from the token
+    const getUserIdFromToken = () => {
+      console.log("id:" + document.cookie);
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        .split("=")[1];
+      // Decode the token to get the user ID
+      // Here you would use your actual decoding logic for JWT tokens
+      const decodedToken = token;
+      setUserId(decodedToken); // Set the user ID in the state
+    };
+
+    // Call the function to retrieve the user ID
+    getUserIdFromToken();
+  }, [userId], []);
   
   const handleMainPageClick = () => 
   {
@@ -25,12 +48,14 @@ const AddItemPage = () =>
     {
       if (pTag == "") throw "deez nuts";
       tags = pTag + ";" + uTags;
+      owner = parseInt(userId);
       console.log("Submitting item request:", { name, desc, price, tags });
       const response = await api.post("/add_item", { 
         name: name,
         desc: desc,
         price: price,
-        tags
+        tags,
+        owner
       });
       console.log("Response:", response.data);
       setMessage(response.data.message);
@@ -71,9 +96,11 @@ const AddItemPage = () =>
 
   return (
     <div>
+      <Header/>
       <h1>Add Item</h1>
       <button onClick={handleMainPageClick}>Go to Main Page</button>
       <br/>
+      <p>{userId}</p>
       <br/>
       <input type="text" id="name" onChange={(e) => setName(e.target.value)} placeholder="Enter Name"/>
       <br/>
