@@ -3,32 +3,27 @@ from fastapi import HTTPException, Request
 from models import Account, FriendModel
 
 def add_friend_to_account(db: Session, friend: FriendModel, request: Request):
-    # Simulate a user ID, you can replace this with an actual user ID from your database
     user_id = 1248606  # example hard-coded id number
     try:
-        # Retrieve the account from the database using the provided user_id
-        account = db.query(Account).filter(Account.user_id == user_id).first()
+        account = db.query(Account).filter(Account.user_id == user_id).first()  #assign variable account the queried account in the database
         if not account:
-            raise HTTPException(status_code=404, detail="Account not found")
+            raise HTTPException(status_code=404, detail="Account not found")            #HTTP Exception if account does not exist
 
-        # Initialize friends_list if it's None
-        if account.friends_list is None:
-            account.friends_list = ""
+        if account.friends_list is None:                            # Initialize friends_list if it's None if the account has been found
+            account.friends_list = ""               
 
-        # Check if friend with the same ID number already exists in the friends_list
-        if friend.idNumber in account.friends_list.split(","):
+        if friend.idNumber in account.friends_list.split(","):      #Split friends_list to see if ID exists           
             raise HTTPException(status_code=400, detail="Friend already in friends list")
 
-        # Add the friend to the account's friends_list
-        friends = account.friends_list.split(",")
-        friend_details = f"{friend.idNumber}:{friend.firstName}:{friend.lastName}"
+        friends = account.friends_list.split(",")           #Add each entry in friends_list into friends list
+        friend_details = f"{friend.idNumber}:{friend.firstName}:{friend.lastName}"  #f = f-string, special string that allows you to create unique strings
         friends.insert(0, friend_details)  # Insert at the beginning
-        account.friends_list = ",".join(friends)
+        account.friends_list = ",".join(friends)        #insert back into column the friends list 
 
-        db.commit()
+        db.commit()         #commit changes to database
         return {"message": "Friend added successfully"}
     except Exception as e:
-        db.rollback()
+        db.rollback()           #undo any change since last commit if there is exception
         print("Error:", e)
         raise HTTPException(status_code=500, detail="Internal server error")
     finally:

@@ -99,12 +99,12 @@ async def get_message_list(client_id: int, recipient_name: str, db: Session = De
 # Endpoint to create a new account with encrypted email, password, and public key
 @app.post("/create_account")
 async def create_account_handler(account: AccountCreate):
-    db = SessionLocal()
+    db = SessionLocal()                 
     return create_account(db, account)
 
 @app.post("/friends")           # Endpoint to add a friend to an account's friends list
 async def add_friend_handler(friend: FriendModel, request: Request):
-    db = SessionLocal()
+    db = SessionLocal()                 #initialize session to interact with database
     return add_friend_to_account(db, friend, request)
 
 @app.delete("/friends/{id_number}")     #End point to delete friend FROM account friend list
