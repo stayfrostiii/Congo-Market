@@ -171,8 +171,8 @@ const AddFriendForm = () => {
       fetchFriendsList();
   }, [idNumber, deleteID]);     //runs every time idNumber or deleteID is modified
 
-  const handleSearch = async () => {
-
+  const handleSearch = async (e) => {
+    e.preventDefault()
    try {
      // Send a GET request to the backend to fetch the friends list
      const response = await axios.get("http://localhost:8000/friends");
@@ -203,65 +203,70 @@ const AddFriendForm = () => {
     <div> {/*Add Friend*/}
       <h2 className="friend-header">Add Friend</h2>
       <form onSubmit={handleSubmit}>
-        <label>
+        <label className="input-row">
           First Name:
           <input
             className="fname"
             type="text"
+            placeholder="Enter First Name Here"
             value={firstName}                   //value of this input textbox is for firstName state
             onChange={(e) => setFirstName(e.target.value)}      //changes firstName state
           />
         </label>
         <br />
         <br />
-        <label>
+        <label className="input-row">
           Last Name:
           <input
             className="lname"
             type="text"
+            placeholder="Enter Last Name Here"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
           />
         </label>
         <br />
         <br />
-        <label>
+        <label className="input-row">
           ID Number:
           <input
             className="idnum"
             type="text"
+            placeholder="Enter ID Number Here"
             value={idNumber}
             onChange={(e) => setIdNumber(e.target.value)}
           />
         </label>
         <br />
         <br />
-        <button className="submit-button" type="submit">
+        <button className="add-submit-button" type="submit">
           Add Friend
         </button>
       </form>
 
+      <h2 className="friend-header">Delete Friend</h2>
         {/*Delete Function*/}
       <form onSubmit={handleDelete}>
-        <label>
+        <label className="input-row">
           ID Number:
           <input
             className="idnum"
             type="text"
+            placeholder="Enter ID to Delete Here"
             value={deleteID}
             onChange={(e) => setDeleteID(e.target.value)}
           />
         </label>
         <br />
         <br />
-        <button className="submit-button" type="submit">
+        <button className="delete-submit-button" type="submit">
           Delete Friend
         </button>
       </form>
 
         {/* Display the friends list */}
       <div>
-        <h2 className="friends-header">Friends List</h2>
+        <h2 className="friend-header">Friends List</h2>
         <table>
           <thead>
             <tr>                    {/*Table Row*/}
@@ -284,18 +289,21 @@ const AddFriendForm = () => {
       </div>
 
             {/*Search for Friend*/}
+      <form onSubmit={handleSearch}>
       <label>
         Search First Name:
         <input
           className="search-input"
           type="text"
+          placeholder="Enter First Name to Search"
           value={searchFirstName}
           onChange={(e) => setSearchFirstName(e.target.value)}
         />
       </label>
-      <button className="submit-button" onClick={handleSearch}>
+      <button className="submit-button" type="submit">
         Search
       </button>
+      </form>
 
       <p>{message}</p>
       {/* Button to navigate back to the authentication selection page */}
