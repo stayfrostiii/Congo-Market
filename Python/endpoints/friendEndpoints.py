@@ -3,6 +3,7 @@ from fastapi import HTTPException, Request
 from models import Account, FriendModel
 
 def add_friend_to_account(db: Session, user_id: int, friend: FriendModel, request: Request):
+    # Simulate a user ID, you can replace this with an actual user ID from your database
     try:
         account = db.query(Account).filter(Account.user_id == user_id).first()  #assign variable account the queried account in the database
         if not account:
@@ -50,29 +51,32 @@ def delete_friend_from_account(db: Session, user_id: int, id_number: int):
     finally:
         db.close()
 
-def fetch_friends_list(db: Session, user_id: int, request: Request):
-   try:
-       # Retrieve the account from the database using the provided user_id
-       account = db.query(Account).filter(Account.user_id == user_id).first()
-       if not account:
-           raise HTTPException(status_code=404, detail="Account not found")
+def fetch_friends_list(db: Session, user_id: int):
+    try:
+        # Retrieve the account from the database using the provided user_id
+        account = db.query(Account).filter(Account.user_id == user_id).first()
+        if not account:
+            raise HTTPException(status_code=404, detail="Account not found")
 
-       # Split the friends_list into individual friend details
-       friends_list = account.friends_list.split(",")       #split entries in friends column by the comma
-       friends = []                                     #initialize empty list called friends
-       for friend_details in friends_list:      #for loop to iterate through entires
-           if not friend_details:
-               continue  # Skip empty strings
-           print("Friend details:", friend_details)
-           friend_info = friend_details.split(":")      #splits friend detailed between every comma by the colon ID:F:L
-           if len(friend_info) != 3:                    #must have 3 elements per comma separated entry (ID:F:L)
-               raise ValueError("Invalid friend details format")
-           friend = {"idNumber": friend_info[0], "firstName": friend_info[1], "lastName": friend_info[2]}   #creates dictionary that maps values to respective names/keys
-           friends.append(friend)       #add separated info to the friends list 
+        # Split the friends_list into individual friend details
+        friends_list = account.friends_list.split(",")
+        friends = []
+        for friend_details in friends_list:
+            if not friend_details:
+                continue
+            friend_info = friend_details.split(":")
+            if len(friend_info) != 3:
+                raise ValueError("Invalid friend details format")
+            friend = {"idNumber": friend_info[0], "firstName": friend_info[1], "lastName": friend_info[2]}
+            friends.append(friend)
 
-       return friends       #returns the array
-   except Exception as e:
-       print("Error:", e)
-       raise HTTPException(status_code=500, detail="Internal server error")
-   finally:
-       db.close()
+        return friends
+    except NoResultFound:
+        raise HTTPException(status_code=404, detail="Account not found")
+    except ValueError as ve:
+        raise HTTPException(status_code=400, detail=str(ve))  # Bad Request
+    except Exception as e:
+        print("Error:", e)
+        raise HTTPException(status_code=500, detail="Internal server error")
+    finally:
+        db.close()
