@@ -13,10 +13,6 @@ const Auth = () => {
     navigate("/login");
   };
 
-  const handleGoToMainClick = () => {
-    navigate("/main_page");
-  };
-
   return (
     <div>
       <h2>Welcome to Our Marketplace!</h2>
